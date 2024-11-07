@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from '../../../images/logo.png';
 
 const NavBar = () => {
+
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <nav className="bg-[#61AD4E] p-4 flex justify-between items-center">
-            <div className="flex items-center">
-                <img src={logo} alt="Logo" className="h-10 w-10 mr-2" />
-                <h1 className="text-white font-bold text-xl">IPAMALIHOG KAY LOLO</h1>
+        <nav className="bg-[#61AD4E] text-white p-4 flex justify-between items-center">
+            <img src={logo} alt="Logo" className="w-12 h-12" />
+            <div className="hidden md:flex space-x-6">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+                <a href="#login">Login</a>
             </div>
-            <div className="flex space-x-4">
-                <a href="#home" className="text-white">Home</a>
-                <a href="#about" className="text-white">About</a>
-                <a href="#services" className="text-white">Services</a>
-                <a href="#contact" className="text-white">Contact</a>
-            </div>
-            <button className="bg-black text-white px-4 py-2 rounded">Login</button>
+            <button
+                className="md:hidden focus:outline-none text-2xl"
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                ☰
+            </button>
+            {isOpen && (
+                <div className="absolute top-16 left-0 w-full bg-[#181818] md:hidden flex flex-col items-center space-y-4 py-4">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+                <a href="#login">Login</a>
+                </div>
+            )}
         </nav>
     );
 };

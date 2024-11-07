@@ -4,11 +4,10 @@ import OrderForm from './OrderForm/OrderForm';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { signOut } from 'firebase/auth';
 import { auth } from '../utils/firebase';
-import OrderTable from './OrderTable/OrderTable';
 import NavBar from './LandingPage/NavBar/NavBar';
-import HeroSection from './LandingPage/HeroSection/HeroSection';
+import HeroSection from './LandingPage/Hero/Hero';
 import FeaturedServices from './LandingPage/FeaturedServices/FeaturedServices';
-import AboutSection from './LandingPage/AboutSection/AboutSection';
+import AboutSection from './LandingPage/AboutUs/AboutUs';
 
 
 const LandingPage = () => {
@@ -77,8 +76,6 @@ const LandingPage = () => {
                     </div>
                 )}
             </div>
-
-            <OrderTable />
         </div>
     )
 }
