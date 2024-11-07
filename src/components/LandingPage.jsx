@@ -8,6 +8,9 @@ import NavBar from './LandingPage/NavBar/NavBar';
 import HeroSection from './LandingPage/Hero/Hero';
 import FeaturedServices from './LandingPage/FeaturedServices/FeaturedServices';
 import AboutSection from './LandingPage/AboutUs/AboutUs';
+import Services from './LandingPage/OurServices/Services';
+import ContactUs from './LandingPage/ContactUs/ContactUs';
+import Footer from './LandingPage/Footer/Footer';
 
 
 const LandingPage = () => {
@@ -41,6 +44,9 @@ const LandingPage = () => {
             <HeroSection />
             <FeaturedServices />
             <AboutSection />
+            <Services />
+            <ContactUs />
+            <Footer />
 
             <Link to="/register/">Go to Signup</Link> <br />
             <Link to="/login">Go to Login</Link>
