@@ -2,7 +2,7 @@ import React from 'react';
 import downloadImg from '../../../images/download-img.png';
 
 const ContactUs = () => (
-    <section className="bg-[#181818] text-white p-8 text-center md:text-left flex flex-col md:flex-row items-center" id="contact">
+    <section className="bg-[#181818] text-white p-8 text-center md:text-left flex flex-col md:flex-row items-center justify-center h-[659px]" id="contact">
         <div className="space-y-4">
             <h2 className="text-2xl font-bold">CONTACT US</h2>
             <p>📞 +63 912 3456 789</p>
