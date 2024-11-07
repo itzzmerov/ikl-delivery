@@ -48,7 +48,7 @@ const OrderForm = ({ onClose }) => {
 
     return (
         <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
-            <div className="bg-[#F9F9F9] p-2 lg:p-8 rounded-[50px] w-full">
+            <div className="bg-[#F9F9F9] p-2 lg:p-8 rounded-[50px] w-full text-black">
                 <h1 className="text-2xl font-bold text-center mb-6">PERA PADALA</h1>
 
                 {/* Sender Information */}
@@ -59,7 +59,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="First Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='senderFirstName'
                             id='senderFirstName'
@@ -70,7 +69,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Last Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='senderLastName'
                             id='senderLastName'
@@ -82,7 +80,6 @@ const OrderForm = ({ onClose }) => {
                         type="text"
                         placeholder="Phone Number"
                         className="border p-2 w-full rounded mb-4"
-                        autoFocus
                         required
                         name='senderPhone'
                         id='senderPhone'
@@ -99,7 +96,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="House / Bldg. No."
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressHouse'
                             id='senderAddressHouse'
@@ -110,7 +106,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Street Address"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressStreet'
                             id='senderAddressStreet'
@@ -121,7 +116,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Barangay"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressBarangay'
                             id='senderAddressBarangay'
@@ -132,7 +126,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="City / Municipality"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressCity'
                             id='senderAddressCity'
@@ -143,7 +136,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Region"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressRegion'
                             id='senderAddressRegion'
@@ -154,7 +146,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="ZIP code"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressZIP'
                             id='senderAddressZIP'
@@ -172,7 +163,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="First Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='receiverFirstName'
                             id='receiverFirstName'
@@ -183,7 +173,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Last Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='receiverLastName'
                             id='receiverLastName'
@@ -195,7 +184,6 @@ const OrderForm = ({ onClose }) => {
                         type="text"
                         placeholder="Phone Number"
                         className="border p-2 w-full rounded mb-4"
-                        autoFocus
                         required
                         name='receiverPhone'
                         id='receiverPhone'
@@ -212,7 +200,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="House / Bldg. No."
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressHouse'
                             id='receiverAddressHouse'
@@ -223,7 +210,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Street Address"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressStreet'
                             id='receiverAddressStreet'
@@ -234,7 +220,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Barangay"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressBarangay'
                             id='receiverAddressBarangay'
@@ -245,7 +230,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="City / Municipality"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressCity'
                             id='receiverAddressCity'
@@ -256,7 +240,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="Region"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressRegion'
                             id='receiverAddressRegion'
@@ -267,7 +250,6 @@ const OrderForm = ({ onClose }) => {
                             type="text"
                             placeholder="ZIP code"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressZIP'
                             id='receiverAddressZIP'
@@ -284,7 +266,6 @@ const OrderForm = ({ onClose }) => {
                         type="text"
                         placeholder="e.g. 500"
                         className="border p-2 w-full rounded"
-                        autoFocus
                         required
                         name='amount'
                         id='amount'
