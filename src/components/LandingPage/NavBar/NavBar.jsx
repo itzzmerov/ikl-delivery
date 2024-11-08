@@ -3,6 +3,7 @@ import logo from '../../../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../utils/firebase';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -36,7 +37,7 @@ const NavBar = () => {
 
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 bg-lightGreen text-lightWhite transition-all duration-300 ${scrolled ? 'py-2 shadow-lg' : 'py-4 shadow-none'}`}>
-            <div className="px-14 flex justify-between items-center transition-all duration-300">
+            <div className="px-5 md:px-14 flex justify-between items-center transition-all duration-300">
                 <img src={logo} alt="Logo" className={`transition-all duration-300 ${scrolled ? 'w-16 h-16' : 'w-24 h-24'}`} />
                 <div className="hidden md:flex items-center gap-5 space-x-6 text-[18px]">
                     <a href="#top" className="hover:text-darkBlack">Home</a>
@@ -47,10 +48,10 @@ const NavBar = () => {
                     {/* <button className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full" onClick={handleLogout}>Logout</button> */}
                 </div>
                 <button
-                    className="md:hidden focus:outline-none text-[50px] md:text-2xl"
+                    className="md:hidden focus:outline-none"
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                    ☰
+                    <MenuIcon sx={{ fontSize: 40 }}/>
                 </button>
             </div>
             {isOpen && (
