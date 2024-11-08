@@ -18,10 +18,9 @@ const NavBar = () => {
         }
     };
 
-    // Track scroll position to adjust navbar size
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {  // Adjust the threshold as needed
+            if (window.scrollY > 50) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
@@ -48,7 +47,7 @@ const NavBar = () => {
                     <button className="bg-black hover:bg-[#383838] text-white px-10 py-2 rounded-full" onClick={handleLogout}>Logout</button>
                 </div>
                 <button
-                    className="md:hidden focus:outline-none text-2xl"
+                    className="md:hidden focus:outline-none text-[50px] md:text-2xl"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     ☰
@@ -60,8 +59,8 @@ const NavBar = () => {
                     <a className="hover:text-[#61AD4E]" href="#about">About</a>
                     <a className="hover:text-[#61AD4E]" href="#services">Services</a>
                     <a className="hover:text-[#61AD4E]" href="#contact">Contact</a>
-                    <Link to="/login" className="bg-black hover:bg-[#383838] text-white px-10 py-2 rounded-full">Login</Link>
-                    <button className="bg-black hover:bg-[#383838] text-white px-10 py-2 rounded-full" onClick={handleLogout}>Logout</button>
+                    <Link to="/login" className="hover:text-[#61AD4E]">Login</Link>
+                    <button className="hover:text-[#61AD4E]" onClick={handleLogout}>Logout</button>
                 </div>
             )}
         </nav>

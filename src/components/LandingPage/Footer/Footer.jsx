@@ -7,7 +7,7 @@ const Footer = () => (
             {/* Logo and Title Section */}
             <div className="flex flex-col items-center space-y-2">
                 <img src={logo} alt="Logo" className="w-48 h-48" />
-                <h2 className="text-[32px] font-bold font-Montserrat text-center">IPAMALIHOG <br />KAY LOLO</h2>
+                <h2 className="text-[26px] font-bold font-Montserrat text-center">IPAMALIHOG <br />KAY LOLO</h2>
             </div>
 
             {/* Services and About Section */}

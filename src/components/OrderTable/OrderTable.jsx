@@ -36,7 +36,6 @@ const OrderTable = () => {
 
     return (
         <div>
-            {/* Responsive Table */}
             <div className="mt-8 overflow-x-auto">
                 <div className="w-[1200px] min-w-full lg:w-full lg:min-w-max">
                     <table className="min-w-full bg-white border border-gray-200">
