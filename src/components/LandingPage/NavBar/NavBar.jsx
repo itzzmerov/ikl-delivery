@@ -44,7 +44,7 @@ const NavBar = () => {
                     <a href="#services" className="hover:text-darkBlack">Services</a>
                     <a href="#contact" className="hover:text-darkBlack">Contact</a>
                     <Link to="/login" className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full">Login</Link>
-                    <button className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full" onClick={handleLogout}>Logout</button>
+                    {/* <button className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full" onClick={handleLogout}>Logout</button> */}
                 </div>
                 <button
                     className="md:hidden focus:outline-none text-[50px] md:text-2xl"
@@ -60,7 +60,7 @@ const NavBar = () => {
                     <a className="hover:text-lightGreen" href="#services">Services</a>
                     <a className="hover:text-lightGreen" href="#contact">Contact</a>
                     <Link to="/login" className="hover:text-lightGreen">Login</Link>
-                    <button className="hover:text-lightGreen" onClick={handleLogout}>Logout</button>
+                    {/* <button className="hover:text-lightGreen" onClick={handleLogout}>Logout</button> */}
                 </div>
             )}
         </nav>
