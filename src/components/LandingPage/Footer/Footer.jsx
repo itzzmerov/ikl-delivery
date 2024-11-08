@@ -3,7 +3,7 @@ import logo from '../../../images/logo.png';
 
 const Footer = () => (
     <footer className="bg-lightWhite p-8">
-        <div className="w-[85%] mx-auto flex flex-col md:flex-row md:justify-between gap-8 text-center md:text-left p-2">
+        <div className="w-[85%] mx-auto flex flex-col lg:flex-row lg:justify-between gap-10 items-center text-center md:text-left p-2">
             <div className="flex flex-col items-center space-y-2">
                 <img src={logo} alt="Logo" className="w-48 h-48" />
                 <h2 className="text-[26px] font-bold font-Montserrat text-center">IPAMALIHOG <br />KAY LOLO</h2>
