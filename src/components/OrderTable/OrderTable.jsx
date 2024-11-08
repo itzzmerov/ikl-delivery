@@ -38,8 +38,8 @@ const OrderTable = () => {
         <div>
             <div className="mt-8 overflow-x-auto">
                 <div className="w-[1200px] min-w-full lg:w-full lg:min-w-max">
-                    <table className="min-w-full bg-white border border-gray-200">
-                        <thead className="bg-gray-800 text-white">
+                    <table className="min-w-full bg-lightWhite border border-gray-200">
+                        <thead className="bg-gray-800 text-lightWhite">
                             <tr className="text-left">
                                 <th className="py-2 px-4 border-b">Sender Name</th>
                                 <th className="py-2 px-4 border-b">Sender Phone</th>
@@ -69,14 +69,14 @@ const OrderTable = () => {
                                         <td className="py-2 px-4 border-b flex gap-2">
                                             <button
                                                 onClick={() => handleUpdateOrder(order.id)}
-                                                className="flex items-center gap-1 px-2 py-1 text-blue-500 border border-blue-500 rounded hover:bg-blue-500 hover:text-white transition"
+                                                className="flex items-center gap-1 px-2 py-1 text-blue-500 border border-blue-500 rounded hover:bg-blue-500 hover:text-lightWhite transition"
                                             >
                                                 <EditIcon fontSize="small" />
                                                 <span>Edit</span>
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteOrder(order.id)}
-                                                className="flex items-center gap-1 px-2 py-1 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition"
+                                                className="flex items-center gap-1 px-2 py-1 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-lightWhite transition"
                                             >
                                                 <DeleteIcon fontSize="small" />
                                                 <span>Delete</span>

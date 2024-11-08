@@ -35,8 +35,8 @@ const Register = () => {
 
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-[#F9F9F9] md:bg-[#D6D6D6]">
-            <div className="flex flex-col items-center bg-[#F9F9F9] p-8 rounded-[50px] md:shadow-lg w-full sm:max-w-md lg:max-w-lg">
+        <div className="flex justify-center items-center min-h-screen bg-lightWhite md:bg-darkWhite">
+            <div className="flex flex-col items-center bg-lightWhite p-8 rounded-[50px] md:shadow-lg w-full sm:max-w-md lg:max-w-lg">
 
                 <Link to="/">
                     <img src={Logo} alt="Logo of Ipamalihog Kay Lolo" className="mb-4 w-32 h-32" />
@@ -85,7 +85,7 @@ const Register = () => {
                     className="border border-gray-400 p-2 mb-6 w-full rounded-xl"
                 /> */}
 
-                <button type='submit' className="bg-[#181818] hover:bg-[#383838] text-white py-2 w-[30%] rounded-full" onClick={handleSubmit}>
+                <button type='submit' className="bg-darkBlack hover:bg-lightBlack text-lightWhite py-2 w-[30%] rounded-full" onClick={handleSubmit}>
                     REGISTER
                 </button>
 

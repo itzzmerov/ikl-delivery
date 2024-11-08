@@ -71,7 +71,7 @@ const UpdateOrder = () => {
 
     return (
         <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
-            <div className="bg-[#F9F9F9] p-2 lg:p-8 rounded-[50px] w-full">
+            <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full">
                 <h1 className="text-2xl font-bold text-center mb-6">PERA PADALA</h1>
 
                 {/* Sender Information */}
@@ -318,7 +318,7 @@ const UpdateOrder = () => {
 
                 {/* Submit Button */}
                 <button
-                    className="bg-[#181818] text-white py-2 w-full rounded"
+                    className="bg-darkBlack hover:bg-lightBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
                     onClick={handleSubmit}
                 >

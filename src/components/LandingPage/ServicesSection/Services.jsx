@@ -29,7 +29,7 @@ const Services = () => {
     };
 
     return (
-        <section className=" bg-white flex items-center justify-center" id="services">
+        <section className=" bg-lightWhite flex items-center justify-center" id="services">
             <div className='flex flex-col justify-center w-[85%] p-8'>
                 <h2 className="text-[48px] font-Montserrat text-center font-bold mt-20 mb-10">OUR SERVICES</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -39,17 +39,17 @@ const Services = () => {
                             className="relative rounded-tl-[50px] rounded-br-[50px] overflow-hidden shadow-lg"
                         >
                             <img src={service.image} alt={service.name} className="w-full h-[400px] object-cover" />
-                            <div className="absolute inset-x-0 bottom-0 bg-[#226710] text-white p-4 flex flex-col items-center space-y-1">
+                            <div className="absolute inset-x-0 bottom-0 bg-darkGreen text-lightWhite p-4 flex flex-col items-center space-y-1">
                                 <h3 className="font-semibold text-[20px] font-Montserrat">{service.name}</h3>
                                 <p className="text-[16px]">{service.price}</p>
-                                <button className="border-white border-2 hover:bg-white hover:text-black text-white px-4 py-1 rounded-lg mt-2" onClick={openOrderForm}>Avail Now</button>
+                                <button className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2" onClick={openOrderForm}>Avail Now</button>
 
                                 {isOrderFormVisible && (
                                     <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-                                        <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-2xl bg-white p-6 rounded-lg overflow-y-auto h-[90vh] shadow-lg">
+                                        <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-2xl bg-lightWhite p-6 rounded-lg overflow-y-auto h-[90vh] shadow-lg">
                                             <button
                                                 onClick={closeOrderForm}
-                                                className="absolute top-2 right-2 bg-gray-200 text-black rounded-full p-2"
+                                                className="absolute top-2 right-2 bg-gray-200 text-darkBlack rounded-full p-2"
                                             >
                                                 <CloseOutlinedIcon />
                                             </button>

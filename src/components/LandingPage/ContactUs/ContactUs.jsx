@@ -7,7 +7,7 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import DownloadIcon from '@mui/icons-material/Download';
 
 const ContactUs = () => (
-    <section className="bg-[#181818] text-white -center md:text-left flex items-center justify-center" id="contact">
+    <section className="bg-darkBlack text-lightWhite -center md:text-left flex items-center justify-center" id="contact">
         <div className='p-8 text flex flex-col md:flex-row items-center justify-center w-[85%] my-16'>
             <div className="space-y-4 w-[50%] p-8 flex flex-col gap-2">
                 <h2 className="text-[48px] font-Montserrat font-bold">CONTACT US</h2>
@@ -18,9 +18,9 @@ const ContactUs = () => (
             </div>
             <div className="mt-4 md:ml-6 w-[40%] flex flex-col justify-center items-center gap-2 p-10">
                 <img src={downloadImg} alt="Download App" className="w-[200px] h-[200px]" />
-                <p className='text-center text-[22px] font-Montserrat'>Download our Mobile App</p>
+                <p className='text-center text-[22px] font-Montserrat font-semibold'>Download our Mobile App</p>
                 <p className='text-center text-[14px]'>Efficient and dependable delivery solutions for every need in Mati City, Davao Oriental.</p>
-                <button className="bg-[#61AD4E] hover:bg-[#226710] text-white text-[16px] font-Montserrat px-4 py-3 rounded-full mt-2"><DownloadIcon /> Download from Play Store</button>
+                <button className="bg-lightGreen hover:bg-darkGreen text-lightWhite text-[16px] font-Montserrat px-4 py-3 rounded-full mt-2"><DownloadIcon /> Download from Play Store</button>
             </div>
         </div>
 

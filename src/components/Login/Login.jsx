@@ -34,8 +34,8 @@ const Login = () => {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-[#F9F9F9] md:bg-[#D6D6D6]">
-            <div className="flex flex-col items-center bg-[#F9F9F9] p-8 rounded-[50px] md:shadow-lg w-full sm:max-w-md lg:max-w-lg">
+        <div className="flex justify-center items-center min-h-screen bg-lightWhite md:bg-darkWhite">
+            <div className="flex flex-col items-center bg-lightWhite p-8 rounded-[50px] md:shadow-lg w-full sm:max-w-md lg:max-w-lg">
 
                 <Link to="/">
                     <img src={Logo} alt="Logo of Ipamalihog Kay Lolo" className="mb-4 w-32 h-32" />
@@ -45,7 +45,7 @@ const Login = () => {
                 <input
                     type="email"
                     placeholder="Email Address"
-                    className="w-full p-3 border border-gray-400 mb-4 rounded-xl focus:outline-none focus:border-[#181818]"
+                    className="w-full p-3 border border-gray-400 mb-4 rounded-xl focus:outline-none focus:border-darkBlack"
                     name='email'
                     required
                     onChange={handleInputChange}
@@ -55,14 +55,14 @@ const Login = () => {
                 <input
                     type="password"
                     placeholder="Password"
-                    className="w-full p-3 border border-gray-400 mb-4 rounded-xl focus:outline-none focus:border-[#181818]"
+                    className="w-full p-3 border border-gray-400 mb-4 rounded-xl focus:outline-none focus:border-darkBlack"
                     name='password'
                     required
                     onChange={handleInputChange}
                     value={formData.password}
                 />
 
-                <button className="bg-[#181818] hover:bg-[#383838] text-white py-2 w-[50%] font-Montserrat rounded-full" onClick={handleSubmit}>
+                <button className="bg-darkBlack hover:bg-lightBlack text-lightWhite py-2 w-[50%] font-Montserrat rounded-full" onClick={handleSubmit}>
                     LOGIN
                 </button>
 
