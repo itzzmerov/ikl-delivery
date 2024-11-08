@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Sidebar from './Sidebar/Sidebar'
 import TopNavbar from './TopNavbar/TopNavbar'
-import { Dashboard } from '@mui/icons-material'
+import Dashboard from './Dashboard/Dashboard'
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);

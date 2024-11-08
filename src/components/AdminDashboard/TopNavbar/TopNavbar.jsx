@@ -9,17 +9,20 @@ const TopNavbar = ({ toggleSidebar }) => {
                     <FaBars />
                 </button>
             </div>
-            <div className="flex items-center space-x-4">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full py-2 px-4 rounded-lg border focus:outline-none"
-                />
-                <button className="ml-2 p-2">
-                    <FaSearch />
-                </button>
-                <FaBell className="text-2xl cursor-pointer" />
-                <FaUserCircle className="text-2xl cursor-pointer" />
+            <div className="flex items-center gap-2">
+                <div className='flex flex-row'>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        className="w-full py-2 px-4 rounded-l-md border focus:outline-none"
+                    />
+                    <button className="p-2 bg-white rounded-r-md border border-r-0">
+                        <FaSearch size={20} />
+                    </button>
+                </div>
+                
+                <FaBell size={30} className="cursor-pointer" />
+                <FaUserCircle size={35} className="cursor-pointer" />
             </div>
         </div>
     );
