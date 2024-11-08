@@ -44,7 +44,7 @@ const Footer = () => (
         </div>
 
         <div className="border-t border-lightBlack mt-8 pt-4 text-center">
-            <p>© Ipamalihog Kay Lolo 2024. All Rights Reserved</p>
+            <p className='text-[14px] md:text-[16px]'>© Ipamalihog Kay Lolo 2024. All Rights Reserved</p>
         </div>
     </footer>
 );
