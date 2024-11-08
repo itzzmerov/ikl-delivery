@@ -30,9 +30,9 @@ const Services = () => {
 
     return (
         <section className=" bg-lightWhite flex items-center justify-center" id="services">
-            <div className='flex flex-col justify-center w-full md:w-[85%] p-8'>
-                <h2 className="text-[32px] font-Montserrat text-center font-bold mt-20 mb-10">OUR SERVICES</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className='flex flex-col justify-center w-full lg:w-[85%] p-8'>
+                <h2 className="text-[32px] md:text-[42px] font-Montserrat text-center font-bold mt-20 mb-10">OUR SERVICES</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                     {serviceItems.map((service, index) => (
                         <div
                             key={index}
