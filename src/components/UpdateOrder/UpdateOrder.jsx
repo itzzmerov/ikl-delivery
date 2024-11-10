@@ -47,7 +47,7 @@ const UpdateOrder = () => {
         fetchOrder();
         // eslint-disable-next-line
     }, [id])
-    
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
