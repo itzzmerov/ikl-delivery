@@ -4,6 +4,7 @@ import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 const OrderList = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const OrderList = () => {
     }, []);
 
     const handleUpdateOrder = (id) => {
-        navigate(`/order/${id}/update-order`);
+        navigate(`/admin/order/${id}/update-order`);
     };
 
     const handleDeleteOrder = async (id) => {
@@ -32,10 +33,16 @@ const OrderList = () => {
         }
     };
 
+    const openOrderForm = () => {
+        navigate("/admin/order/new-order")
+    }
 
     return (
         <div className="p-8 flex-1">
-            <h1 className="text-2xl font-semibold mb-4">Order List</h1>
+            <div className='flex justify-between items-center mb-2'>
+                <h1 className="text-2xl font-semibold mb-4">Order List</h1>
+                <button onClick={openOrderForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'><AddIcon /> Add Order</button>
+            </div>
 
             {/* Scrollable container */}
             <div className="min-w-full h-96 overflow-x-auto overflow-y-auto">

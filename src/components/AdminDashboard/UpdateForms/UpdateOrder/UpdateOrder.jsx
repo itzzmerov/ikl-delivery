@@ -1,7 +1,9 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import { db } from '../../utils/firebase';
+import { db } from '../../../../utils/firebase';
+import { AiOutlineClose } from 'react-icons/ai';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const UpdateOrder = () => {
 
@@ -63,16 +65,28 @@ const UpdateOrder = () => {
         try {
             const result = await updateDoc(doc(db, "orders", id), formData)
             console.log(result);
-            navigate("/")
+            navigate("/admin/orderlist")
         } catch (error) {
             console.error(error.message)
         }
     }
 
     return (
-        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
+        <div className='flex flex-col justify-center items-center min-h-screen w-full rounded-full p-8'>
+            <div className='flex justify-start items-center w-full'>
+                <h1 className="text-2xl font-semibold mb-4"><span onClick={() => navigate('/admin/orderlist')} className='cursor-pointer text-blue-900 hover:text-blue-600'>Order List</span> <ArrowForwardIosIcon /> Update Order</h1>
+            </div>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full">
-                <h1 className="text-2xl font-bold text-center mb-6">PERA PADALA</h1>
+                <div className="flex justify-between items-center mb-6">
+                    <p></p>
+                    <h1 className="text-2xl font-bold">PERA PADALA</h1>
+                    <button
+                        className="text-darkBlack hover:text-red-600"
+                        onClick={() => navigate('/admin/orderlist')}
+                    >
+                        <AiOutlineClose size={24} />
+                    </button>
+                </div>
 
                 {/* Sender Information */}
                 <div className="mb-2">
@@ -82,7 +96,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="First Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='senderFirstName'
                             id='senderFirstName'
@@ -93,7 +106,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Last Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='senderLastName'
                             id='senderLastName'
@@ -105,7 +117,6 @@ const UpdateOrder = () => {
                         type="text"
                         placeholder="Phone Number"
                         className="border p-2 w-full rounded mb-4"
-                        autoFocus
                         required
                         name='senderPhone'
                         id='senderPhone'
@@ -122,7 +133,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="House / Bldg. No."
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressHouse'
                             id='senderAddressHouse'
@@ -133,7 +143,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Street Address"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressStreet'
                             id='senderAddressStreet'
@@ -144,7 +153,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Barangay"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressBarangay'
                             id='senderAddressBarangay'
@@ -155,7 +163,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="City / Municipality"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressCity'
                             id='senderAddressCity'
@@ -166,7 +173,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Region"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressRegion'
                             id='senderAddressRegion'
@@ -177,7 +183,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="ZIP code"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='senderAddressZIP'
                             id='senderAddressZIP'
@@ -195,7 +200,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="First Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='receiverFirstName'
                             id='receiverFirstName'
@@ -206,7 +210,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Last Name"
                             className="border p-2 w-full rounded"
-                            autoFocus
                             required
                             name='receiverLastName'
                             id='receiverLastName'
@@ -218,7 +221,6 @@ const UpdateOrder = () => {
                         type="text"
                         placeholder="Phone Number"
                         className="border p-2 w-full rounded mb-4"
-                        autoFocus
                         required
                         name='receiverPhone'
                         id='receiverPhone'
@@ -235,7 +237,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="House / Bldg. No."
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressHouse'
                             id='receiverAddressHouse'
@@ -246,7 +247,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Street Address"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressStreet'
                             id='receiverAddressStreet'
@@ -257,7 +257,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Barangay"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressBarangay'
                             id='receiverAddressBarangay'
@@ -268,7 +267,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="City / Municipality"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressCity'
                             id='receiverAddressCity'
@@ -279,7 +277,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="Region"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressRegion'
                             id='receiverAddressRegion'
@@ -290,7 +287,6 @@ const UpdateOrder = () => {
                             type="text"
                             placeholder="ZIP code"
                             className="border w-full p-2 rounded"
-                            autoFocus
                             required
                             name='receiverAddressZIP'
                             id='receiverAddressZIP'
@@ -307,7 +303,6 @@ const UpdateOrder = () => {
                         type="text"
                         placeholder="e.g. 500"
                         className="border p-2 w-full rounded"
-                        autoFocus
                         required
                         name='amount'
                         id='amount'

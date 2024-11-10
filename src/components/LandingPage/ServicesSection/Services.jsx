@@ -6,7 +6,7 @@ import HatidSundo from '../../../images/hatid-sundo.jpg';
 import Pamalengke from '../../../images/pamalengke.jpg';
 import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
-import OrderForm from '../../OrderForm/OrderForm';
+import OrderForm from '../../OrderForm/CustomerOrderForm';
 
 const serviceItems = [
     { name: 'Food Delivery', price: '₱100 - 150', image: FoodDelivery },

@@ -3,7 +3,7 @@ import FoodDelivery from '../../../images/food-delivery.jpg';
 import PeraPadala from '../../../images/pera-padala.jpg';
 import HatidSundo from '../../../images/hatid-sundo.jpg';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import OrderForm from '../../OrderForm/OrderForm';
+import OrderForm from '../../OrderForm/CustomerOrderForm';
 
 const services = [
     { name: 'Food Delivery', image: FoodDelivery, bg: FoodDelivery },
@@ -37,7 +37,7 @@ const FeaturedServices = () => {
                     key={index}
                     className="relative flex flex-col justify-center items-center text-lightWhite rounded-2xl bg-cover bg-center h-[350px] w-full md:w-[30%] lg:w-[27.5%] cursor-pointer"
                     style={{ backgroundImage: `url(${service.bg})` }}
-                    
+
                 >
                     <button onClick={openOrderForm}>
                         <div className="absolute inset-0 bg-darkBlack opacity-50 rounded-2xl"></div>
@@ -57,13 +57,13 @@ const FeaturedServices = () => {
                             </div>
                         </div>
                     )}
-                    
+
                 </div>
-                
+
             ))}
 
-            
-            
+
+
         </section>
     );
 };
