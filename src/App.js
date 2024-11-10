@@ -20,7 +20,10 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/" element={<PrivateRoute element={<LandingPage />} />}></Route>
         <Route path="/order/:id/update-order" element={<PrivateRoute element={<UpdateOrder />} />}></Route>
-        <Route path="/admin" element={<AdminDashboard />}></Route>
+        <Route
+          path="/admin/*"
+          element={<AdminDashboard />}
+        />
       </Routes>
     </div>
   );
