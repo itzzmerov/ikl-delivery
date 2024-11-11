@@ -31,17 +31,31 @@ const UpdateOrder = () => {
         receiverAddressRegion: '',
         receiverAddressZIP: '',
         amount: '',
+        service: null, // To store the service data
     })
 
     const fetchOrder = async () => {
         try {
             const response = await getDoc(doc(db, "orders", id));
-            if (response.exists())
-                setFormData(response.data());
-            else
-                console.log("No such document found!")
+            if (response.exists()) {
+                const orderData = response.data();
+                setFormData(orderData);
+
+                // Fetch the related service data based on the service ID in the order
+                if (orderData.serviceId) {
+                    const serviceResponse = await getDoc(doc(db, "services", orderData.serviceId));
+                    if (serviceResponse.exists()) {
+                        setFormData((prevData) => ({
+                            ...prevData,
+                            service: serviceResponse.data(), // Store the service data
+                        }));
+                    }
+                }
+            } else {
+                console.log("No such document found!");
+            }
         } catch (error) {
-            console.error(error.message)
+            console.error(error.message);
         }
     }
 
@@ -79,7 +93,7 @@ const UpdateOrder = () => {
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full">
                 <div className="flex justify-between items-center mb-6">
                     <p></p>
-                    <h1 className="text-2xl font-bold">PERA PADALA</h1>
+                    <h1 className="text-2xl font-bold">{formData.service?.name || "PERA PADALA"}</h1>
                     <button
                         className="text-darkBlack hover:text-red-600"
                         onClick={() => navigate('/admin/orderlist')}
@@ -296,22 +310,6 @@ const UpdateOrder = () => {
                     </div>
                 </div>
 
-                {/* Amount */}
-                <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Amount:</h2>
-                    <input
-                        type="text"
-                        placeholder="e.g. 500"
-                        className="border p-2 w-full rounded"
-                        required
-                        name='amount'
-                        id='amount'
-                        value={formData.amount}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                {/* Submit Button */}
                 <button
                     className="bg-darkBlack hover:bg-lightBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
@@ -319,10 +317,9 @@ const UpdateOrder = () => {
                 >
                     Update Order
                 </button>
-
             </div>
         </div>
     )
 }
 
-export default UpdateOrder
+export default UpdateOrder;

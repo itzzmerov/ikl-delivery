@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { db } from '../../utils/firebase';
 import { collection, addDoc } from 'firebase/firestore'
 
-const OrderForm = ({ onClose }) => {
+const OrderForm = ({ onClose, serviceName  }) => {
 
     const [formData, setFormData] = useState({
+        service: serviceName || '', // Add service name to the form data
         senderFirstName: '',
         senderLastName: '',
         senderPhone: '',
@@ -24,32 +25,32 @@ const OrderForm = ({ onClose }) => {
         receiverAddressRegion: '',
         receiverAddressZIP: '',
         amount: '',
-    })
+    });
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({
             ...formData,
-            [name]: value
-        })
-    }
+            [name]: value,
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
+        console.log(formData);
         try {
-            const result = await addDoc(collection(db, "orders"), formData)
+            const result = await addDoc(collection(db, "orders"), formData);
             console.log(result);
             onClose();
         } catch (error) {
-            console.error(error.message)
+            console.error(error.message);
         }
-    }
+    };
 
     return (
         <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
-                <h1 className="text-2xl font-bold text-center mb-6">PERA PADALA</h1>
+                <h1 className="text-2xl font-bold text-center mb-6">{serviceName || 'Service'}</h1>
 
                 {/* Sender Information */}
                 <div className="mb-2">

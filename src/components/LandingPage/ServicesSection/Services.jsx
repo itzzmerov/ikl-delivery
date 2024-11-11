@@ -10,6 +10,7 @@ import OrderForm from '../../OrderForm/CustomerOrderForm';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
+// Service items data
 const serviceItems = [
     { name: 'Food Delivery', price: '₱100 - 150', image: FoodDelivery },
     { name: 'Pera Padala', price: '₱100 - 150', image: PeraPadala },
@@ -22,22 +23,26 @@ const serviceItems = [
 const Services = () => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
-    const [isOrderFormVisible, setIsOrderFormVisible] = useState(false)
+    const [isOrderFormVisible, setIsOrderFormVisible] = useState(false);
+    const [selectedService, setSelectedService] = useState(''); // New state for selected service
 
-    const openOrderForm = () => {
+    // Function to open order form and set selected service
+    const openOrderForm = (serviceName) => {
         if (!currentUser) {
             navigate('/login');
             return;
         }
+        setSelectedService(serviceName);
         setIsOrderFormVisible(true);
     };
 
     const closeOrderForm = () => {
         setIsOrderFormVisible(false);
+        setSelectedService(''); // Reset the selected service
     };
 
     return (
-        <section className=" bg-lightWhite flex items-center justify-center" id="services">
+        <section className="bg-lightWhite flex items-center justify-center" id="services">
             <div className='flex flex-col justify-center w-full lg:w-[85%] p-8'>
                 <h2 className="text-[32px] md:text-[42px] font-Montserrat text-center font-bold mt-20 mb-10">OUR SERVICES</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -50,7 +55,10 @@ const Services = () => {
                             <div className="absolute inset-x-0 bottom-0 bg-darkGreen text-lightWhite p-4 flex flex-col items-center space-y-1">
                                 <h3 className="font-semibold text-[20px] font-Montserrat">{service.name}</h3>
                                 <p className="text-[16px]">{service.price}</p>
-                                <button className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2" onClick={openOrderForm}>
+                                <button
+                                    className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2"
+                                    onClick={() => openOrderForm(service.name)} // Pass service name to the form
+                                >
                                     {currentUser ? 'Avail Now' : 'Login to Avail'}
                                 </button>
 
@@ -63,7 +71,7 @@ const Services = () => {
                                             >
                                                 <CloseOutlinedIcon />
                                             </button>
-                                            <OrderForm onClose={closeOrderForm} />
+                                            <OrderForm onClose={closeOrderForm} serviceName={selectedService} />
                                         </div>
                                     </div>
                                 )}
@@ -73,9 +81,7 @@ const Services = () => {
                 </div>
             </div>
         </section>
-
-    )
-
+    );
 };
 
 export default Services;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { db } from '../../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, getDocs } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -29,7 +29,25 @@ const OrderForm = () => {
         receiverAddressRegion: '',
         receiverAddressZIP: '',
         amount: '',
+        service: '',
     })
+
+    const [services, setServices] = useState([]);
+
+    const fetchServices = async () => {
+        try {
+            const servicesRef = collection(db, 'services');
+            const querySnapshot = await getDocs(servicesRef);
+            const servicesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setServices(servicesData);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchServices();
+    }, []);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -66,6 +84,25 @@ const OrderForm = () => {
                     >
                         <AiOutlineClose size={24} />
                     </button>
+                </div>
+
+                {/* Service Selection */}
+                <div className="mb-4">
+                    <h2 className="font-semibold mb-2">Select Service:</h2>
+                    <select
+                        name="service"
+                        className="border p-2 w-full rounded"
+                        value={formData.service}
+                        onChange={handleInputChange}
+                        required
+                    >
+                        <option value="">--Select a Service--</option>
+                        {services.map(service => (
+                            <option key={service.id} value={service.name}>
+                                {service.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 {/* Sender Information */}

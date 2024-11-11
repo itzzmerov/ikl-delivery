@@ -49,6 +49,7 @@ const OrderList = () => {
                 <table className="min-w-full bg-lightWhite border border-gray-200">
                     <thead className="bg-gray-800 text-lightWhite sticky top-0">
                         <tr className="text-left">
+                            <th className="py-2 px-4 border-b">Services</th>
                             <th className="py-2 px-4 border-b">Sender Name</th>
                             <th className="py-2 px-4 border-b">Sender Phone</th>
                             <th className="py-2 px-4 border-b">Sender Address</th>
@@ -69,6 +70,7 @@ const OrderList = () => {
                         ) : (
                             orders.map((order) => (
                                 <tr key={order.id} className="text-left">
+                                    <td className="py-2 px-4 border-b">{order.service}</td>
                                     <td className="py-2 px-4 border-b">{order.senderFirstName} {order.senderLastName}</td>
                                     <td className="py-2 px-4 border-b">{order.senderPhone}</td>
                                     <td className="py-2 px-4 border-b">{order.senderAddressHouse} {order.senderAddressStreet} {order.senderAddressBarangay} {order.senderAddressCity} {order.senderAddressRegion} {order.senderAddressZIP}</td>

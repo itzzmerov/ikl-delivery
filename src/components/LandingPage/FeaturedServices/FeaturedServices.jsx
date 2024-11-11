@@ -18,17 +18,20 @@ const FeaturedServices = () => {
     const { currentUser } = useAuth();
 
     const [isOrderFormVisible, setIsOrderFormVisible] = useState(false);
+    const [selectedService, setSelectedService] = useState('');
 
-    const openOrderForm = () => {
+    const openOrderForm = (serviceName) => {
         if (!currentUser) {
             navigate('/login');
             return;
         }
+        setSelectedService(serviceName);
         setIsOrderFormVisible(true);
     };
 
     const closeOrderForm = () => {
         setIsOrderFormVisible(false);
+        setSelectedService('');
     };
 
     return (
@@ -46,7 +49,7 @@ const FeaturedServices = () => {
                     style={{ backgroundImage: `url(${service.bg})` }}
 
                 >
-                    <button onClick={openOrderForm}>
+                    <button onClick={() => openOrderForm(service.name)}>
                         <div className="absolute inset-0 bg-darkBlack opacity-50 rounded-2xl"></div>
                         <h2 className="absolute bottom-16 left-4 text-[32px] lg:text-[64px] font-semibold z-10">{service.name}</h2>
                     </button>
@@ -64,7 +67,7 @@ const FeaturedServices = () => {
                                 >
                                     <CloseOutlinedIcon />
                                 </button>
-                                <OrderForm onClose={closeOrderForm} />
+                                <OrderForm onClose={closeOrderForm} serviceName={selectedService} />
                             </div>
                         </div>
                     )}
