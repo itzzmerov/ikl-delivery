@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../../utils/firebase';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
+import { FaUserFriends, FaClipboardList, FaMotorcycle, FaStar } from 'react-icons/fa'; // Import React Icons
 
 const Dashboard = () => {
     const [numCustomers, setNumCustomers] = useState(0);
@@ -21,7 +22,7 @@ const Dashboard = () => {
 
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-                setUserName(userData.firstName + " " + userData.lastName || "Admin"); 
+                setUserName(`${userData.firstName} ${userData.lastName}` || "Admin");
             }
         }
     };
@@ -71,28 +72,34 @@ const Dashboard = () => {
         fetchAverageReviews();
     }, []);
 
+    // Define card data
+    const cards = [
+        { title: 'Customers', value: numCustomers, icon: <FaUserFriends />, bgColor: 'bg-gradient-to-r from-blue-500 to-green-400', textColor: 'text-white' },
+        { title: 'Orders', value: numOrders, icon: <FaClipboardList />, bgColor: 'bg-gradient-to-r from-purple-400 to-pink-500', textColor: 'text-white' },
+        { title: 'Riders', value: numRiders, icon: <FaMotorcycle />, bgColor: 'bg-gradient-to-r from-orange-500 to-yellow-400', textColor: 'text-white' },
+        { title: 'Average Reviews', value: averageReviews, icon: <FaStar />, bgColor: 'bg-gradient-to-r from-indigo-400 to-purple-500', textColor: 'text-white' }
+    ];
+
     return (
         <div className="p-8 flex-1">
             <h1 className="text-2xl font-semibold mb-4">Dashboard</h1>
             <p className="mb-8">Hi {userName}, welcome back to IKL Admin</p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="bg-white rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-                    <h2 className="text-xl font-semibold">Customers</h2>
-                    <p className="text-3xl font-bold">{numCustomers}</p>
-                </div>
-                <div className="bg-white rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-                    <h2 className="text-xl font-semibold">Orders</h2>
-                    <p className="text-3xl font-bold">{numOrders}</p>
-                </div>
-                <div className="bg-white rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-                    <h2 className="text-xl font-semibold">Riders</h2>
-                    <p className="text-3xl font-bold">{numRiders}</p>
-                </div>
-                <div className="bg-white rounded-lg p-4 shadow-md flex flex-col justify-center items-center">
-                    <h2 className="text-xl font-semibold">Average Reviews</h2>
-                    <p className="text-3xl font-bold">{averageReviews}</p>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {cards.map((card, index) => (
+                    <div
+                        key={index}
+                        className={`rounded-lg p-6 shadow-lg flex items-center ${card.bgColor} hover:scale-105 transition-transform duration-200`}
+                    >
+                        <div className={`text-4xl mr-4 ${card.textColor}`}>
+                            {card.icon}
+                        </div>
+                        <div className="flex flex-col">
+                            <h2 className={`text-lg font-semibold ${card.textColor}`}>{card.title}</h2>
+                            <p className={`text-2xl font-bold ${card.textColor}`}>{card.value}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );
