@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { db } from '../../../../utils/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const AddNewRider = () => {
+const UpdateRider = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -15,7 +16,6 @@ const AddNewRider = () => {
         userType: 'rider',
         username: '',
         email: '',
-        password: '',
         phoneNumber: '',
         userAddressHouse: '',
         userAddressStreet: '',
@@ -23,21 +23,57 @@ const AddNewRider = () => {
         userAddressCity: '',
         userAddressRegion: '',
         userAddressZIP: '',
-    })
+    });
+
+    const fetchRider = async () => {
+        try {
+            const response = await getDoc(doc(db, "users", id));
+            if (response.exists()) {
+                const riderData = response.data();
+                
+                const { address } = riderData;
+
+                setFormData({
+                    firstName: riderData.firstName || '',
+                    middleName: riderData.middleName || '',
+                    lastName: riderData.lastName || '',
+                    username: riderData.username || '',
+                    email: riderData.email || '',
+                    phoneNumber: riderData.phoneNumber || '',
+                    userType: riderData.userType || 'rider',
+                    userAddressHouse: address ? address.house : '',
+                    userAddressStreet: address ? address.street : '',
+                    userAddressBarangay: address ? address.barangay : '',
+                    userAddressCity: address ? address.city : '',
+                    userAddressRegion: address ? address.region : '',
+                    userAddressZIP: address ? address.zip : '',
+                });
+            } else {
+                console.log("No such document found!");
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+    useEffect(() => {
+        fetchRider();
+        // eslint-disable-next-line
+    }, [id]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({
             ...formData,
             [name]: value
-        })
-    }
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
+        console.log(formData);
 
-        const address = {
+        const updatedAddress = {
             house: formData.userAddressHouse,
             street: formData.userAddressStreet,
             barangay: formData.userAddressBarangay,
@@ -46,36 +82,36 @@ const AddNewRider = () => {
             zip: formData.userAddressZIP,
         };
 
-        const RiderData = {
-            firstName: formData.firstName,
-            middleName: formData.middleName,
-            lastName: formData.lastName,
-            userType: formData.userType,
-            username: formData.username,
-            email: formData.email,
-            password: formData.password,
-            phoneNumber: formData.phoneNumber,
-            createdAt: serverTimestamp(),
-            address: address, 
-        };
-
         try {
-            const result = await addDoc(collection(db, "users"), RiderData)
-            console.log(result);
-            navigate('/admin/riders')
+            const updatedData = {
+                ...formData,
+                address: updatedAddress, 
+                updatedAt: serverTimestamp(), 
+            };
+
+            await updateDoc(doc(db, "users", id), updatedData);
+
+            console.log("Customer data updated successfully.");
+            navigate("/admin/riders");
         } catch (error) {
-            console.error(error.message)
+            console.error("Error updating customer data:", error.message);
         }
-    }
+    };
+
     return (
-        <div className='flex flex-col items-center w-full p-8'>
+        <div className='flex flex-col justify-center items-center min-h-screen w-full rounded-full p-8'>
             <div className='flex justify-start items-center w-full'>
-                <h1 className="text-2xl font-semibold mb-4"><span onClick={() => navigate('/admin/riders')} className='cursor-pointer text-blue-900 hover:text-blue-600'>Riders</span> <ArrowForwardIosIcon /> Add New Rider</h1>
+                <h1 className="text-2xl font-semibold mb-4">
+                    <span onClick={() => navigate('/admin/riders')} className='cursor-pointer text-blue-900 hover:text-blue-600'>
+                        Riders
+                    </span> 
+                    <ArrowForwardIosIcon /> Update Rider
+                </h1>
             </div>
-            <div className="bg-lightWhite p-2 lg:p-8 rounded-[25px] w-full text-darkBlack">
+            <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full">
                 <div className="flex justify-between items-center mb-6">
                     <p></p>
-                    <h1 className="text-2xl font-bold">RIDER LIST</h1>
+                    <h1 className="text-2xl font-bold">UPDATE RIDER INFORMATION</h1>
                     <button
                         className="text-darkBlack hover:text-red-600"
                         onClick={() => navigate('/admin/riders')}
@@ -84,7 +120,7 @@ const AddNewRider = () => {
                     </button>
                 </div>
 
-                <div className="mb-2">
+                <div className="mb-4">
                     <div className='w-full flex mb-2'>
                         <h3>Personal Information:</h3>
                     </div>
@@ -204,15 +240,6 @@ const AddNewRider = () => {
                         onChange={handleInputChange}
                         value={formData.phoneNumber}
                     />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="password"
-                        required
-                        onChange={handleInputChange}
-                        value={formData.password}
-                    />
                 </div>
 
                 <button
@@ -220,12 +247,12 @@ const AddNewRider = () => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Add Service
+                    Update Rider
                 </button>
 
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AddNewRider
+export default UpdateRider;

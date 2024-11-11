@@ -39,11 +39,9 @@ const Register = () => {
         e.preventDefault();
         console.log(formData)
         try {
-            // Create user with email and password in Firebase Authentication
             const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             const userId = response.user.uid;
 
-            // Create user document in Firestore
             await setDoc(doc(db, 'users', userId), {
                 firstName: formData.firstName,
                 middleName: formData.middleName,

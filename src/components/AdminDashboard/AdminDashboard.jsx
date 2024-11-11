@@ -13,6 +13,10 @@ import UpdateOrder from './UpdateForms/UpdateOrder/UpdateOrder';
 import AddNewOrder from './AddForms/AddNewOrder/AddNewOrder'
 import AddNewService from './AddForms/ServicesForm/AddNewService';
 import UpdateService from './UpdateForms/UpdateService/UpdateService';
+import AddNewCustomer from './AddForms/AddNewCustomer/AddNewCustomer';
+import UpdateCustomer from './UpdateForms/UpdateCustomer/UpdateCustomer';
+import AddNewRider from './AddForms/AddNewRider/AddNewRider';
+import UpdateRider from './UpdateForms/UpdateRider/UpdateRider';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -23,13 +27,10 @@ const AdminDashboard = () => {
 
     return (
         <div className="flex h-screen overflow-hidden">
-            {/* Sidebar remains fixed */}
             <Sidebar isCollapsed={isSidebarCollapsed} />
             <div className="flex-1 flex flex-col">
-                {/* Top Navbar remains fixed */}
                 <TopNavbar toggleSidebar={toggleSidebar} />
 
-                {/* Scrollable content area */}
                 <div className="flex-1 h-full overflow-y-auto p-4 bg-darkWhite">
                     <Routes>
                         <Route path="/" element={<Navigate to="dashboard" />} />
@@ -44,10 +45,14 @@ const AdminDashboard = () => {
                         {/* Adding New Data Links */}
                         <Route path="order/new-order" element={<AddNewOrder />} />
                         <Route path="services/new-service" element={<AddNewService />} />
+                        <Route path="customers/new-customer" element={<AddNewCustomer />} />
+                        <Route path="riders/new-rider" element={<AddNewRider />} />
 
                         {/* Updating Data Links */}
                         <Route path="order/:id/update-order" element={<UpdateOrder />} />
                         <Route path="services/:id/update-services" element={<UpdateService />} />
+                        <Route path="customers/:id/update-customer" element={<UpdateCustomer />} />
+                        <Route path="riders/:id/update-rider" element={<UpdateRider />} />
 
                     </Routes>
                 </div>
