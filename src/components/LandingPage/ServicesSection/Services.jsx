@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { useAuth } from '../../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import FoodDelivery from '../../../images/food-delivery.jpg';
 import PeraPadala from '../../../images/pera-padala.jpg';
 import HatidSundo from '../../../images/hatid-sundo.jpg';
@@ -7,24 +9,39 @@ import Pamalengke from '../../../images/pamalengke.jpg';
 import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
 import OrderForm from '../../OrderForm/CustomerOrderForm';
-import { useAuth } from '../../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
-// Service items data
+// Dummy data with locally stored images and random price handler
 const serviceItems = [
-    { name: 'Food Delivery', price: '₱100 - 150', image: FoodDelivery },
-    { name: 'Pera Padala', price: '₱100 - 150', image: PeraPadala },
-    { name: 'Hatid Sundo', price: '₱100 - 150', image: HatidSundo },
-    { name: 'Pamalengke', price: '₱100 - 150', image: Pamalengke },
-    { name: 'Bill Payments', price: '₱100 - 150', image: BillPayment },
-    { name: 'Parcel Pickup', price: '₱100 - 150', image: ParcelPickup },
+    { name: 'Food Delivery', image: FoodDelivery },
+    { name: 'Pera Padala', image: PeraPadala },
+    { name: 'Hatid Sundo', image: HatidSundo },
+    { name: 'Pamalengke', image: Pamalengke },
+    { name: 'Bill Payments', image: BillPayment },
+    { name: 'Parcel Pickup', image: ParcelPickup },
 ];
 
 const Services = () => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
     const [isOrderFormVisible, setIsOrderFormVisible] = useState(false);
-    const [selectedService, setSelectedService] = useState(''); // New state for selected service
+    const [selectedService, setSelectedService] = useState('');
+    const [serviceItemsWithPrice, setServiceItemsWithPrice] = useState(serviceItems); // State to hold services with dummy prices
+
+    // Dummy price generator
+    const generateDummyPrice = () => {
+        const minPrice = 100;
+        const maxPrice = 150;
+        return `₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice} - ₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice}`;
+    };
+
+    // Attach dummy prices to services
+    useEffect(() => {
+        const servicesWithPrices = serviceItems.map(service => ({
+            ...service,
+            price: generateDummyPrice(), // Add price
+        }));
+        setServiceItemsWithPrice(servicesWithPrices);
+    }, []);
 
     // Function to open order form and set selected service
     const openOrderForm = (serviceName) => {
@@ -46,7 +63,7 @@ const Services = () => {
             <div className='flex flex-col justify-center w-full lg:w-[85%] p-8'>
                 <h2 className="text-[32px] md:text-[42px] font-Montserrat text-center font-bold mt-20 mb-10">OUR SERVICES</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                    {serviceItems.map((service, index) => (
+                    {serviceItemsWithPrice.map((service, index) => (
                         <div
                             key={index}
                             className="relative rounded-tl-[50px] rounded-br-[50px] overflow-hidden shadow-lg"
@@ -54,7 +71,7 @@ const Services = () => {
                             <img src={service.image} alt={service.name} className="w-full h-[400px] object-cover" />
                             <div className="absolute inset-x-0 bottom-0 bg-darkGreen text-lightWhite p-4 flex flex-col items-center space-y-1">
                                 <h3 className="font-semibold text-[20px] font-Montserrat">{service.name}</h3>
-                                <p className="text-[16px]">{service.price}</p>
+                                <p className="text-[16px]">{service.price}</p> {/* Displaying the dummy price */}
                                 <button
                                     className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2"
                                     onClick={() => openOrderForm(service.name)} // Pass service name to the form
