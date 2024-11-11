@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,7 +11,8 @@ const Customers = () => {
     const [customers, setCustomers] = useState([]);
 
     const fetchCustomers = async () => {
-        const response = await getDocs(collection(db, "users"));
+        const customersQuery = query(collection(db, "users"), where("userType", "==", "customer"));
+        const response = await getDocs(customersQuery);
         const customersList = response.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setCustomers(customersList);
     };
