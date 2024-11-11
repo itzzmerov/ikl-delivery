@@ -7,6 +7,8 @@ import Pamalengke from '../../../images/pamalengke.jpg';
 import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
 import OrderForm from '../../OrderForm/CustomerOrderForm';
+import { useAuth } from '../../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const serviceItems = [
     { name: 'Food Delivery', price: '₱100 - 150', image: FoodDelivery },
@@ -18,9 +20,15 @@ const serviceItems = [
 ];
 
 const Services = () => {
+    const navigate = useNavigate();
+    const { currentUser } = useAuth();
     const [isOrderFormVisible, setIsOrderFormVisible] = useState(false)
 
     const openOrderForm = () => {
+        if (!currentUser) {
+            navigate('/login');
+            return;
+        }
         setIsOrderFormVisible(true);
     };
 
@@ -42,7 +50,9 @@ const Services = () => {
                             <div className="absolute inset-x-0 bottom-0 bg-darkGreen text-lightWhite p-4 flex flex-col items-center space-y-1">
                                 <h3 className="font-semibold text-[20px] font-Montserrat">{service.name}</h3>
                                 <p className="text-[16px]">{service.price}</p>
-                                <button className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2" onClick={openOrderForm}>Avail Now</button>
+                                <button className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2" onClick={openOrderForm}>
+                                    {currentUser ? 'Avail Now' : 'Login to Avail'}
+                                </button>
 
                                 {isOrderFormVisible && (
                                     <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">

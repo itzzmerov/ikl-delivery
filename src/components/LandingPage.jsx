@@ -8,6 +8,7 @@ import ContactUs from './LandingPage/ContactUs/ContactUs';
 import Footer from './LandingPage/Footer/Footer';
 
 const LandingPage = () => {
+
     return (
         <div className="pt-[96px] bg-lightGreen">
             <NavBar />

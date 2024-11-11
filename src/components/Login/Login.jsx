@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import Logo from '../../images/logo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../utils/firebase';
+import { auth, db } from '../../utils/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Login = () => {
 
@@ -23,13 +24,29 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
         try {
+            // Sign in user
             const response = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-            console.log("Login successful: ", response);
-            navigate("/")
+            const userId = response.user.uid;
+
+            // Fetch user data from Firestore
+            const userDoc = await getDoc(doc(db, 'users', userId));
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                console.log('User data:', userData);
+
+                // Check user type and redirect accordingly
+                if (userData.userType === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
+            } else {
+                console.error('No user data found');
+            }
         } catch (error) {
-            console.error(error.message)
+            console.error('Error during login:', error.message);
         }
     }
 

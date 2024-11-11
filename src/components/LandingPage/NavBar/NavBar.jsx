@@ -4,16 +4,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../utils/firebase';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useAuth } from '../../../hooks/useAuth';
+import { FaCircleUser } from "react-icons/fa6";
 
 const NavBar = () => {
+    const { currentUser } = useAuth();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            navigate("/login");
+            navigate("/");
         } catch (error) {
             console.error(error);
         }
@@ -44,8 +48,30 @@ const NavBar = () => {
                     <a href="#about" className="hover:text-darkBlack">About</a>
                     <a href="#services" className="hover:text-darkBlack">Services</a>
                     <a href="#contact" className="hover:text-darkBlack">Contact</a>
-                    <Link to="/login" className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full">Login</Link>
-                    {/* <button className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full" onClick={handleLogout}>Logout</button> */}
+                    {!currentUser ? (
+                        <Link to="/login" className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full">Login</Link>
+                    ) : (
+                        <div className="relative">
+                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2">
+                        <FaCircleUser className="w-8 h-8 rounded-full" />
+                        </button>
+            
+                        {dropdownOpen && (
+                          <div className="absolute right-0 mt-2 w-75 bg-white text-black rounded-lg shadow-lg">
+                            <div className="p-2">
+                              <p className="text-xs font-OpenSans">Logged in as:</p>
+                              <p className="text-sm font-semibold font-Montserrat">{currentUser.email}</p>
+                            </div>
+                            <button 
+                              onClick={handleLogout}
+                              className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200 rounded-b-lg font-Montserrat"
+                            >
+                              Logout
+                            </button>
+                          </div>
+                        )}
+                      </div>   
+                    )}
                 </div>
                 <button
                     className="md:hidden focus:outline-none"

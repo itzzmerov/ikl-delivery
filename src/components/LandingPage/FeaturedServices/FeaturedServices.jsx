@@ -4,6 +4,8 @@ import PeraPadala from '../../../images/pera-padala.jpg';
 import HatidSundo from '../../../images/hatid-sundo.jpg';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import OrderForm from '../../OrderForm/CustomerOrderForm';
+import { useAuth } from '../../../hooks/useAuth';
+import { Link, useNavigate } from 'react-router-dom';
 
 const services = [
     { name: 'Food Delivery', image: FoodDelivery, bg: FoodDelivery },
@@ -12,10 +14,16 @@ const services = [
 ];
 
 const FeaturedServices = () => {
+    const navigate = useNavigate();
+    const { currentUser } = useAuth();
 
     const [isOrderFormVisible, setIsOrderFormVisible] = useState(false);
 
     const openOrderForm = () => {
+        if (!currentUser) {
+            navigate('/login');
+            return;
+        }
         setIsOrderFormVisible(true);
     };
 
@@ -27,8 +35,7 @@ const FeaturedServices = () => {
         <section
             className="relative p-8 flex flex-wrap justify-center gap-5"
             style={{
-                marginTop: '-200px',
-                zIndex: '40',
+                
                 background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, #f9f9f9 50%)',
             }}
         >
@@ -44,8 +51,12 @@ const FeaturedServices = () => {
                         <h2 className="absolute bottom-16 left-4 text-[32px] lg:text-[64px] font-semibold z-10">{service.name}</h2>
                     </button>
 
+                    {!currentUser && (
+                        <p className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded">Login to Avail</p>
+                    )}
+
                     {isOrderFormVisible && (
-                        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center mt-20">
+                        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
                             <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-2xl bg-lightWhite p-6 rounded-lg overflow-y-auto h-[90vh] shadow-lg">
                                 <button
                                     onClick={closeOrderForm}

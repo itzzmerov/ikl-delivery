@@ -7,21 +7,18 @@ import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 
 function App() {
 
-  const PrivateRoute = ({element}) => {
-    const {currentUser} = useAuth();
-    return currentUser ? element : <Navigate to="/login" />
-  }
+  const PrivateRoute = ({ element }) => {
+    const { currentUser } = useAuth();
+    return currentUser ? element : <Navigate to="/login" />;
+  };
 
   return (
-    <div className="">
+    <div>
       <Routes>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/" element={<PrivateRoute element={<LandingPage />} />}></Route>
-        <Route
-          path="/admin/*"
-          element={<AdminDashboard />}
-        />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/admin/*" element={<PrivateRoute element={<AdminDashboard />} />} />
       </Routes>
     </div>
   );

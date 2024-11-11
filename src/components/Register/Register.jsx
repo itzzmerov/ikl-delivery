@@ -17,7 +17,7 @@ const Register = () => {
         email: '',
         password: '',
         phoneNumber: '',
-        userType: 'customer',
+        userType: 'admin',
         userAddressHouse: '',
         userAddressStreet: '',
         userAddressBarangay: '',

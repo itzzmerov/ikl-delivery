@@ -3,7 +3,7 @@ import riderHero from '../../../images/rider-hero.svg';
 
 const Hero = () => {
     return (
-        <section className="bg-lightGreen text-white pb-56 flex justify-center" id='home'>
+        <section className="bg-lightGreen text-white pb-4 flex justify-center" id='home'>
             <div className='p-8 text-center lg:text-left flex flex-col lg:flex-row justify-center items-center gap-6 w-full md:w-[85%] mt-12'>
                 <div className="space-y-4 flex flex-col items-center lg:items-start gap-5">
                     <h1 className="text-[48px] md:text-[64px] font-bold font-Montserrat text-darkBlack leading-[60px] md:leading-[80px]">Fast & Reliable Deliveries at Your Doorstep</h1>
