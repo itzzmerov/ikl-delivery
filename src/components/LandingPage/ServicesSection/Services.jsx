@@ -10,7 +10,6 @@ import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
 import OrderForm from '../../OrderForm/CustomerOrderForm';
 
-// Dummy data with locally stored images and random price handler
 const serviceItems = [
     { name: 'Food Delivery', image: FoodDelivery },
     { name: 'Pera Padala', image: PeraPadala },
@@ -25,25 +24,22 @@ const Services = () => {
     const { currentUser } = useAuth();
     const [isOrderFormVisible, setIsOrderFormVisible] = useState(false);
     const [selectedService, setSelectedService] = useState('');
-    const [serviceItemsWithPrice, setServiceItemsWithPrice] = useState(serviceItems); // State to hold services with dummy prices
+    const [serviceItemsWithPrice, setServiceItemsWithPrice] = useState(serviceItems);
 
-    // Dummy price generator
     const generateDummyPrice = () => {
         const minPrice = 100;
         const maxPrice = 150;
         return `₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice} - ₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice}`;
     };
 
-    // Attach dummy prices to services
     useEffect(() => {
         const servicesWithPrices = serviceItems.map(service => ({
             ...service,
-            price: generateDummyPrice(), // Add price
+            price: generateDummyPrice(),
         }));
         setServiceItemsWithPrice(servicesWithPrices);
     }, []);
 
-    // Function to open order form and set selected service
     const openOrderForm = (serviceName) => {
         if (!currentUser) {
             navigate('/login');
@@ -55,7 +51,7 @@ const Services = () => {
 
     const closeOrderForm = () => {
         setIsOrderFormVisible(false);
-        setSelectedService(''); // Reset the selected service
+        setSelectedService('');
     };
 
     return (
@@ -71,10 +67,10 @@ const Services = () => {
                             <img src={service.image} alt={service.name} className="w-full h-[400px] object-cover" />
                             <div className="absolute inset-x-0 bottom-0 bg-darkGreen text-lightWhite p-4 flex flex-col items-center space-y-1">
                                 <h3 className="font-semibold text-[20px] font-Montserrat">{service.name}</h3>
-                                <p className="text-[16px]">{service.price}</p> {/* Displaying the dummy price */}
+                                <p className="text-[16px]">{service.price}</p>
                                 <button
                                     className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2"
-                                    onClick={() => openOrderForm(service.name)} // Pass service name to the form
+                                    onClick={() => openOrderForm(service.name)}
                                 >
                                     {currentUser ? 'Avail Now' : 'Login to Avail'}
                                 </button>
