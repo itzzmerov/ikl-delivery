@@ -3,12 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBJiSRDFyPcsDMu1GCT3BEULRalOmWGk2U",
-  authDomain: "ikl-delivery.firebaseapp.com",
-  projectId: "ikl-delivery",
-  storageBucket: "ikl-delivery.firebasestorage.app",
-  messagingSenderId: "680638948156",
-  appId: "1:680638948156:web:82909b6cf003c390bd3439"
+  apiKey: "AIzaSyC8CN7WpI0KuR50kJ-8N999IwICYUq9i68",
+  authDomain: "ipamalihog-delivery.firebaseapp.com",
+  databaseURL: "https://ipamalihog-delivery-default-rtdb.firebaseio.com",
+  projectId: "ipamalihog-delivery",
+  storageBucket: "ipamalihog-delivery.firebasestorage.app",
+  messagingSenderId: "582535738787",
+  appId: "1:582535738787:web:7f4ac2b9e40fe4bf859616"
 };
 
 //This is to initialize the firebase
