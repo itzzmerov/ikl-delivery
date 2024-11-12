@@ -60,7 +60,7 @@ const OrdersPage = ({ onClose }) => {
                 {loading ? (
                     <p>Loading...</p>
                 ) : orders.length > 0 ? (
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
                         <table className="min-w-full bg-white border">
                             <thead>
                                 <tr className="bg-darkGreen text-lightWhite uppercase text-sm leading-normal">

@@ -40,7 +40,7 @@ const OrderList = () => {
         setSelectedOrderId(orderId);
         setShowModal(true); // Open the modal to assign a rider
     };
-    
+
     const handleRejectOrder = async (orderId) => {
         try {
             await updateDoc(doc(db, "orders", orderId), {
