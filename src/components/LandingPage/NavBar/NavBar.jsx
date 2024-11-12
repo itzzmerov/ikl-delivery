@@ -6,6 +6,7 @@ import { auth } from '../../../utils/firebase';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../../../hooks/useAuth';
 import { FaCircleUser } from "react-icons/fa6";
+import OrdersPage from '../OrdersPage/OrdersPage';
 
 const NavBar = () => {
     const { currentUser } = useAuth();
@@ -13,6 +14,7 @@ const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [isOrdersPageVisible, setIsOrdersPageVisible] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -22,6 +24,16 @@ const NavBar = () => {
             console.error(error);
         }
     };
+
+    const openOrdersPage = () => {
+        setIsOrdersPageVisible(true);
+        setDropdownOpen(false);
+    };
+
+    const closeOrdersPage = () => {
+        setIsOrdersPageVisible(false);
+    };
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -52,34 +64,40 @@ const NavBar = () => {
                         <Link to="/login" className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full">Login</Link>
                     ) : (
                         <div className="relative">
-                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2">
-                        <FaCircleUser className="w-8 h-8 rounded-full" />
-                        </button>
-            
-                        {dropdownOpen && (
-                          <div className="absolute right-0 mt-2 w-75 bg-white text-black rounded-lg shadow-lg">
-                            <div className="p-2">
-                              <p className="text-xs font-OpenSans">Logged in as:</p>
-                              <p className="text-sm font-semibold font-Montserrat">{currentUser.email}</p>
-                            </div>
-                            <button 
-                              onClick={handleLogout}
-                              className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200 rounded-b-lg font-Montserrat"
-                            >
-                              Logout
+                            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2">
+                                <FaCircleUser className="w-8 h-8 rounded-full" />
                             </button>
-                          </div>
-                        )}
-                      </div>   
+                            {dropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-60 bg-white text-black rounded-lg shadow-lg">
+                                    <div className="p-2">
+                                        <p className="text-xs font-OpenSans">Logged in as:</p>
+                                        <p className="text-sm font-semibold font-Montserrat">{currentUser.email}</p>
+                                    </div>
+                                    <button
+                                        onClick={openOrdersPage}
+                                        className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200"
+                                    >
+                                        View Orders
+                                    </button>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200 rounded-b-lg font-Montserrat"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
                 <button
                     className="md:hidden focus:outline-none"
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                    <MenuIcon sx={{ fontSize: 40 }}/>
+                    <MenuIcon sx={{ fontSize: 40 }} />
                 </button>
             </div>
+            {isOrdersPageVisible && <OrdersPage onClose={closeOrdersPage} />}
             {isOpen && (
                 <div className="absolute top-[7.5rem] left-0 w-full bg-darkBlack md:hidden flex flex-col items-center space-y-4 py-4 gap-2">
                     <a className="hover:text-lightGreen" href="#home">Home</a>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { db } from '../../utils/firebase';
 import { collection, addDoc } from 'firebase/firestore'
+import { useAuth } from '../../hooks/useAuth';
 
-const OrderForm = ({ onClose, serviceName  }) => {
+const OrderForm = ({ onClose, serviceName }) => {
+
+    const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
         service: serviceName || '',
@@ -38,15 +41,27 @@ const OrderForm = ({ onClose, serviceName  }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        if (!currentUser) {
+            console.error('User not logged in');
+            return;
+        }
+
         try {
-            const result = await addDoc(collection(db, "orders"), formData);
-            console.log(result);
+            // Add the current user's UID to the form data
+            const orderData = {
+                ...formData,
+                userId: currentUser.uid,  // Add userId field
+                createdAt: new Date().toISOString(),  // Optional: Add timestamp
+            };
+
+            const result = await addDoc(collection(db, 'orders'), orderData);
+            console.log('Order created with ID:', result.id);
             onClose();
         } catch (error) {
-            console.error(error.message);
+            console.error('Error adding order:', error.message);
         }
     };
+
 
     return (
         <div className='flex justify-center items-center min-h-screen w-full rounded-full'>

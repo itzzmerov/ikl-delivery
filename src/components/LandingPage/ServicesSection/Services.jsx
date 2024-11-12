@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../../../utils/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 import FoodDelivery from '../../../images/food-delivery.jpg';
 import PeraPadala from '../../../images/pera-padala.jpg';
 import HatidSundo from '../../../images/hatid-sundo.jpg';
@@ -10,21 +12,21 @@ import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
 import OrderForm from '../../OrderForm/CustomerOrderForm';
 
-const serviceItems = [
-    { name: 'Food Delivery', image: FoodDelivery },
-    { name: 'Pera Padala', image: PeraPadala },
-    { name: 'Hatid Sundo', image: HatidSundo },
-    { name: 'Pamalengke', image: Pamalengke },
-    { name: 'Bill Payments', image: BillPayment },
-    { name: 'Parcel Pickup', image: ParcelPickup },
-];
+const localImages = {
+    'Food Delivery': FoodDelivery,
+    'Pera Padala': PeraPadala,
+    'Hatid Sundo': HatidSundo,
+    'Pamalengke': Pamalengke,
+    'Bill Payments': BillPayment,
+    'Parcel Pickup': ParcelPickup,
+};
 
 const Services = () => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
     const [isOrderFormVisible, setIsOrderFormVisible] = useState(false);
     const [selectedService, setSelectedService] = useState('');
-    const [serviceItemsWithPrice, setServiceItemsWithPrice] = useState(serviceItems);
+    const [serviceItemsWithPrice, setServiceItemsWithPrice] = useState([]);
 
     const generateDummyPrice = () => {
         const minPrice = 100;
@@ -32,12 +34,29 @@ const Services = () => {
         return `₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice} - ₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice}`;
     };
 
+    const fetchServices = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, 'services'));
+            const fetchedServices = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                name: doc.data().name,
+            }));
+
+            const servicesWithImagesAndPrices = fetchedServices.map((service) => ({
+                name: service.name,
+                image: localImages[service.name] || FoodDelivery,
+                price: generateDummyPrice(),
+            }));
+
+            setServiceItemsWithPrice(servicesWithImagesAndPrices);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
+
     useEffect(() => {
-        const servicesWithPrices = serviceItems.map(service => ({
-            ...service,
-            price: generateDummyPrice(),
-        }));
-        setServiceItemsWithPrice(servicesWithPrices);
+        fetchServices();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const openOrderForm = (serviceName) => {
