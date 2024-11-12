@@ -14,6 +14,7 @@ const UpdateRider = () => {
         middleName: '',
         lastName: '',
         userType: 'rider',
+        status: '',
         username: '',
         email: '',
         phoneNumber: '',
@@ -41,6 +42,7 @@ const UpdateRider = () => {
                     email: riderData.email || '',
                     phoneNumber: riderData.phoneNumber || '',
                     userType: riderData.userType || 'rider',
+                    status: riderData.status || '',
                     userAddressHouse: address ? address.house : '',
                     userAddressStreet: address ? address.street : '',
                     userAddressBarangay: address ? address.barangay : '',
@@ -121,6 +123,18 @@ const UpdateRider = () => {
                 </div>
 
                 <div className="mb-4">
+                <select
+                        id="status"
+                        name="status"
+                        className="border border-gray-400 p-2 mb-4 w-[20%] rounded-xl"
+                        value={formData.status}
+                        onChange={handleInputChange}
+                    >
+                        <option value="" disabled>Select Status</option>
+                        <option value="Available">Available</option>
+                        <option value="Not Available">Not Available</option>
+                    </select>
+                    
                     <div className='w-full flex mb-2'>
                         <h3>Personal Information:</h3>
                     </div>

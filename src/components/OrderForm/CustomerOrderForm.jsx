@@ -5,7 +5,8 @@ import { collection, addDoc } from 'firebase/firestore'
 const OrderForm = ({ onClose, serviceName  }) => {
 
     const [formData, setFormData] = useState({
-        service: serviceName || '', // Add service name to the form data
+        service: serviceName || '',
+        status: 'Pending',
         senderFirstName: '',
         senderLastName: '',
         senderPhone: '',

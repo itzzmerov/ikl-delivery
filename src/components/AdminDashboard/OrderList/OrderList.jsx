@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 
 const OrderList = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState(null);
 
     const fetchOrders = async () => {
         const response = await getDocs(collection(db, "orders"));
@@ -20,16 +23,33 @@ const OrderList = () => {
         fetchOrders();
     }, []);
 
-    const handleUpdateOrder = (id) => {
-        navigate(`/admin/order/${id}/update-order`);
-    };
+    // const handleUpdateOrder = (id) => {
+    //     navigate(`/admin/order/${id}/update-order`);
+    // };
 
-    const handleDeleteOrder = async (id) => {
+    // const handleDeleteOrder = async (id) => {
+    //     try {
+    //         await deleteDoc(doc(db, 'orders', id));
+    //         fetchOrders();
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+
+    const handleAcceptOrder = (orderId) => {
+        setSelectedOrderId(orderId);
+        setShowModal(true); // Open the modal to assign a rider
+    };
+    
+    const handleRejectOrder = async (orderId) => {
         try {
-            await deleteDoc(doc(db, 'orders', id));
-            fetchOrders();
+            await updateDoc(doc(db, "orders", orderId), {
+                status: 'Rejected'
+            });
+            alert("Order rejected successfully");
+            fetchOrders(); // Refresh the order list
         } catch (error) {
-            console.error(error);
+            console.error("Error rejecting order:", error);
         }
     };
 
@@ -49,6 +69,7 @@ const OrderList = () => {
                 <table className="min-w-full bg-lightWhite border border-gray-200">
                     <thead className="bg-gray-800 text-lightWhite sticky top-0">
                         <tr className="text-left">
+                            <th className="py-2 px-4 border-b">Status</th>
                             <th className="py-2 px-4 border-b">Services</th>
                             <th className="py-2 px-4 border-b">Sender Name</th>
                             <th className="py-2 px-4 border-b">Sender Phone</th>
@@ -70,6 +91,7 @@ const OrderList = () => {
                         ) : (
                             orders.map((order) => (
                                 <tr key={order.id} className="text-left">
+                                    <td className="py-2 px-4 border-b">{order.status}</td>
                                     <td className="py-2 px-4 border-b">{order.service}</td>
                                     <td className="py-2 px-4 border-b">{order.senderFirstName} {order.senderLastName}</td>
                                     <td className="py-2 px-4 border-b">{order.senderPhone}</td>
@@ -80,19 +102,24 @@ const OrderList = () => {
                                     <td className="py-2 px-4 border-b">{order.amount}</td>
                                     <td className="py-2 px-4 border-b flex gap-2">
                                         <button
-                                            onClick={() => handleUpdateOrder(order.id)}
-                                            className="flex items-center gap-1 px-2 py-1 text-blue-500 border border-blue-500 rounded hover:bg-blue-500 hover:text-lightWhite transition"
+                                            onClick={() => handleAcceptOrder(order.id)}
+                                            className="flex items-center gap-1 px-2 py-1 text-green-500 border border-green-500 rounded hover:bg-green-500 hover:text-lightWhite transition"
                                         >
-                                            <EditIcon fontSize="small" />
-                                            <span>Edit</span>
+                                            <span>Accept</span>
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteOrder(order.id)}
+                                            onClick={() => handleRejectOrder(order.id)}
                                             className="flex items-center gap-1 px-2 py-1 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-lightWhite transition"
                                         >
-                                            <DeleteIcon fontSize="small" />
-                                            <span>Delete</span>
+                                            <span>Reject</span>
                                         </button>
+                                        {showModal && (
+                                            <RiderAssignmentModal
+                                                orderId={selectedOrderId}
+                                                onClose={() => setShowModal(false)}
+                                                onSubmit={fetchOrders} // Refresh orders after submission
+                                            />
+                                        )}
                                     </td>
                                 </tr>
                             ))

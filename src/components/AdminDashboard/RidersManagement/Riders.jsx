@@ -49,6 +49,7 @@ const Riders = () => {
                 <table className="min-w-full bg-lightWhite border border-gray-200">
                     <thead className="bg-gray-800 text-lightWhite sticky top-0">
                         <tr className="text-left">
+                            <th className="py-2 px-4 border-b">Status</th>
                             <th className="py-2 px-4 border-b">Name</th>
                             <th className="py-2 px-4 border-b">Username</th>
                             <th className="py-2 px-4 border-b">Email Address</th>
@@ -67,6 +68,7 @@ const Riders = () => {
                         ) : (
                             riders.map((rider) => (
                                 <tr key={rider.id} className="text-left">
+                                    <td className="py-2 px-4 border-b">{rider.status}</td>
                                     <td className="py-2 px-4 border-b">{rider.firstName} {rider.middleName} {rider.lastName}</td>
                                     <td className="py-2 px-4 border-b">{rider.username}</td>
                                     <td className="py-2 px-4 border-b">{rider.email}</td>

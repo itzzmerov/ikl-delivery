@@ -13,6 +13,7 @@ const AddNewRider = () => {
         middleName: '',
         lastName: '',
         userType: 'rider',
+        status: 'Available',
         username: '',
         email: '',
         password: '',
@@ -51,6 +52,7 @@ const AddNewRider = () => {
             middleName: formData.middleName,
             lastName: formData.lastName,
             userType: formData.userType,
+            status: formData.status,
             username: formData.username,
             email: formData.email,
             password: formData.password,
@@ -220,7 +222,7 @@ const AddNewRider = () => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Add Service
+                    Add Rider
                 </button>
 
             </div>

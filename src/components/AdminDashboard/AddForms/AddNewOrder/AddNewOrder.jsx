@@ -10,6 +10,7 @@ const OrderForm = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
+        status: 'Pending',
         senderFirstName: '',
         senderLastName: '',
         senderPhone: '',
