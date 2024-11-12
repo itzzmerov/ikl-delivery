@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { db } from '../../../../utils/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { auth, db } from '../../../../utils/firebase';
+import { collection, addDoc, serverTimestamp, setDoc, doc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const AddNewCustomer = () => {
     const navigate = useNavigate();
@@ -35,8 +36,8 @@ const AddNewCustomer = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
-
+        console.log(formData);
+    
         const address = {
             house: formData.userAddressHouse,
             street: formData.userAddressStreet,
@@ -45,7 +46,7 @@ const AddNewCustomer = () => {
             region: formData.userAddressRegion,
             zip: formData.userAddressZIP,
         };
-
+    
         const customerData = {
             firstName: formData.firstName,
             middleName: formData.middleName,
@@ -53,20 +54,28 @@ const AddNewCustomer = () => {
             userType: formData.userType,
             username: formData.username,
             email: formData.email,
-            password: formData.password,
             phoneNumber: formData.phoneNumber,
             createdAt: serverTimestamp(),
             address: address,
         };
-
+    
         try {
-            const result = await addDoc(collection(db, "users"), customerData)
-            console.log(result);
-            navigate('/admin/customers')
+            const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+            const userId = userCredential.user.uid;
+    
+            await setDoc(doc(db, 'users', userId), {
+                ...customerData,
+                password: '',
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+            });
+    
+            console.log('Customer added successfully to Firestore and Firebase Auth');
+            navigate('/admin/customers');
         } catch (error) {
-            console.error(error.message)
+            console.error('Error adding customer:', error.message);
         }
-    }
+    };
 
     return (
         <div className='flex flex-col items-center w-full p-8'>
