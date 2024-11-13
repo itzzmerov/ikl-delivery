@@ -10,7 +10,7 @@ const RiderAssignmentModal = ({ orderId, onClose, onSubmit }) => {
     // Fetch available riders from the database
     const fetchAvailableRiders = async () => {
         try {
-            const q = query(collection(db, "users"), where("userType", "==", "rider"));
+            const q = query(collection(db, "users"), where("userType", "==", "rider"), where("status", "==", "Available"));
             const snapshot = await getDocs(q);
             const riderList = snapshot.docs.map((doc) => ({
                 id: doc.id,
@@ -38,11 +38,18 @@ const RiderAssignmentModal = ({ orderId, onClose, onSubmit }) => {
     // Assign rider to the order
     const handleAssignRider = async () => {
         try {
+            // Update the order with the assigned rider
             await updateDoc(doc(db, "orders", orderId), {
                 riderId: selectedRiderId,
                 riderName: selectedRiderName,
-                status: 'Accepted',
+                status: 'Accepted', // Set order status to Accepted
             });
+
+            // Update the rider's status to "Not Available"
+            await updateDoc(doc(db, "users", selectedRiderId), {
+                status: 'Not Available', // Change rider status to "Not Available"
+            });
+
             alert("Rider assigned and order accepted!");
             onSubmit();
             onClose();
