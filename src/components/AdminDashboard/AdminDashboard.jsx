@@ -4,7 +4,7 @@ import Sidebar from './Sidebar/Sidebar';
 import TopNavbar from './TopNavbar/TopNavbar';
 import Dashboard from './Dashboard/Dashboard';
 import Analytics from './Analytics/Analytics';
-import OrderList from './OrderList/OrderList';
+import OrderList from './OrderList/PendingOrders';
 import Services from './ServicesManagement/Services';
 import Reviews from './Reviews/Reviews';
 import Customers from './CustomerManagement/Customers';
@@ -36,7 +36,7 @@ const AdminDashboard = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="dashboard" />} />
                         <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="orderlist" element={<OrderList />} />
+                        <Route path="pending-orders" element={<OrderList />} />
                         <Route path="services" element={<Services />} />
                         <Route path="reviews" element={<Reviews />} />
                         <Route path="customers" element={<Customers />} />

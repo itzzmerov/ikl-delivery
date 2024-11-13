@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaHome, FaList, FaConciergeBell, FaStar, FaChartBar, FaUser } from 'react-icons/fa';
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
-import logo from '../../../images/logo.png';
 import { NavLink } from 'react-router-dom';
+import { MdExpandMore } from "react-icons/md";
+import logo from '../../../images/logo.png';
 
 const Sidebar = ({ isCollapsed }) => {
+    const [isOrderDropdownOpen, setIsOrderDropdownOpen] = useState(false);
+
+    const toggleOrderDropdown = () => {
+        setIsOrderDropdownOpen(!isOrderDropdownOpen);
+    };
+
     return (
         <div className={`h-screen bg-black text-lightWhite flex flex-col py-6 px-5 ${isCollapsed ? 'w-20' : 'w-64'}`}>
             {/* Logo */}
@@ -27,14 +34,50 @@ const Sidebar = ({ isCollapsed }) => {
                     {!isCollapsed && <span className="ml-3">Dashboard</span>}
                 </NavLink>
 
-                <NavLink
-                    to="/admin/orderlist"
-                    className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
-                        ${isCollapsed ? 'justify-center ' : ''}${isActive ? 'bg-gray-700' : ''}`}
-                >
-                    <FaList size={23} className="text-lightWhite min-w-[23px]" />
-                    {!isCollapsed && <span className="ml-3">Order List</span>}
-                </NavLink>
+                {/* Order List Dropdown */}
+                <div className={`relative ${isCollapsed ? 'justify-center' : ''}`}>
+                    <button
+                        onClick={toggleOrderDropdown}
+                        className={`flex items-center w-full px-4 py-2 hover:bg-gray-700 ${isOrderDropdownOpen ? 'bg-gray-700' : ''}`}
+                    >
+                        <FaList size={23} className="text-lightWhite min-w-[23px]" />
+                        {!isCollapsed && (
+                            <>
+                                <span className="ml-3">Order List</span>
+                                <MdExpandMore size={20} className={`ml-auto transition-transform ${isOrderDropdownOpen ? 'rotate-180' : ''}`} />
+                            </>
+                        )}
+                    </button>
+
+                    {!isCollapsed && isOrderDropdownOpen && (
+                        <div className="bg-gray-800 rounded shadow-lg mt-1">
+                            <NavLink
+                                to="/admin/orders/pending"
+                                className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
+                            >
+                                Pending Orders
+                            </NavLink>
+                            <NavLink
+                                to="/admin/orders/accepted"
+                                className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
+                            >
+                                Accepted Orders
+                            </NavLink>
+                            <NavLink
+                                to="/admin/orders/rejected"
+                                className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
+                            >
+                                Rejected Orders
+                            </NavLink>
+                            <NavLink
+                                to="/admin/orders/cancelled"
+                                className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
+                            >
+                                Cancelled Orders
+                            </NavLink>
+                        </div>
+                    )}
+                </div>
 
                 <NavLink
                     to="/admin/services"
