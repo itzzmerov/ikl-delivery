@@ -7,7 +7,6 @@ const RiderAssignmentModal = ({ orderId, onClose, onSubmit }) => {
     const [selectedRiderId, setSelectedRiderId] = useState('');
     const [selectedRiderName, setSelectedRiderName] = useState('');
 
-    // Fetch available riders from the database
     const fetchAvailableRiders = async () => {
         try {
             const q = query(collection(db, "users"), where("userType", "==", "rider"), where("status", "==", "Available"));
@@ -26,7 +25,6 @@ const RiderAssignmentModal = ({ orderId, onClose, onSubmit }) => {
         fetchAvailableRiders();
     }, []);
 
-    // Handle rider selection
     const handleRiderChange = (e) => {
         const riderId = e.target.value;
         const selectedRider = riders.find((rider) => rider.id === riderId);
@@ -35,19 +33,16 @@ const RiderAssignmentModal = ({ orderId, onClose, onSubmit }) => {
         setSelectedRiderName(riderName);
     };
 
-    // Assign rider to the order
     const handleAssignRider = async () => {
         try {
-            // Update the order with the assigned rider
             await updateDoc(doc(db, "orders", orderId), {
                 riderId: selectedRiderId,
                 riderName: selectedRiderName,
-                status: 'Accepted', // Set order status to Accepted
+                status: 'Accepted',
             });
 
-            // Update the rider's status to "Not Available"
             await updateDoc(doc(db, "users", selectedRiderId), {
-                status: 'Not Available', // Change rider status to "Not Available"
+                status: 'Not Available', 
             });
 
             alert("Rider assigned and order accepted!");
