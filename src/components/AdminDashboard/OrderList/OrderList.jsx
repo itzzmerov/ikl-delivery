@@ -45,14 +45,12 @@ const OrderList = () => {
         setServiceFilter(e.target.value);
     };
 
-    // Define table columns based on selected service type
     const getTableColumns = () => {
         switch (serviceFilter) {
             case 'Food Delivery':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer First Name', key: 'customerFirstName' },
-                    { name: 'Customer Last Name', key: 'customerLastName' },
+                    { name: 'Customer Name', key: 'customerName' }, 
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Item/s to buy', key: 'itemsToBuy' },
@@ -62,8 +60,7 @@ const OrderList = () => {
             case 'Special Delivery':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer First Name', key: 'customerFirstName' },
-                    { name: 'Customer Last Name', key: 'customerLastName' },
+                    { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Description', key: 'description' },
                     { name: 'Special Instructions', key: 'specialInstructions' },
@@ -72,8 +69,7 @@ const OrderList = () => {
             case 'Parcel Pickup':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer First Name', key: 'customerFirstName' },
-                    { name: 'Customer Last Name', key: 'customerLastName' },
+                    { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Parcel Details', key: 'parcelDetails' },
                     { name: 'Pickup Location', key: 'pickupLocation' },
@@ -82,8 +78,7 @@ const OrderList = () => {
             case 'Pamalengke':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer First Name', key: 'customerFirstName' },
-                    { name: 'Customer Last Name', key: 'customerLastName' },
+                    { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'List of Items', key: 'listOfItems' },
                     { name: 'Store Preference', key: 'storePreference' },
@@ -93,19 +88,17 @@ const OrderList = () => {
             case 'Hatid Sundo':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer First Name', key: 'customerFirstName' },
-                    { name: 'Customer Last Name', key: 'customerLastName' },
+                    { name: 'Customer Name', key: 'customerName' }, 
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Pickup Location', key: 'pickupLocation' },
                     { name: 'Dropoff Location', key: 'dropoffLocation' },
                     { name: 'Pickup Time', key: 'pickupTime' },
                     { name: 'Special Requests', key: 'specialRequests' }
                 ];
-            case 'Bill Payments':
+            case 'Bill Payment':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer First Name', key: 'customerFirstName' },
-                    { name: 'Customer Last Name', key: 'customerLastName' },
+                    { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Email Address', key: 'emailAddress' },
                     { name: 'Bill Type', key: 'billType' },
@@ -117,10 +110,10 @@ const OrderList = () => {
             case 'Pera Padala':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Sender Name', key: 'senderFirstName' },
-                    { name: 'Sender Phone', key: 'senderPhone' },
+                    { name: 'Sender Name', key: 'senderName' },
+                    { name: 'Sender Phone', key: 'customerPhone' },
                     { name: 'Sender Address', key: 'senderAddress' },
-                    { name: 'Receiver Name', key: 'receiverFirstName' },
+                    { name: 'Receiver Name', key: 'receiverName' },
                     { name: 'Receiver Phone', key: 'receiverPhone' },
                     { name: 'Receiver Address', key: 'receiverAddress' },
                     { name: 'Amount', key: 'amount' }
@@ -149,7 +142,7 @@ const OrderList = () => {
                         <option value="Parcel Pickup">Parcel Pickup</option>
                         <option value="Pamalengke">Pamalengke</option>
                         <option value="Hatid Sundo">Hatid Sundo</option>
-                        <option value="Bill Payments">Bill Payments</option>
+                        <option value="Bill Payment">Bill Payment</option>
                         <option value="Pera Padala">Pera Padala</option>
                     </select>
                     <button onClick={openOrderForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'>
@@ -165,7 +158,7 @@ const OrderList = () => {
                         {getTableColumns().map(({ name }, index) => (
                             <th key={index} className="py-2 px-4 border-b">{name}</th>
                         ))}
-                        <th className="py-2 px-4 border-b">Actions</th> {/* Add Actions column */}
+                        <th className="py-2 px-4 border-b">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -177,37 +170,43 @@ const OrderList = () => {
                         </tr>
                     ) : (
                         orders
-                            .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
-                            .map((order) => (
-                                <tr key={order.id} className="text-left">
-                                    {getTableColumns().map(({ key }, index) => (
-                                        <td key={index} className="py-2 px-4 border-b">
-                                            {order[key] !== undefined ? order[key] : 'N/A'}
-                                        </td>
-                                    ))}
-                                    <td className="py-2 px-4 border-b flex gap-2">
-                                        <button
-                                            onClick={() => handleAcceptOrder(order.id)}
-                                            className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4 "
-                                        >
-                                            Accept
-                                        </button>
-                                        <button
-                                            onClick={() => handleRejectOrder(order.id)}
-                                            className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4 "
-                                        >
-                                            Reject
-                                        </button>
-                                        {showModal && (
-                                            <RiderAssignmentModal
-                                                orderId={selectedOrderId}
-                                                onClose={() => setShowModal(false)}
-                                                onSubmit={fetchOrders}
-                                            />
-                                        )}
+                        .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
+                        .map((order) => (
+                            <tr key={order.id} className="text-left">
+                                {getTableColumns().map(({ key }, index) => (
+                                    <td key={index} className="py-2 px-4 border-b">
+                                        {key === 'customerName' && order.customerFirstName && order.customerLastName
+                                            ? `${order.customerFirstName} ${order.customerLastName}`
+                                            : key === 'senderName' && order.customerFirstName && order.customerLastName
+                                            ? `${order.customerFirstName} ${order.customerLastName}`
+                                            : key === 'receiverName' && order.receiverFirstName && order.receiverLastName
+                                            ? `${order.receiverFirstName} ${order.receiverLastName}`
+                                            : order[key] !== undefined ? order[key] : 'N/A'}
                                     </td>
-                                </tr>
-                            ))
+                                ))}
+                                <td className="py-2 px-4 border-b flex gap-2">
+                                    <button
+                                        onClick={() => handleAcceptOrder(order.id)}
+                                        className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4 "
+                                    >
+                                        Accept
+                                    </button>
+                                    <button
+                                        onClick={() => handleRejectOrder(order.id)}
+                                        className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4 "
+                                    >
+                                        Reject
+                                    </button>
+                                    {showModal && (
+                                        <RiderAssignmentModal
+                                            orderId={selectedOrderId}
+                                            onClose={() => setShowModal(false)}
+                                            onSubmit={fetchOrders}
+                                        />
+                                    )}
+                                </td>
+                            </tr>
+                        ))
                     )}
                 </tbody>
             </table>

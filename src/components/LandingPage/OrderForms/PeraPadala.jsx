@@ -56,38 +56,38 @@ const PeraPadala = ({ onClose }) => {
                     <h2 className="font-semibold mb-2">Sender Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
                         <div>
-                            <label htmlFor="senderFirstName" className="block mb-1">First Name:</label>
+                            <label htmlFor="customerFirstName" className="block mb-1">First Name:</label>
                             <input
                                 type="text"
-                                id="senderFirstName"
+                                id="customerFirstName"
                                 className="border p-2 w-full rounded"
-                                name="senderFirstName"
-                                value={formData.senderFirstName}
+                                name="customerFirstName"
+                                value={formData.customerFirstName}
                                 onChange={handleInputChange}
                                 required
                             />
                         </div>
                         <div>
-                            <label htmlFor="senderLastName" className="block mb-1">Last Name:</label>
+                            <label htmlFor="customerLastName" className="block mb-1">Last Name:</label>
                             <input
                                 type="text"
-                                id="senderLastName"
+                                id="customerLastName"
                                 className="border p-2 w-full rounded"
-                                name="senderLastName"
-                                value={formData.senderLastName}
+                                name="customerLastName"
+                                value={formData.customerLastName}
                                 onChange={handleInputChange}
                                 required
                             />
                         </div>
                     </div>
                     <div className="mb-2">
-                        <label htmlFor="senderPhone" className="block mb-1">Phone Number:</label>
+                        <label htmlFor="customerPhone" className="block mb-1">Phone Number:</label>
                         <input
                             type="text"
-                            id="senderPhone"
+                            id="customerPhone"
                             className="border p-2 w-full rounded"
-                            name="senderPhone"
-                            value={formData.senderPhone}
+                            name="customerPhone"
+                            value={formData.customerPhone}
                             onChange={handleInputChange}
                             required
                         />
