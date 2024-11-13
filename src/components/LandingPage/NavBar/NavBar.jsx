@@ -15,11 +15,18 @@ const NavBar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isOrdersPageVisible, setIsOrdersPageVisible] = useState(false);
+    const [logoutMessage, setLogoutMessage] = useState(false);
 
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            navigate("/");
+            setLogoutMessage(true);
+            setDropdownOpen(false);
+            
+            setTimeout(() => {
+                setLogoutMessage(false);
+                navigate("/");
+            }, 3000);
         } catch (error) {
             console.error(error);
         }
@@ -33,7 +40,6 @@ const NavBar = () => {
     const closeOrdersPage = () => {
         setIsOrdersPageVisible(false);
     };
-
 
     useEffect(() => {
         const handleScroll = () => {
@@ -97,7 +103,18 @@ const NavBar = () => {
                     <MenuIcon sx={{ fontSize: 40 }} />
                 </button>
             </div>
+
             {isOrdersPageVisible && <OrdersPage onClose={closeOrdersPage} />}
+
+            {logoutMessage && (
+                <div className="fixed top-0 left-0 w-full flex justify-center z-50">
+                    <div className="bg-lightWhite text-darkBlack py-3 px-6 rounded-b-lg shadow-md mt-4">
+                        <p>Logout Successful. Thank you for using our website!</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Mobile Navigation Menu */}
             {isOpen && (
                 <div className="absolute top-[7.5rem] left-0 w-full bg-darkBlack md:hidden flex flex-col items-center space-y-4 py-4 gap-2">
                     <a className="hover:text-lightGreen" href="#home">Home</a>
@@ -105,7 +122,6 @@ const NavBar = () => {
                     <a className="hover:text-lightGreen" href="#services">Services</a>
                     <a className="hover:text-lightGreen" href="#contact">Contact</a>
                     <Link to="/login" className="hover:text-lightGreen">Login</Link>
-                    {/* <button className="hover:text-lightGreen" onClick={handleLogout}>Logout</button> */}
                 </div>
             )}
         </nav>
