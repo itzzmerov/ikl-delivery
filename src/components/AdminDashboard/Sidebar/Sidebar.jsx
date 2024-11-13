@@ -1,15 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaHome, FaList, FaConciergeBell, FaStar, FaChartBar, FaUser } from 'react-icons/fa';
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { MdExpandMore } from "react-icons/md";
 import logo from '../../../images/logo.png';
 
 const Sidebar = ({ isCollapsed }) => {
     const [isOrderDropdownOpen, setIsOrderDropdownOpen] = useState(false);
+    const location = useLocation();
+    const dropdownRef = useRef(null);
 
     const toggleOrderDropdown = () => {
-        setIsOrderDropdownOpen(!isOrderDropdownOpen);
+        setIsOrderDropdownOpen((prevState) => !prevState);
+    };
+
+    // Close dropdown when clicking outside of it
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsOrderDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        // Add click event listener
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            // Clean up the event listener
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    // Prevent dropdown from closing when selecting from the dropdown links
+    const handleDropdownClick = (e) => {
+        e.stopPropagation();
     };
 
     return (
@@ -35,7 +58,7 @@ const Sidebar = ({ isCollapsed }) => {
                 </NavLink>
 
                 {/* Order List Dropdown */}
-                <div className={`relative ${isCollapsed ? 'justify-center' : ''}`}>
+                <div className={`relative ${isCollapsed ? 'justify-center' : ''}`} ref={dropdownRef}>
                     <button
                         onClick={toggleOrderDropdown}
                         className={`flex items-center w-full px-4 py-2 hover:bg-gray-700 ${isOrderDropdownOpen ? 'bg-gray-700' : ''}`}
@@ -50,7 +73,7 @@ const Sidebar = ({ isCollapsed }) => {
                     </button>
 
                     {!isCollapsed && isOrderDropdownOpen && (
-                        <div className="bg-gray-800 rounded shadow-lg mt-1">
+                        <div className="bg-gray-800 rounded shadow-lg mt-1" onClick={handleDropdownClick}>
                             <NavLink
                                 to="/admin/orders/pending-orders"
                                 className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
