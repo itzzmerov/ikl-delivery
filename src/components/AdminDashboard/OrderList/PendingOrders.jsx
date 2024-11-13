@@ -170,7 +170,7 @@ const PendingOrders = () => {
                         </tr>
                     ) : (
                         orders
-                        .filter(order => order.status === 'Pending') // Add this line to filter only "Pending" orders
+                        .filter(order => order.status === 'Pending')
                         .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
                         .map((order) => (
                             <tr key={order.id} className="text-left">
