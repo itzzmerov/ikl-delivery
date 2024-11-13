@@ -14,7 +14,6 @@ const Sidebar = ({ isCollapsed }) => {
         setIsOrderDropdownOpen((prevState) => !prevState);
     };
 
-    // Close dropdown when clicking outside of it
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setIsOrderDropdownOpen(false);
@@ -22,22 +21,18 @@ const Sidebar = ({ isCollapsed }) => {
     };
 
     useEffect(() => {
-        // Add click event listener
         document.addEventListener('click', handleClickOutside);
         return () => {
-            // Clean up the event listener
             document.removeEventListener('click', handleClickOutside);
         };
     }, []);
 
-    // Prevent dropdown from closing when selecting from the dropdown links
     const handleDropdownClick = (e) => {
         e.stopPropagation();
     };
 
     return (
         <div className={`h-screen bg-black text-lightWhite flex flex-col py-6 px-5 ${isCollapsed ? 'w-20' : 'w-64'}`}>
-            {/* Logo */}
             <div className="flex justify-center mb-4">
                 <img
                     src={logo}
@@ -46,7 +41,6 @@ const Sidebar = ({ isCollapsed }) => {
                 />
             </div>
 
-            {/* Navigation Links */}
             <nav className="space-y-4 w-full mt-4">
                 <NavLink
                     to="/admin/dashboard"
@@ -57,7 +51,6 @@ const Sidebar = ({ isCollapsed }) => {
                     {!isCollapsed && <span className="ml-3">Dashboard</span>}
                 </NavLink>
 
-                {/* Order List Dropdown */}
                 <div className={`relative ${isCollapsed ? 'justify-center' : ''}`} ref={dropdownRef}>
                     <button
                         onClick={toggleOrderDropdown}
