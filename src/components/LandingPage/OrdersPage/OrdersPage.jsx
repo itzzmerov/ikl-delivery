@@ -88,7 +88,8 @@ const OrdersPage = ({ onClose }) => {
                                             {order.riderName || 'Not Assigned'}
                                         </td>
                                         <td className="py-3 px-6 text-center">
-                                            {order.status !== 'Cancelled' && (
+                                            {/* Check if the status is not Accepted, Rejected, or Cancelled */}
+                                            {order.status !== 'Accepted' && order.status !== 'Rejected' && order.status !== 'Cancelled' && (
                                                 <button
                                                     className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
                                                     onClick={() => handleCancelOrder(order.id)}
