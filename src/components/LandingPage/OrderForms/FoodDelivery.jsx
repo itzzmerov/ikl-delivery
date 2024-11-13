@@ -7,7 +7,7 @@ const FoodDelivery = ({ onClose }) => {
     const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
-        service: 'Food Delivery', // Preset service type as "Food Delivery"
+        service: 'Food Delivery', 
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -36,8 +36,8 @@ const FoodDelivery = ({ onClose }) => {
         try {
             const deliveryData = {
                 ...formData,
-                userId: currentUser.uid, // Add userId field
-                createdAt: new Date().toISOString(), // Add timestamp
+                userId: currentUser.uid, 
+                createdAt: new Date().toISOString(), 
             };
 
             const result = await addDoc(collection(db, 'orders'), deliveryData);
@@ -49,7 +49,7 @@ const FoodDelivery = ({ onClose }) => {
     };
 
     return (
-        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
+        <div className='flex justify-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Food Delivery</h1>
 

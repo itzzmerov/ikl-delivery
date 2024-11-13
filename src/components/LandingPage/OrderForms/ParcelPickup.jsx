@@ -7,7 +7,7 @@ const ParcelPickup = ({ onClose }) => {
     const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
-        service: 'Parcel Pickup', // Preset service type as "Parcel Pickup"
+        service: 'Parcel Pickup', 
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -35,8 +35,8 @@ const ParcelPickup = ({ onClose }) => {
         try {
             const parcelData = {
                 ...formData,
-                userId: currentUser.uid, // Add userId field
-                createdAt: new Date().toISOString(), // Add timestamp
+                userId: currentUser.uid, 
+                createdAt: new Date().toISOString(),
             };
 
             const result = await addDoc(collection(db, 'orders'), parcelData);
@@ -48,7 +48,7 @@ const ParcelPickup = ({ onClose }) => {
     };
 
     return (
-        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
+        <div className='flex justify-centermin-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Parcel Pickup</h1>
 

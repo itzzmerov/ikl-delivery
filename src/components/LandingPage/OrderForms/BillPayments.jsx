@@ -51,7 +51,7 @@ const BillPayments = ({ onClose }) => {
     };
 
     return (
-        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
+        <div className='flex justify-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Bill Payment</h1>
 

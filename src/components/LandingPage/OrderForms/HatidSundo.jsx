@@ -7,7 +7,7 @@ const HatidSundo = ({ onClose }) => {
     const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
-        service: 'Hatid Sundo', // Preset service type as "Hatid Sundo"
+        service: 'Hatid Sundo', 
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -36,8 +36,8 @@ const HatidSundo = ({ onClose }) => {
         try {
             const hatidSundoData = {
                 ...formData,
-                userId: currentUser.uid, // Add userId field
-                createdAt: new Date().toISOString(), // Add timestamp
+                userId: currentUser.uid,
+                createdAt: new Date().toISOString(), 
             };
 
             const result = await addDoc(collection(db, 'orders'), hatidSundoData);
@@ -49,7 +49,7 @@ const HatidSundo = ({ onClose }) => {
     };
 
     return (
-        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
+        <div className='flex justify-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Hatid Sundo</h1>
 

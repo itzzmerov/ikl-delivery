@@ -3,14 +3,16 @@ import FoodDelivery from '../../../images/food-delivery.jpg';
 import PeraPadala from '../../../images/pera-padala.jpg';
 import HatidSundo from '../../../images/hatid-sundo.jpg';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import OrderForm from '../../OrderForm/CustomerOrderForm';
 import { useAuth } from '../../../hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
+import { /*Link,*/ useNavigate } from 'react-router-dom';
+import FoodDeliveryForm from '../OrderForms/FoodDelivery';
+import PeraPadalaForm from '../OrderForms/PeraPadala';
+import HatidSundoForm from '../OrderForms/HatidSundo';
 
 const services = [
-    { name: 'Food Delivery', image: FoodDelivery, bg: FoodDelivery },
-    { name: 'Pera Padala', image: PeraPadala, bg: PeraPadala },
-    { name: 'Hatid Sundo', image: HatidSundo, bg: HatidSundo }
+    { name: 'Food Delivery', image: FoodDelivery, bg: FoodDelivery, formComponent: FoodDeliveryForm },
+    { name: 'Pera Padala', image: PeraPadala, bg: PeraPadala, formComponent: PeraPadalaForm },
+    { name: 'Hatid Sundo', image: HatidSundo, bg: HatidSundo, formComponent: HatidSundoForm }
 ];
 
 const FeaturedServices = () => {
@@ -34,11 +36,19 @@ const FeaturedServices = () => {
         setSelectedService('');
     };
 
+    const renderForm = () => {
+        const selectedServiceObj = services.find((service) => service.name === selectedService);
+        if (selectedServiceObj && selectedServiceObj.formComponent) {
+            const FormComponent = selectedServiceObj.formComponent;
+            return <FormComponent onClose={closeOrderForm} />;
+        }
+        return null;
+    };
+
     return (
         <section
             className="relative p-8 flex flex-wrap justify-center gap-5"
             style={{
-                
                 background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, #f9f9f9 50%)',
             }}
         >
@@ -47,7 +57,6 @@ const FeaturedServices = () => {
                     key={index}
                     className="relative flex flex-col justify-center items-center text-lightWhite rounded-2xl bg-cover bg-center h-[350px] w-full md:w-[30%] lg:w-[27.5%] cursor-pointer"
                     style={{ backgroundImage: `url(${service.bg})` }}
-
                 >
                     <button onClick={() => openOrderForm(service.name)}>
                         <div className="absolute inset-0 bg-darkBlack opacity-50 rounded-2xl"></div>
@@ -67,17 +76,12 @@ const FeaturedServices = () => {
                                 >
                                     <CloseOutlinedIcon />
                                 </button>
-                                <OrderForm onClose={closeOrderForm} serviceName={selectedService} />
+                                {renderForm()}
                             </div>
                         </div>
                     )}
-
                 </div>
-
             ))}
-
-
-
         </section>
     );
 };

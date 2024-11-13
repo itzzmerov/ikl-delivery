@@ -7,7 +7,7 @@ const SpecialDelivery = ({ onClose }) => {
     const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
-        service: 'Special Delivery', // Preset service type as "Special Delivery"
+        service: 'Special Delivery', 
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -35,8 +35,8 @@ const SpecialDelivery = ({ onClose }) => {
         try {
             const deliveryData = {
                 ...formData,
-                userId: currentUser.uid, // Add userId field
-                createdAt: new Date().toISOString(), // Add timestamp
+                userId: currentUser.uid,
+                createdAt: new Date().toISOString(), 
             };
 
             const result = await addDoc(collection(db, 'orders'), deliveryData);
@@ -48,7 +48,7 @@ const SpecialDelivery = ({ onClose }) => {
     };
 
     return (
-        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
+        <div className='flex justify-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Special Delivery</h1>
 
