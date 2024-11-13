@@ -52,25 +52,25 @@ const Sidebar = ({ isCollapsed }) => {
                     {!isCollapsed && isOrderDropdownOpen && (
                         <div className="bg-gray-800 rounded shadow-lg mt-1">
                             <NavLink
-                                to="/admin/orders/pending"
+                                to="/admin/orders/pending-orders"
                                 className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
                             >
                                 Pending Orders
                             </NavLink>
                             <NavLink
-                                to="/admin/orders/accepted"
+                                to="/admin/orders/accepted-orders"
                                 className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
                             >
                                 Accepted Orders
                             </NavLink>
                             <NavLink
-                                to="/admin/orders/rejected"
+                                to="/admin/orders/rejected-orders"
                                 className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
                             >
                                 Rejected Orders
                             </NavLink>
                             <NavLink
-                                to="/admin/orders/cancelled"
+                                to="/admin/orders/cancelled-orders"
                                 className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
                             >
                                 Cancelled Orders

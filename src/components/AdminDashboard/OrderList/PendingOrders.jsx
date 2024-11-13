@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 
-const OrderList = () => {
+const PendingOrders = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -170,6 +170,7 @@ const OrderList = () => {
                         </tr>
                     ) : (
                         orders
+                        .filter(order => order.status === 'Pending') // Add this line to filter only "Pending" orders
                         .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
                         .map((order) => (
                             <tr key={order.id} className="text-left">
@@ -187,13 +188,13 @@ const OrderList = () => {
                                 <td className="py-2 px-4 border-b flex gap-2">
                                     <button
                                         onClick={() => handleAcceptOrder(order.id)}
-                                        className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4 "
+                                        className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
                                     >
                                         Accept
                                     </button>
                                     <button
                                         onClick={() => handleRejectOrder(order.id)}
-                                        className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4 "
+                                        className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4"
                                     >
                                         Reject
                                     </button>
@@ -215,4 +216,4 @@ const OrderList = () => {
     );
 };
 
-export default OrderList;
+export default PendingOrders;

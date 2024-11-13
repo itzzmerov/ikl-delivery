@@ -4,7 +4,6 @@ import Sidebar from './Sidebar/Sidebar';
 import TopNavbar from './TopNavbar/TopNavbar';
 import Dashboard from './Dashboard/Dashboard';
 import Analytics from './Analytics/Analytics';
-import OrderList from './OrderList/PendingOrders';
 import Services from './ServicesManagement/Services';
 import Reviews from './Reviews/Reviews';
 import Customers from './CustomerManagement/Customers';
@@ -18,6 +17,11 @@ import UpdateCustomer from './UpdateForms/UpdateCustomer/UpdateCustomer';
 import AddNewRider from './AddForms/AddNewRider/AddNewRider';
 import UpdateRider from './UpdateForms/UpdateRider/UpdateRider';
 import AddReview from './AddForms/AddReviews/AddReview';
+
+import PendingOrders from './OrderList/PendingOrders';
+import AcceptedOrders from './OrderList/AcceptedOrders';
+import RejectedOrders from './OrderList/RejectedOrders';
+import CancelledOrders from './OrderList/CancelledOrders';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -36,12 +40,17 @@ const AdminDashboard = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="dashboard" />} />
                         <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="pending-orders" element={<OrderList />} />
                         <Route path="services" element={<Services />} />
                         <Route path="reviews" element={<Reviews />} />
                         <Route path="customers" element={<Customers />} />
                         <Route path="riders" element={<Riders />} />
                         <Route path="analytics" element={<Analytics />} />
+
+                        {/* Link for Orders */}
+                        <Route path="orders/pending-orders" element={<PendingOrders />} />
+                        <Route path="orders/accepted-orders" element={<AcceptedOrders />} />
+                        <Route path="orders/rejected-orders" element={<RejectedOrders />} />
+                        <Route path="orders/cancelled-orders" element={<CancelledOrders />} />
 
                         {/* Adding New Data Links */}
                         <Route path="order/new-order" element={<AddNewOrder />} />
