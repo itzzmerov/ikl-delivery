@@ -9,24 +9,14 @@ const PeraPadala = ({ onClose }) => {
     const [formData, setFormData] = useState({
         service: 'Pera Padala',
         status: 'Pending',
-        senderFirstName: '',
-        senderLastName: '',
-        senderPhone: '',
-        senderAddressHouse: '',
-        senderAddressStreet: '',
-        senderAddressBarangay: '',
-        senderAddressCity: '',
-        senderAddressRegion: '',
-        senderAddressZIP: '',
+        customerFirstName: '',
+        customerLastName: '',
+        customerPhone: '',
+        senderAddress: '',
         receiverFirstName: '',
         receiverLastName: '',
         receiverPhone: '',
-        receiverAddressHouse: '',
-        receiverAddressStreet: '',
-        receiverAddressBarangay: '',
-        receiverAddressCity: '',
-        receiverAddressRegion: '',
-        receiverAddressZIP: '',
+        receiverAddress: '',
         amount: '',
     });
 
@@ -41,14 +31,14 @@ const PeraPadala = ({ onClose }) => {
             console.error('User not logged in');
             return;
         }
-
+    
         try {
             const orderData = {
                 ...formData,
                 userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
-
+    
             await addDoc(collection(db, 'orders'), orderData);
             onClose();
         } catch (error) {
@@ -107,22 +97,15 @@ const PeraPadala = ({ onClose }) => {
                 {/* Sender Address */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Sender Address:</h2>
-                    <div className="grid lg:grid-cols-2 gap-2">
-                        {['House', 'Street', 'Barangay', 'City', 'Region', 'ZIP'].map((field) => (
-                            <div key={`senderAddress${field}`}>
-                                <label htmlFor={`senderAddress${field}`} className="block mb-1">{field}:</label>
-                                <input
-                                    type="text"
-                                    id={`senderAddress${field}`}
-                                    className="border p-2 w-full rounded"
-                                    name={`senderAddress${field}`}
-                                    value={formData[`senderAddress${field}`]}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <input
+                        type="text"
+                        id="senderAddress"
+                        className="border p-2 w-full rounded"
+                        name="senderAddress"
+                        value={formData.senderAddress}
+                        onChange={handleInputChange}
+                        required
+                    />
                 </div>
 
                 {/* Receiver Information */}
@@ -171,22 +154,15 @@ const PeraPadala = ({ onClose }) => {
                 {/* Receiver Address */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Receiver Address:</h2>
-                    <div className="grid lg:grid-cols-2 gap-2">
-                        {['House', 'Street', 'Barangay', 'City', 'Region', 'ZIP'].map((field) => (
-                            <div key={`receiverAddress${field}`}>
-                                <label htmlFor={`receiverAddress${field}`} className="block mb-1">{field}:</label>
-                                <input
-                                    type="text"
-                                    id={`receiverAddress${field}`}
-                                    className="border p-2 w-full rounded"
-                                    name={`receiverAddress${field}`}
-                                    value={formData[`receiverAddress${field}`]}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <input
+                        type="text"
+                        id="receiverAddress"
+                        className="border p-2 w-full rounded"
+                        name="receiverAddress"
+                        value={formData.receiverAddress}
+                        onChange={handleInputChange}
+                        required
+                    />
                 </div>
 
                 {/* Amount */}

@@ -188,13 +188,13 @@ const OrderList = () => {
                                     <td className="py-2 px-4 border-b flex gap-2">
                                         <button
                                             onClick={() => handleAcceptOrder(order.id)}
-                                            className="text-green-500 border border-green-500 rounded"
+                                            className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4 "
                                         >
                                             Accept
                                         </button>
                                         <button
                                             onClick={() => handleRejectOrder(order.id)}
-                                            className="text-red-500 border border-red-500 rounded"
+                                            className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4 "
                                         >
                                             Reject
                                         </button>
