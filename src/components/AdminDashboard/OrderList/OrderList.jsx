@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, /*deleteDoc,*/ doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import EditIcon from '@mui/icons-material/Edit';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 

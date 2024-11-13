@@ -10,7 +10,12 @@ import HatidSundo from '../../../images/hatid-sundo.jpg';
 import Pamalengke from '../../../images/pamalengke.jpg';
 import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
-import OrderForm from '../../OrderForm/CustomerOrderForm';
+import FoodDeliveryForm from '../OrderForms/FoodDelivery';
+import PeraPadalaForm from '../OrderForms/PeraPadala';
+import HatidSundoForm from '../OrderForms/HatidSundo';
+import PamalengkeForm from '../OrderForms/Pamalengke';
+import BillPaymentForm from '../OrderForms/BillPayments';
+import ParcelPickupForm from '../OrderForms/ParcelPickup';
 
 const localImages = {
     'Food Delivery': FoodDelivery,
@@ -73,6 +78,25 @@ const Services = () => {
         setSelectedService('');
     };
 
+    const renderForm = () => {
+        switch (selectedService) {
+            case 'Food Delivery':
+                return <FoodDeliveryForm onClose={closeOrderForm} />;
+            case 'Pera Padala':
+                return <PeraPadalaForm onClose={closeOrderForm} />;
+            case 'Hatid Sundo':
+                return <HatidSundoForm onClose={closeOrderForm} />;
+            case 'Pamalengke':
+                return <PamalengkeForm onClose={closeOrderForm} />;
+            case 'Bill Payments':
+                return <BillPaymentForm onClose={closeOrderForm} />;
+            case 'Parcel Pickup':
+                return <ParcelPickupForm onClose={closeOrderForm} />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <section className="bg-lightWhite flex items-center justify-center" id="services">
             <div className='flex flex-col justify-center w-full lg:w-[85%] p-8'>
@@ -103,7 +127,7 @@ const Services = () => {
                                             >
                                                 <CloseOutlinedIcon />
                                             </button>
-                                            <OrderForm onClose={closeOrderForm} serviceName={selectedService} />
+                                            {renderForm()}
                                         </div>
                                     </div>
                                 )}
