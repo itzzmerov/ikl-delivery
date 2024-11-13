@@ -61,7 +61,6 @@ const SpecialDelivery = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerFirstName"
-                                placeholder="First Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerFirstName'
@@ -74,7 +73,6 @@ const SpecialDelivery = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerLastName"
-                                placeholder="Last Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerLastName'
@@ -88,7 +86,6 @@ const SpecialDelivery = ({ onClose }) => {
                         <input
                             type="text"
                             id="phoneNumber"
-                            placeholder="Phone Number"
                             className="border p-2 w-full rounded"
                             required
                             name='phoneNumber'
@@ -130,7 +127,7 @@ const SpecialDelivery = ({ onClose }) => {
                         <input
                             type="number"
                             id="estimatedCost"
-                            placeholder="Estimated cost of delivery"
+                            placeholder="e.g., 500"
                             className="border p-2 w-full rounded"
                             required
                             name='estimatedCost'

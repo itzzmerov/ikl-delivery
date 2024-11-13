@@ -61,7 +61,6 @@ const ParcelPickup = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerFirstName"
-                                placeholder="First Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerFirstName'
@@ -74,7 +73,6 @@ const ParcelPickup = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerLastName"
-                                placeholder="Last Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerLastName'
@@ -88,7 +86,6 @@ const ParcelPickup = ({ onClose }) => {
                         <input
                             type="text"
                             id="phoneNumber"
-                            placeholder="Phone Number"
                             className="border p-2 w-full rounded"
                             required
                             name='phoneNumber'
@@ -105,7 +102,7 @@ const ParcelPickup = ({ onClose }) => {
                         <label htmlFor="parcelDetails" className="block mb-1">Parcel Details:</label>
                         <textarea
                             id="parcelDetails"
-                            placeholder="Describe the parcel (e.g., documents, clothing, etc.)"
+                            placeholder="e.g., documents, clothing, etc."
                             className="border p-2 w-full rounded"
                             required
                             name='parcelDetails'
@@ -118,7 +115,6 @@ const ParcelPickup = ({ onClose }) => {
                         <input
                             type="text"
                             id="pickupLocation"
-                            placeholder="Where the parcel will be picked up from"
                             className="border p-2 w-full rounded"
                             required
                             name='pickupLocation'

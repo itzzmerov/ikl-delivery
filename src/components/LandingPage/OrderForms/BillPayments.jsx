@@ -63,7 +63,6 @@ const BillPayments = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerFirstName"
-                                placeholder="First Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerFirstName'
@@ -76,7 +75,6 @@ const BillPayments = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerLastName"
-                                placeholder="Last Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerLastName'
@@ -90,7 +88,6 @@ const BillPayments = ({ onClose }) => {
                         <input
                             type="text"
                             id="phoneNumber"
-                            placeholder="Phone Number"
                             className="border p-2 w-full rounded"
                             required
                             name='phoneNumber'
@@ -103,7 +100,6 @@ const BillPayments = ({ onClose }) => {
                         <input
                             type="email"
                             id="emailAddress"
-                            placeholder="Email Address"
                             className="border p-2 w-full rounded"
                             required
                             name='emailAddress'
@@ -133,7 +129,6 @@ const BillPayments = ({ onClose }) => {
                         <input
                             type="text"
                             id="accountNumber"
-                            placeholder="Account Number"
                             className="border p-2 w-full rounded"
                             required
                             name='accountNumber'

@@ -62,7 +62,6 @@ const Pamalengke = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerFirstName"
-                                placeholder="First Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerFirstName'
@@ -75,7 +74,6 @@ const Pamalengke = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerLastName"
-                                placeholder="Last Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerLastName'
@@ -89,7 +87,6 @@ const Pamalengke = ({ onClose }) => {
                         <input
                             type="text"
                             id="phoneNumber"
-                            placeholder="Phone Number"
                             className="border p-2 w-full rounded"
                             required
                             name='phoneNumber'
@@ -106,7 +103,7 @@ const Pamalengke = ({ onClose }) => {
                         <label htmlFor="listOfItems" className="block mb-1">List of Items:</label>
                         <textarea
                             id="listOfItems"
-                            placeholder="Enter the items you need (e.g., 2kg rice, 1 dozen eggs)"
+                            placeholder="e.g., 2kg rice, 1 dozen eggs"
                             className="border p-2 w-full rounded"
                             required
                             name='listOfItems'
@@ -119,7 +116,7 @@ const Pamalengke = ({ onClose }) => {
                         <input
                             type="text"
                             id="storePreference"
-                            placeholder="Preferred store (e.g., Supermarket, Local Market)"
+                            placeholder="e.g., Supermarket, Local Market"
                             className="border p-2 w-full rounded"
                             name='storePreference'
                             value={formData.storePreference}
@@ -136,7 +133,7 @@ const Pamalengke = ({ onClose }) => {
                         <input
                             type="number"
                             id="estimatedPrice"
-                            placeholder="Estimated total price (e.g., 1000)"
+                            placeholder="e.g., 1000"
                             className="border p-2 w-full rounded"
                             required
                             name='estimatedPrice'

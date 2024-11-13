@@ -62,7 +62,6 @@ const HatidSundo = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerFirstName"
-                                placeholder="First Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerFirstName'
@@ -75,7 +74,6 @@ const HatidSundo = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerLastName"
-                                placeholder="Last Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerLastName'
@@ -89,7 +87,6 @@ const HatidSundo = ({ onClose }) => {
                         <input
                             type="text"
                             id="phoneNumber"
-                            placeholder="Phone Number"
                             className="border p-2 w-full rounded"
                             required
                             name='phoneNumber'
@@ -107,7 +104,6 @@ const HatidSundo = ({ onClose }) => {
                         <input
                             type="text"
                             id="pickupLocation"
-                            placeholder="Enter pickup location"
                             className="border p-2 w-full rounded"
                             required
                             name='pickupLocation'
@@ -120,7 +116,6 @@ const HatidSundo = ({ onClose }) => {
                         <input
                             type="text"
                             id="dropoffLocation"
-                            placeholder="Enter dropoff location"
                             className="border p-2 w-full rounded"
                             required
                             name='dropoffLocation'
@@ -149,7 +144,6 @@ const HatidSundo = ({ onClose }) => {
                         <label htmlFor="specialRequests" className="block mb-1">Special Requests:</label>
                         <textarea
                             id="specialRequests"
-                            placeholder="Enter any special requests"
                             className="border p-2 w-full rounded"
                             name='specialRequests'
                             value={formData.specialRequests}

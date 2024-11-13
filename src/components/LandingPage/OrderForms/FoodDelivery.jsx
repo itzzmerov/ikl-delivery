@@ -62,7 +62,6 @@ const FoodDelivery = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerFirstName"
-                                placeholder="First Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerFirstName'
@@ -75,7 +74,6 @@ const FoodDelivery = ({ onClose }) => {
                             <input
                                 type="text"
                                 id="customerLastName"
-                                placeholder="Last Name"
                                 className="border p-2 w-full rounded"
                                 required
                                 name='customerLastName'
@@ -89,7 +87,6 @@ const FoodDelivery = ({ onClose }) => {
                         <input
                             type="text"
                             id="phoneNumber"
-                            placeholder="Phone Number"
                             className="border p-2 w-full rounded"
                             required
                             name='phoneNumber'
@@ -107,7 +104,6 @@ const FoodDelivery = ({ onClose }) => {
                         <input
                             type="text"
                             id="storePreference"
-                            placeholder="Preferred store"
                             className="border p-2 w-full rounded"
                             required
                             name='storePreference'
@@ -119,7 +115,7 @@ const FoodDelivery = ({ onClose }) => {
                         <label htmlFor="itemsToBuy" className="block mb-1">Items to Buy:</label>
                         <textarea
                             id="itemsToBuy"
-                            placeholder="List of items to buy"
+                            placeholder="e.g., Burger, Fries, Chicken Meal, etc."
                             className="border p-2 w-full rounded"
                             required
                             name='itemsToBuy'
@@ -132,7 +128,6 @@ const FoodDelivery = ({ onClose }) => {
                         <input
                             type="number"
                             id="estimatedPrice"
-                            placeholder="Estimated price"
                             className="border p-2 w-full rounded"
                             required
                             name='estimatedPrice'
@@ -144,7 +139,6 @@ const FoodDelivery = ({ onClose }) => {
                         <label htmlFor="specialInstructions" className="block mb-1">Special Instructions:</label>
                         <textarea
                             id="specialInstructions"
-                            placeholder="Any special instructions?"
                             className="border p-2 w-full rounded"
                             required
                             name='specialInstructions'

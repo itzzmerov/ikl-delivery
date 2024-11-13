@@ -16,6 +16,7 @@ import HatidSundoForm from '../OrderForms/HatidSundo';
 import PamalengkeForm from '../OrderForms/Pamalengke';
 import BillPaymentForm from '../OrderForms/BillPayments';
 import ParcelPickupForm from '../OrderForms/ParcelPickup';
+import SpecialDelivery from '../OrderForms/SpecialDelivery';
 
 const localImages = {
     'Food Delivery': FoodDelivery,
@@ -92,6 +93,8 @@ const Services = () => {
                 return <BillPaymentForm onClose={closeOrderForm} />;
             case 'Parcel Pickup':
                 return <ParcelPickupForm onClose={closeOrderForm} />;
+            case 'Special Delivery':
+                return <SpecialDelivery onClose={closeOrderForm} />;
             default:
                 return null;
         }

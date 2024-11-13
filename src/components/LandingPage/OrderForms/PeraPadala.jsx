@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
-const PeraPadala = ({ onClose, serviceName }) => {
-
+const PeraPadala = ({ onClose }) => {
     const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
-        service: serviceName || '',
+        service: 'Pera Padala',
         status: 'Pending',
         senderFirstName: '',
         senderLastName: '',
@@ -33,10 +32,7 @@ const PeraPadala = ({ onClose, serviceName }) => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
@@ -53,250 +49,171 @@ const PeraPadala = ({ onClose, serviceName }) => {
                 createdAt: new Date().toISOString(),
             };
 
-            const result = await addDoc(collection(db, 'orders'), orderData);
-            console.log('Order created with ID:', result.id);
+            await addDoc(collection(db, 'orders'), orderData);
             onClose();
         } catch (error) {
             console.error('Error adding order:', error.message);
         }
     };
 
-
     return (
         <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
-                <h1 className="text-2xl font-bold text-center mb-6">{serviceName || 'Service'}</h1>
+                <h1 className="text-2xl font-bold text-center mb-6">Pera Padala</h1>
 
-                <div className="mb-2">
+                {/* Sender Information */}
+                <div className="mb-4">
                     <h2 className="font-semibold mb-2">Sender Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
-                        <input
-                            type="text"
-                            placeholder="First Name"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='senderFirstName'
-                            id='senderFirstName'
-                            value={formData.senderFirstName}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='senderLastName'
-                            id='senderLastName'
-                            value={formData.senderLastName}
-                            onChange={handleInputChange}
-                        />
+                        <div>
+                            <label htmlFor="senderFirstName" className="block mb-1">First Name:</label>
+                            <input
+                                type="text"
+                                id="senderFirstName"
+                                className="border p-2 w-full rounded"
+                                name="senderFirstName"
+                                value={formData.senderFirstName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="senderLastName" className="block mb-1">Last Name:</label>
+                            <input
+                                type="text"
+                                id="senderLastName"
+                                className="border p-2 w-full rounded"
+                                name="senderLastName"
+                                value={formData.senderLastName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
                     </div>
-                    <input
-                        type="text"
-                        placeholder="Phone Number"
-                        className="border p-2 w-full rounded mb-4"
-                        required
-                        name='senderPhone'
-                        id='senderPhone'
-                        value={formData.senderPhone}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                <div className="mb-2">
-                    <h2 className="font-semibold mb-2">Address:</h2>
-                    <div className="grid lg:grid-cols-2 gap-2 mb-2">
+                    <div className="mb-2">
+                        <label htmlFor="senderPhone" className="block mb-1">Phone Number:</label>
                         <input
                             type="text"
-                            placeholder="House / Bldg. No."
-                            className="border w-full p-2 rounded"
-                            required
-                            name='senderAddressHouse'
-                            id='senderAddressHouse'
-                            value={formData.senderAddressHouse}
+                            id="senderPhone"
+                            className="border p-2 w-full rounded"
+                            name="senderPhone"
+                            value={formData.senderPhone}
                             onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Street Address"
-                            className="border w-full p-2 rounded"
                             required
-                            name='senderAddressStreet'
-                            id='senderAddressStreet'
-                            value={formData.senderAddressStreet}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Barangay"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='senderAddressBarangay'
-                            id='senderAddressBarangay'
-                            value={formData.senderAddressBarangay}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="City / Municipality"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='senderAddressCity'
-                            id='senderAddressCity'
-                            value={formData.senderAddressCity}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Region"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='senderAddressRegion'
-                            id='senderAddressRegion'
-                            value={formData.senderAddressRegion}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="ZIP code"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='senderAddressZIP'
-                            id='senderAddressZIP'
-                            value={formData.senderAddressZIP}
-                            onChange={handleInputChange}
                         />
                     </div>
                 </div>
 
-                <div className="mb-2">
+                {/* Sender Address */}
+                <div className="mb-4">
+                    <h2 className="font-semibold mb-2">Sender Address:</h2>
+                    <div className="grid lg:grid-cols-2 gap-2">
+                        {['House', 'Street', 'Barangay', 'City', 'Region', 'ZIP'].map((field) => (
+                            <div key={`senderAddress${field}`}>
+                                <label htmlFor={`senderAddress${field}`} className="block mb-1">{field}:</label>
+                                <input
+                                    type="text"
+                                    id={`senderAddress${field}`}
+                                    className="border p-2 w-full rounded"
+                                    name={`senderAddress${field}`}
+                                    value={formData[`senderAddress${field}`]}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Receiver Information */}
+                <div className="mb-4">
                     <h2 className="font-semibold mb-2">Receiver Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
-                        <input
-                            type="text"
-                            placeholder="First Name"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='receiverFirstName'
-                            id='receiverFirstName'
-                            value={formData.receiverFirstName}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='receiverLastName'
-                            id='receiverLastName'
-                            value={formData.receiverLastName}
-                            onChange={handleInputChange}
-                        />
+                        <div>
+                            <label htmlFor="receiverFirstName" className="block mb-1">First Name:</label>
+                            <input
+                                type="text"
+                                id="receiverFirstName"
+                                className="border p-2 w-full rounded"
+                                name="receiverFirstName"
+                                value={formData.receiverFirstName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="receiverLastName" className="block mb-1">Last Name:</label>
+                            <input
+                                type="text"
+                                id="receiverLastName"
+                                className="border p-2 w-full rounded"
+                                name="receiverLastName"
+                                value={formData.receiverLastName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
                     </div>
-                    <input
-                        type="text"
-                        placeholder="Phone Number"
-                        className="border p-2 w-full rounded mb-4"
-                        required
-                        name='receiverPhone'
-                        id='receiverPhone'
-                        value={formData.receiverPhone}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                <div className="mb-2">
-                    <h2 className="font-semibold mb-2">Address:</h2>
-                    <div className="grid lg:grid-cols-2 gap-2 mb-2">
+                    <div className="mb-2">
+                        <label htmlFor="receiverPhone" className="block mb-1">Phone Number:</label>
                         <input
                             type="text"
-                            placeholder="House / Bldg. No."
-                            className="border w-full p-2 rounded"
-                            required
-                            name='receiverAddressHouse'
-                            id='receiverAddressHouse'
-                            value={formData.receiverAddressHouse}
+                            id="receiverPhone"
+                            className="border p-2 w-full rounded"
+                            name="receiverPhone"
+                            value={formData.receiverPhone}
                             onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Street Address"
-                            className="border w-full p-2 rounded"
                             required
-                            name='receiverAddressStreet'
-                            id='receiverAddressStreet'
-                            value={formData.receiverAddressStreet}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Barangay"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='receiverAddressBarangay'
-                            id='receiverAddressBarangay'
-                            value={formData.receiverAddressBarangay}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="City / Municipality"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='receiverAddressCity'
-                            id='receiverAddressCity'
-                            value={formData.receiverAddressCity}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Region"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='receiverAddressRegion'
-                            id='receiverAddressRegion'
-                            value={formData.receiverAddressRegion}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="ZIP code"
-                            className="border w-full p-2 rounded"
-                            required
-                            name='receiverAddressZIP'
-                            id='receiverAddressZIP'
-                            value={formData.receiverAddressZIP}
-                            onChange={handleInputChange}
                         />
                     </div>
                 </div>
 
+                {/* Receiver Address */}
                 <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Amount:</h2>
+                    <h2 className="font-semibold mb-2">Receiver Address:</h2>
+                    <div className="grid lg:grid-cols-2 gap-2">
+                        {['House', 'Street', 'Barangay', 'City', 'Region', 'ZIP'].map((field) => (
+                            <div key={`receiverAddress${field}`}>
+                                <label htmlFor={`receiverAddress${field}`} className="block mb-1">{field}:</label>
+                                <input
+                                    type="text"
+                                    id={`receiverAddress${field}`}
+                                    className="border p-2 w-full rounded"
+                                    name={`receiverAddress${field}`}
+                                    value={formData[`receiverAddress${field}`]}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Amount */}
+                <div className="mb-4">
+                    <label htmlFor="amount" className="block mb-2">Amount (PHP):</label>
                     <input
-                        type="text"
-                        placeholder="e.g. 500"
+                        type="number"
+                        id="amount"
                         className="border p-2 w-full rounded"
-                        required
-                        name='amount'
-                        id='amount'
+                        name="amount"
                         value={formData.amount}
                         onChange={handleInputChange}
+                        required
                     />
                 </div>
 
                 {/* Submit Button */}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
-                    type='submit'
+                    type="submit"
                     onClick={handleSubmit}
                 >
                     Send Order
                 </button>
-
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PeraPadala
+export default PeraPadala;
