@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaBars, FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../utils/firebase';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const TopNavbar = ({ toggleSidebar }) => {
     const [isAccountMenuVisible, setIsAccountMenuVisible] = useState(false);
     const navigate = useNavigate();
+    const accountMenuRef = useRef(null);
 
     const handleAccountClick = () => {
         setIsAccountMenuVisible(!isAccountMenuVisible);
@@ -20,6 +21,20 @@ const TopNavbar = ({ toggleSidebar }) => {
             console.error("Logout error: ", error);
         }
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
+                setIsAccountMenuVisible(false);
+            }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+    
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="w-full flex items-center justify-between bg-lightWhite p-4 shadow">
@@ -49,9 +64,11 @@ const TopNavbar = ({ toggleSidebar }) => {
                         onClick={handleAccountClick} 
                     />
                     {isAccountMenuVisible && (
-                        <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md border">
+                        <div 
+                            ref={accountMenuRef}
+                            className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md border"
+                        >
                             <ul className="text-sm text-gray-700">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Account Info</li>
                                 <li 
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                     onClick={handleLogout}
