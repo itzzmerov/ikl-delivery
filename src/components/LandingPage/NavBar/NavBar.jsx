@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../../../hooks/useAuth';
 import { FaCircleUser } from "react-icons/fa6";
 import OrdersPage from '../OrdersPage/OrdersPage';
+import ViewOrdersHistory from '../OrdersPage/ViewOrdersHistory';
 
 const NavBar = () => {
     const { currentUser } = useAuth();
@@ -15,6 +16,7 @@ const NavBar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isOrdersPageVisible, setIsOrdersPageVisible] = useState(false);
+    const [isOrdersHistoryVisible, setIsOrdersHistoryVisible] = useState(false);
     const [logoutMessage, setLogoutMessage] = useState(false);
 
     const handleLogout = async () => {
@@ -34,11 +36,22 @@ const NavBar = () => {
 
     const openOrdersPage = () => {
         setIsOrdersPageVisible(true);
+        setIsOrdersHistoryVisible(false);
         setDropdownOpen(false);
     };
 
     const closeOrdersPage = () => {
         setIsOrdersPageVisible(false);
+    };
+
+    const openOrdersHistory = () => {
+        setIsOrdersHistoryVisible(true);
+        setIsOrdersPageVisible(false);
+        setDropdownOpen(false);
+    };
+
+    const closeOrdersHistory = () => {
+        setIsOrdersHistoryVisible(false);
     };
 
     useEffect(() => {
@@ -86,6 +99,12 @@ const NavBar = () => {
                                         View Orders
                                     </button>
                                     <button
+                                        onClick={openOrdersHistory}
+                                        className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200"
+                                    >
+                                        Order History
+                                    </button>
+                                    <button
                                         onClick={handleLogout}
                                         className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200 rounded-b-lg font-Montserrat"
                                     >
@@ -105,6 +124,7 @@ const NavBar = () => {
             </div>
 
             {isOrdersPageVisible && <OrdersPage onClose={closeOrdersPage} />}
+            {isOrdersHistoryVisible && <ViewOrdersHistory onClose={closeOrdersHistory} />}
 
             {logoutMessage && (
                 <div className="fixed top-0 left-0 w-full flex justify-center z-50">
