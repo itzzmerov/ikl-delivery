@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 
-const AcceptedOrders = () => {
+const CompletedOrders = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -45,7 +45,7 @@ const AcceptedOrders = () => {
         try {
             await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
             alert("Order status updated to Completed successfully");
-            fetchOrders(); // Refresh the order list
+            fetchOrders();
         } catch (error) {
             console.error("Error completing order:", error);
         }
@@ -184,7 +184,7 @@ const AcceptedOrders = () => {
                             </tr>
                         ) : (
                             orders
-                                .filter(order => order.status === 'Accepted')
+                                .filter(order => order.status === 'Completed')
                                 .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
                                 .map((order) => (
                                     <tr key={order.id} className="text-left">
@@ -225,4 +225,4 @@ const AcceptedOrders = () => {
     );
 };
 
-export default AcceptedOrders;
+export default CompletedOrders;

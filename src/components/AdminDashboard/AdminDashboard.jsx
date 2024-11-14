@@ -22,6 +22,7 @@ import PendingOrders from './OrderList/PendingOrders';
 import AcceptedOrders from './OrderList/AcceptedOrders';
 import RejectedOrders from './OrderList/RejectedOrders';
 import CancelledOrders from './OrderList/CancelledOrders';
+import CompletedOrders from './OrderList/CompletedOrders';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -51,6 +52,7 @@ const AdminDashboard = () => {
                         <Route path="orders/accepted-orders" element={<AcceptedOrders />} />
                         <Route path="orders/rejected-orders" element={<RejectedOrders />} />
                         <Route path="orders/cancelled-orders" element={<CancelledOrders />} />
+                        <Route path="orders/completed-orders" element={<CompletedOrders />} />
 
                         {/* Adding New Data Links */}
                         <Route path="order/new-order" element={<AddNewOrder />} />

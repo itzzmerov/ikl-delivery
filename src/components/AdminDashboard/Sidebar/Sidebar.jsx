@@ -91,6 +91,12 @@ const Sidebar = ({ isCollapsed }) => {
                             >
                                 Cancelled Orders
                             </NavLink>
+                            <NavLink
+                                to="/admin/orders/completed-orders"
+                                className={({ isActive }) => `block px-6 py-2 hover:bg-gray-700 ${isActive ? 'bg-gray-700' : ''}`}
+                            >
+                                Completed Orders
+                            </NavLink>
                         </div>
                     )}
                 </div>

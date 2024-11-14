@@ -31,7 +31,7 @@ const UpdateOrder = () => {
         receiverAddressRegion: '',
         receiverAddressZIP: '',
         amount: '',
-        service: null, // To store the service data
+        service: null,
     })
 
     const fetchOrder = async () => {
@@ -41,13 +41,12 @@ const UpdateOrder = () => {
                 const orderData = response.data();
                 setFormData(orderData);
 
-                // Fetch the related service data based on the service ID in the order
                 if (orderData.serviceId) {
                     const serviceResponse = await getDoc(doc(db, "services", orderData.serviceId));
                     if (serviceResponse.exists()) {
                         setFormData((prevData) => ({
                             ...prevData,
-                            service: serviceResponse.data(), // Store the service data
+                            service: serviceResponse.data(),
                         }));
                     }
                 }
