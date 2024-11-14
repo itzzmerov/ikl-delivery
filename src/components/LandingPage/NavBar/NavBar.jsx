@@ -102,7 +102,7 @@ const NavBar = () => {
                                         onClick={openOrdersHistory}
                                         className="w-full px-4 py-2 text-sm text-left hover:bg-gray-200"
                                     >
-                                        Order History
+                                        Orders History
                                     </button>
                                     <button
                                         onClick={handleLogout}

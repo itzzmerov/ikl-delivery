@@ -14,7 +14,6 @@ const ViewOrdersHistory = ({ onClose }) => {
             if (!currentUser) return;
 
             const ordersRef = collection(db, 'orders');
-            // Query for orders with status other than "Pending"
             const q = query(ordersRef, where('userId', '==', currentUser.uid));
 
             try {
@@ -24,12 +23,10 @@ const ViewOrdersHistory = ({ onClose }) => {
                     ...doc.data(),
                 }));
 
-                // Filter out only non-pending orders
                 const filteredOrders = fetchedOrders.filter(
                     (order) => order.status !== 'Pending'
                 );
 
-                // Sort orders by createdAt in descending order (newest first)
                 const sortedOrders = filteredOrders.sort((a, b) => {
                     const dateA = new Date(a.createdAt);
                     const dateB = new Date(b.createdAt);
