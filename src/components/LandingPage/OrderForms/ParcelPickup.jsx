@@ -8,7 +8,7 @@ const ParcelPickup = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Parcel Pickup', 
+        service: 'Parcel Pickup',
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -36,15 +36,15 @@ const ParcelPickup = ({ onClose }) => {
         try {
             const parcelData = {
                 ...formData,
-                userId: currentUser.uid, 
+                userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
 
             const result = await addDoc(collection(db, 'orders'), parcelData);
             console.log('Parcel Pickup request created with ID:', result.id);
-            
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
@@ -104,7 +104,6 @@ const ParcelPickup = ({ onClose }) => {
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Parcel Details:</h2>
                     <div className="mb-2">
-                        <label htmlFor="parcelDetails" className="block mb-1">Parcel Details:</label>
                         <textarea
                             id="parcelDetails"
                             placeholder="e.g., documents, clothing, etc."
@@ -130,9 +129,8 @@ const ParcelPickup = ({ onClose }) => {
                 </div>
 
                 <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Weight Information:</h2>
+                    <h2 className="font-semibold mb-2">Weight Information (kg):</h2>
                     <div className="mb-2">
-                        <label htmlFor="estimatedWeight" className="block mb-1">Estimated Weight (kg):</label>
                         <input
                             type="number"
                             id="estimatedWeight"

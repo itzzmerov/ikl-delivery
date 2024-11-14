@@ -3,35 +3,23 @@ import { db } from '../../../utils/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
-const OrderForm = ({ onClose, serviceName }) => {
-
+const BillPayments = ({ onClose }) => {
     const { currentUser } = useAuth();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Bill Payments', 
+        service: 'Bill Payment',
         status: 'Pending',
-        senderFirstName: '',
-        senderLastName: '',
-        senderPhone: '',
-        senderAddressHouse: '',
-        senderAddressStreet: '',
-        senderAddressBarangay: '',
-        senderAddressCity: '',
-        senderAddressRegion: '',
-        senderAddressZIP: '',
-        receiverFirstName: '',
-        receiverLastName: '',
-        receiverPhone: '',
-        receiverAddressHouse: '',
-        receiverAddressStreet: '',
-        receiverAddressBarangay: '',
-        receiverAddressCity: '',
-        receiverAddressRegion: '',
-        receiverAddressZIP: '',
+        customerFirstName: '',
+        customerLastName: '',
+        phoneNumber: '',
+        emailAddress: '',
+        billType: '',
+        accountNumber: '',
         amount: '',
+        billDate: '',
+        dueDate: '',
     });
-
-    const [showPopup, setShowPopup] = useState(false);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -49,14 +37,14 @@ const OrderForm = ({ onClose, serviceName }) => {
         }
 
         try {
-            const orderData = {
+            const paymentData = {
                 ...formData,
                 userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
 
-            const result = await addDoc(collection(db, 'orders'), orderData);
-            console.log('Order created with ID:', result.id);
+            const result = await addDoc(collection(db, 'orders'), paymentData);
+            console.log('Bill Payment created with ID:', result.id);
 
             setShowPopup(true);
 
@@ -64,26 +52,27 @@ const OrderForm = ({ onClose, serviceName }) => {
                 setShowPopup(false);
                 onClose();
             }, 3000);
+
         } catch (error) {
-            console.error('Error adding order:', error.message);
+            console.error('Error adding bill payment:', error.message);
         }
     };
 
     return (
-        <div className='flex justify-center min-h-screen w-full rounded-full'>
+        <div className='flex justify-center items-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
-            <h1 className="text-2xl font-bold text-center mb-6">Bill Payments</h1>
+                <h1 className="text-2xl font-bold text-center mb-6">Bill Payment</h1>
 
-                <div className="mb-2">
-                    <h2 className="font-semibold mb-2">Sender Information:</h2>
+                <div className="mb-4">
+                    <h2 className="font-semibold mb-2">Customer Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
                         <input
                             type="text"
                             placeholder="First Name"
                             className="border p-2 w-full rounded"
                             required
-                            name='senderFirstName'
-                            value={formData.senderFirstName}
+                            name='customerFirstName'
+                            value={formData.customerFirstName}
                             onChange={handleInputChange}
                         />
                         <input
@@ -91,64 +80,80 @@ const OrderForm = ({ onClose, serviceName }) => {
                             placeholder="Last Name"
                             className="border p-2 w-full rounded"
                             required
-                            name='senderLastName'
-                            value={formData.senderLastName}
+                            name='customerLastName'
+                            value={formData.customerLastName}
                             onChange={handleInputChange}
                         />
                     </div>
                     <input
                         type="text"
                         placeholder="Phone Number"
-                        className="border p-2 w-full rounded mb-4"
+                        className="border p-2 w-full rounded mb-2"
                         required
-                        name='senderPhone'
-                        value={formData.senderPhone}
+                        name='phoneNumber'
+                        value={formData.phoneNumber}
                         onChange={handleInputChange}
                     />
-                </div>
-
-                <div className="mb-2">
-                    <h2 className="font-semibold mb-2">Receiver Information:</h2>
-                    <div className="grid lg:grid-cols-2 gap-2 mb-2">
-                        <input
-                            type="text"
-                            placeholder="First Name"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='receiverFirstName'
-                            value={formData.receiverFirstName}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='receiverLastName'
-                            value={formData.receiverLastName}
-                            onChange={handleInputChange}
-                        />
-                    </div>
                     <input
-                        type="text"
-                        placeholder="Phone Number"
+                        type="email"
+                        placeholder="Email Address"
                         className="border p-2 w-full rounded mb-4"
                         required
-                        name='receiverPhone'
-                        value={formData.receiverPhone}
+                        name='emailAddress'
+                        value={formData.emailAddress}
                         onChange={handleInputChange}
                     />
                 </div>
 
                 <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Amount:</h2>
+                    <h2 className="font-semibold mb-2">Bill Information:</h2>
                     <input
                         type="text"
-                        placeholder="e.g. 500"
-                        className="border p-2 w-full rounded"
+                        placeholder="Bill Type (e.g., Electricity, Water)"
+                        className="border p-2 w-full rounded mb-2"
+                        required
+                        name='billType'
+                        value={formData.billType}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Account Number"
+                        className="border p-2 w-full rounded mb-2"
+                        required
+                        name='accountNumber'
+                        value={formData.accountNumber}
+                        onChange={handleInputChange}
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <h2 className="font-semibold mb-2">Payment Details:</h2>
+                    <input
+                        type="number"
+                        placeholder="Amount"
+                        className="border p-2 w-full rounded mb-2"
                         required
                         name='amount'
                         value={formData.amount}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="date"
+                        placeholder="Bill Date"
+                        className="border p-2 w-full rounded mb-2"
+                        required
+                        name='billDate'
+                        value={formData.billDate}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="date"
+                        placeholder="Due Date"
+                        className="border p-2 w-full rounded mb-4"
+                        required
+                        name='dueDate'
+                        value={formData.dueDate}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -158,7 +163,7 @@ const OrderForm = ({ onClose, serviceName }) => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Send Order
+                    Submit Payment
                 </button>
 
                 {showPopup && (
@@ -173,4 +178,4 @@ const OrderForm = ({ onClose, serviceName }) => {
     );
 };
 
-export default OrderForm;
+export default BillPayments;
