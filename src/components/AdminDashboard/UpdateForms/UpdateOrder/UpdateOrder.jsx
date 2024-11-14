@@ -101,7 +101,6 @@ const UpdateOrder = () => {
                     </button>
                 </div>
 
-                {/* Sender Information */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Sender Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -138,7 +137,6 @@ const UpdateOrder = () => {
                     />
                 </div>
 
-                {/* Sender Address */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Address:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -205,7 +203,6 @@ const UpdateOrder = () => {
                     </div>
                 </div>
 
-                {/* Receiver Information */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Receiver Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -242,7 +239,6 @@ const UpdateOrder = () => {
                     />
                 </div>
 
-                {/* Receiver Address */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Address:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">

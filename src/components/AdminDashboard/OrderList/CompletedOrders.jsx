@@ -143,7 +143,7 @@ const CompletedOrders = () => {
     return (
         <div className="p-8 flex-1">
             <div className='flex justify-between items-center mb-2'>
-                <h1 className="text-2xl font-semibold mb-4">Order List</h1>
+                <h1 className="text-2xl font-semibold mb-4">Completed Orders</h1>
                 <div className="flex gap-2">
                     <select
                         value={serviceFilter}
@@ -172,7 +172,7 @@ const CompletedOrders = () => {
                             {getTableColumns().map(({ name }, index) => (
                                 <th key={index} className="py-2 px-4 border-b">{name}</th>
                             ))}
-                            <th className="py-2 px-4 border-b">Actions</th>
+                            {/* <th className="py-2 px-4 border-b">Actions</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -199,7 +199,7 @@ const CompletedOrders = () => {
                                                             : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
-                                        <td className="py-2 px-4 border-b flex gap-2">
+                                        {/* <td className="py-2 px-4 border-b flex gap-2">
                                             <button
                                                 onClick={() => handleCompleteOrder(order.id)}
                                                 className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
@@ -214,7 +214,7 @@ const CompletedOrders = () => {
                                                     onSubmit={fetchOrders}
                                                 />
                                             )}
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))
                         )}

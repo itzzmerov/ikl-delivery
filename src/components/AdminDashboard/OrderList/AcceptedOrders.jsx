@@ -45,7 +45,7 @@ const AcceptedOrders = () => {
         try {
             await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
             alert("Order status updated to Completed successfully");
-            fetchOrders(); // Refresh the order list
+            fetchOrders();
         } catch (error) {
             console.error("Error completing order:", error);
         }
@@ -143,7 +143,7 @@ const AcceptedOrders = () => {
     return (
         <div className="p-8 flex-1">
             <div className='flex justify-between items-center mb-2'>
-                <h1 className="text-2xl font-semibold mb-4">Order List</h1>
+                <h1 className="text-2xl font-semibold mb-4">Accepted Orders</h1>
                 <div className="flex gap-2">
                     <select
                         value={serviceFilter}

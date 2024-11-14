@@ -50,7 +50,7 @@ const PendingOrders = () => {
             case 'Food Delivery':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer Name', key: 'customerName' }, 
+                    { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Item/s to buy', key: 'itemsToBuy' },
@@ -88,7 +88,7 @@ const PendingOrders = () => {
             case 'Hatid Sundo':
                 return [
                     { name: 'Status', key: 'status' },
-                    { name: 'Customer Name', key: 'customerName' }, 
+                    { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Pickup Location', key: 'pickupLocation' },
                     { name: 'Dropoff Location', key: 'dropoffLocation' },
@@ -129,7 +129,7 @@ const PendingOrders = () => {
     return (
         <div className="p-8 flex-1">
             <div className='flex justify-between items-center mb-2'>
-                <h1 className="text-2xl font-semibold mb-4">Order List</h1>
+                <h1 className="text-2xl font-semibold mb-4">Pending Orders</h1>
                 <div className="flex gap-2">
                     <select
                         value={serviceFilter}
@@ -152,65 +152,65 @@ const PendingOrders = () => {
             </div>
 
             <div className="min-w-full h-96 overflow-x-auto overflow-y-auto">
-            <table className="min-w-full bg-lightWhite border border-gray-200">
-                <thead className="bg-gray-800 text-lightWhite sticky top-0">
-                    <tr className="text-left">
-                        {getTableColumns().map(({ name }, index) => (
-                            <th key={index} className="py-2 px-4 border-b">{name}</th>
-                        ))}
-                        <th className="py-2 px-4 border-b">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orders.length === 0 ? (
-                        <tr>
-                            <td colSpan={getTableColumns().length + 1} className="py-4 text-center">
-                                No data found
-                            </td>
+                <table className="min-w-full bg-lightWhite border border-gray-200">
+                    <thead className="bg-gray-800 text-lightWhite sticky top-0">
+                        <tr className="text-left">
+                            {getTableColumns().map(({ name }, index) => (
+                                <th key={index} className="py-2 px-4 border-b">{name}</th>
+                            ))}
+                            <th className="py-2 px-4 border-b">Actions</th>
                         </tr>
-                    ) : (
-                        orders
-                        .filter(order => order.status === 'Pending')
-                        .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
-                        .map((order) => (
-                            <tr key={order.id} className="text-left">
-                                {getTableColumns().map(({ key }, index) => (
-                                    <td key={index} className="py-2 px-4 border-b">
-                                        {key === 'customerName' && order.customerFirstName && order.customerLastName
-                                            ? `${order.customerFirstName} ${order.customerLastName}`
-                                            : key === 'senderName' && order.customerFirstName && order.customerLastName
-                                            ? `${order.customerFirstName} ${order.customerLastName}`
-                                            : key === 'receiverName' && order.receiverFirstName && order.receiverLastName
-                                            ? `${order.receiverFirstName} ${order.receiverLastName}`
-                                            : order[key] !== undefined ? order[key] : 'N/A'}
-                                    </td>
-                                ))}
-                                <td className="py-2 px-4 border-b flex gap-2">
-                                    <button
-                                        onClick={() => handleAcceptOrder(order.id)}
-                                        className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
-                                    >
-                                        Accept
-                                    </button>
-                                    <button
-                                        onClick={() => handleRejectOrder(order.id)}
-                                        className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4"
-                                    >
-                                        Reject
-                                    </button>
-                                    {showModal && (
-                                        <RiderAssignmentModal
-                                            orderId={selectedOrderId}
-                                            onClose={() => setShowModal(false)}
-                                            onSubmit={fetchOrders}
-                                        />
-                                    )}
+                    </thead>
+                    <tbody>
+                        {orders.length === 0 ? (
+                            <tr>
+                                <td colSpan={getTableColumns().length + 1} className="py-4 text-center">
+                                    No data found
                                 </td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ) : (
+                            orders
+                                .filter(order => order.status === 'Pending')
+                                .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
+                                .map((order) => (
+                                    <tr key={order.id} className="text-left">
+                                        {getTableColumns().map(({ key }, index) => (
+                                            <td key={index} className="py-2 px-4 border-b">
+                                                {key === 'customerName' && order.customerFirstName && order.customerLastName
+                                                    ? `${order.customerFirstName} ${order.customerLastName}`
+                                                    : key === 'senderName' && order.customerFirstName && order.customerLastName
+                                                        ? `${order.customerFirstName} ${order.customerLastName}`
+                                                        : key === 'receiverName' && order.receiverFirstName && order.receiverLastName
+                                                            ? `${order.receiverFirstName} ${order.receiverLastName}`
+                                                            : order[key] !== undefined ? order[key] : 'N/A'}
+                                            </td>
+                                        ))}
+                                        <td className="py-2 px-4 border-b flex gap-2">
+                                            <button
+                                                onClick={() => handleAcceptOrder(order.id)}
+                                                className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
+                                            >
+                                                Accept
+                                            </button>
+                                            <button
+                                                onClick={() => handleRejectOrder(order.id)}
+                                                className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4"
+                                            >
+                                                Reject
+                                            </button>
+                                            {showModal && (
+                                                <RiderAssignmentModal
+                                                    orderId={selectedOrderId}
+                                                    onClose={() => setShowModal(false)}
+                                                    onSubmit={fetchOrders}
+                                                />
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

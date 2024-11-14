@@ -81,7 +81,7 @@ const OrderForm = () => {
     return (
         <div className='flex flex-col justify-center items-center min-h-screen w-full p-8'>
             <div className='flex justify-start items-center w-full'>
-                <h1 className="text-2xl font-semibold mb-4"><span onClick={() => navigate('/admin/orderlist')} className='cursor-pointer text-blue-900 hover:text-blue-600'>Order List</span> <ArrowForwardIosIcon /> Add New Order</h1>
+                <h1 className="text-2xl font-semibold mb-4"><span onClick={() => navigate('/admin/orders/pending-orders')} className='cursor-pointer text-blue-900 hover:text-blue-600'>Order List</span> <ArrowForwardIosIcon /> Add New Order</h1>
             </div>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[25px] w-full text-darkBlack">
                 <div className="flex justify-between items-center mb-6">
@@ -89,7 +89,7 @@ const OrderForm = () => {
                     <h1 className="text-2xl font-bold">PERA PADALA</h1>
                     <button
                         className="text-darkBlack hover:text-red-600"
-                        onClick={() => navigate('/admin/orderlist')}
+                        onClick={() => navigate('/admin/orders/pending-orders')}
                     >
                         <AiOutlineClose size={24} />
                     </button>
