@@ -8,6 +8,7 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 const Register = () => {
 
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -37,11 +38,11 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
+        console.log(formData);
         try {
             const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             const userId = response.user.uid;
-
+    
             await setDoc(doc(db, 'users', userId), {
                 firstName: formData.firstName,
                 middleName: formData.middleName,
@@ -61,13 +62,20 @@ const Register = () => {
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
             });
-
+    
             console.log('Signup and Firestore document creation successful.');
-            navigate('/login');
+    
+            setShowPopup(true);
+    
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/login');
+            }, 2000);
+    
         } catch (error) {
             console.error('Error during registration:', error.message);
         }
-    }
+    };
 
 
     return (
@@ -214,6 +222,14 @@ const Register = () => {
                 <p className="mt-4 text-sm">
                     Already have an account? <Link to="/login" className="text-blue-500">Login here</Link>
                 </p>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Created Account Successfully!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
