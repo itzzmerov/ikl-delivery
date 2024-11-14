@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import logo from '../../../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -18,6 +18,7 @@ const NavBar = () => {
     const [isOrdersPageVisible, setIsOrdersPageVisible] = useState(false);
     const [isOrdersHistoryVisible, setIsOrdersHistoryVisible] = useState(false);
     const [logoutMessage, setLogoutMessage] = useState(false);
+    const dropdownRef = useRef(null);
 
     const handleLogout = async () => {
         try {
@@ -70,6 +71,20 @@ const NavBar = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+            }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+    
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 bg-lightGreen text-lightWhite transition-all duration-300 ${scrolled ? 'py-2 shadow-lg' : 'py-4 shadow-none'}`}>
             <div className="px-5 md:px-14 flex justify-between items-center transition-all duration-300">
@@ -87,7 +102,7 @@ const NavBar = () => {
                                 <FaCircleUser className="w-8 h-8 rounded-full" />
                             </button>
                             {dropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-60 bg-white text-black rounded-lg shadow-lg">
+                                <div ref={dropdownRef} className="absolute right-0 mt-2 w-60 bg-white text-black rounded-lg shadow-lg">
                                     <div className="p-2">
                                         <p className="text-xs font-OpenSans">Logged in as:</p>
                                         <p className="text-sm font-semibold font-Montserrat">{currentUser.email}</p>
