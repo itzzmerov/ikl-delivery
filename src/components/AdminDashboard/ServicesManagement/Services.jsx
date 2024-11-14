@@ -4,11 +4,12 @@ import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add'; 
+import AddIcon from '@mui/icons-material/Add';
 
 const Services = () => {
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
 
     const fetchServices = async () => {
         const response = await getDocs(collection(db, "services"));
@@ -27,7 +28,13 @@ const Services = () => {
     const handleDeleteServices = async (id) => {
         try {
             await deleteDoc(doc(db, 'services', id));
-            fetchServices();
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                fetchServices();
+            }, 2000);
+
         } catch (error) {
             console.error(error);
         }
@@ -89,6 +96,14 @@ const Services = () => {
                                             <DeleteIcon fontSize="small" />
                                             <span>Delete</span>
                                         </button>
+
+                                        {showPopup && (
+                                            <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                                                <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
+                                                    <p>Successfully deleted a service!</p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             ))

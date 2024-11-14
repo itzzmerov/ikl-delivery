@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const AddNewCustomer = () => {
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -37,7 +38,7 @@ const AddNewCustomer = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
-    
+
         const address = {
             house: formData.userAddressHouse,
             street: formData.userAddressStreet,
@@ -46,7 +47,7 @@ const AddNewCustomer = () => {
             region: formData.userAddressRegion,
             zip: formData.userAddressZIP,
         };
-    
+
         const customerData = {
             firstName: formData.firstName,
             middleName: formData.middleName,
@@ -58,20 +59,26 @@ const AddNewCustomer = () => {
             createdAt: serverTimestamp(),
             address: address,
         };
-    
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             const userId = userCredential.user.uid;
-    
+
             await setDoc(doc(db, 'users', userId), {
                 ...customerData,
                 password: '',
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
             });
-    
+
             console.log('Customer added successfully to Firestore and Firebase Auth');
-            navigate('/admin/customers');
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/admin/customers');
+            }, 2000);
         } catch (error) {
             console.error('Error adding customer:', error.message);
         }
@@ -232,6 +239,14 @@ const AddNewCustomer = () => {
                 >
                     Add Customer
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Successfully created an account!</p>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </div>

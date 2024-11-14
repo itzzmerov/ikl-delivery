@@ -7,6 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const AddNewService = () => {
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -34,7 +35,14 @@ const AddNewService = () => {
         try {
             const result = await addDoc(collection(db, "services"), formDataWithDate)
             console.log(result);
-            navigate('/admin/services')
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/admin/services')
+            }, 2000);
+
         } catch (error) {
             console.error(error.message)
         }
@@ -90,6 +98,14 @@ const AddNewService = () => {
                 >
                     Add Service
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Successfully created new service!</p>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </div>

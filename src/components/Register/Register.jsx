@@ -35,7 +35,7 @@ const Register = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
         console.log(formData);
         try {
             const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);

@@ -8,6 +8,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const AddNewRider = () => {
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -76,7 +77,14 @@ const AddNewRider = () => {
             });
 
             console.log('Rider added successfully:', result);
-            navigate('/admin/riders');
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/admin/riders');
+            }, 2000);
+
         } catch (error) {
             console.error('Error adding rider:', error.message);
         }
@@ -146,6 +154,14 @@ const AddNewRider = () => {
                 <button className="bg-darkBlack hover:bg-lightBlack text-lightWhite py-2 w-full rounded" type="submit" onClick={handleSubmit}>
                     Add Rider
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Successfully created new rider!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

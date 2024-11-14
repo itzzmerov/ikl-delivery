@@ -7,6 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const AddReview = () => {
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         ratingValue: '',
@@ -34,7 +35,14 @@ const AddReview = () => {
         try {
             const result = await addDoc(collection(db, "reviews"), formDataWithDate)
             console.log(result);
-            navigate('/admin/reviews')
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/admin/reviews')
+            }, 2000);
+
         } catch (error) {
             console.error(error.message)
         }
@@ -90,6 +98,14 @@ const AddReview = () => {
                 >
                     Add Review
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Successfully added new review!</p>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </div>

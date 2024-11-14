@@ -4,11 +4,12 @@ import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/fire
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add'; 
+import AddIcon from '@mui/icons-material/Add';
 
 const Riders = () => {
     const navigate = useNavigate();
     const [riders, setRiders] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
 
     const fetchRiders = async () => {
         const customersQuery = query(collection(db, "users"), where("userType", "==", "rider"));
@@ -28,7 +29,14 @@ const Riders = () => {
     const handleDeleteRiders = async (id) => {
         try {
             await deleteDoc(doc(db, 'users', id));
-            fetchRiders();
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                fetchRiders();
+            }, 2000);
+
         } catch (error) {
             console.error(error);
         }
@@ -91,6 +99,14 @@ const Riders = () => {
                                             <DeleteIcon fontSize="small" />
                                             <span>Delete</span>
                                         </button>
+
+                                        {showPopup && (
+                                            <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                                                <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
+                                                    <p>Successfully deleted a rider!</p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             ))

@@ -8,6 +8,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const OrderForm = () => {
 
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         status: 'Pending',
@@ -64,7 +65,14 @@ const OrderForm = () => {
         try {
             const result = await addDoc(collection(db, "orders"), formData)
             console.log(result);
-            navigate('/admin/orderlist')
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/admin/orderlist')
+            }, 2000);
+
         } catch (error) {
             console.error(error.message)
         }
@@ -87,7 +95,6 @@ const OrderForm = () => {
                     </button>
                 </div>
 
-                {/* Service Selection */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Select Service:</h2>
                     <select
@@ -106,7 +113,6 @@ const OrderForm = () => {
                     </select>
                 </div>
 
-                {/* Sender Information */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Sender Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -143,7 +149,6 @@ const OrderForm = () => {
                     />
                 </div>
 
-                {/* Sender Address */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Address:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -210,7 +215,6 @@ const OrderForm = () => {
                     </div>
                 </div>
 
-                {/* Receiver Information */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Receiver Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -247,7 +251,6 @@ const OrderForm = () => {
                     />
                 </div>
 
-                {/* Receiver Address */}
                 <div className="mb-2">
                     <h2 className="font-semibold mb-2">Address:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -314,7 +317,6 @@ const OrderForm = () => {
                     </div>
                 </div>
 
-                {/* Amount */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Amount:</h2>
                     <input
@@ -329,7 +331,6 @@ const OrderForm = () => {
                     />
                 </div>
 
-                {/* Submit Button */}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
@@ -338,6 +339,13 @@ const OrderForm = () => {
                     Send Order
                 </button>
 
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Successfully added new order!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
