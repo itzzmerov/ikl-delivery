@@ -5,6 +5,7 @@ import { useAuth } from '../../../hooks/useAuth';
 
 const SpecialDelivery = ({ onClose }) => {
     const { currentUser } = useAuth();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         service: 'Special Delivery', 
@@ -41,7 +42,13 @@ const SpecialDelivery = ({ onClose }) => {
 
             const result = await addDoc(collection(db, 'orders'), deliveryData);
             console.log('Special Delivery request created with ID:', result.id);
-            onClose();
+            
+            setShowPopup(true);
+    
+            setTimeout(() => {
+                setShowPopup(false);
+                onClose();
+            }, 3000);
         } catch (error) {
             console.error('Error adding Special Delivery request:', error.message);
         }
@@ -52,7 +59,6 @@ const SpecialDelivery = ({ onClose }) => {
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Special Delivery</h1>
 
-                {/* Customer Information */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Customer Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -95,7 +101,6 @@ const SpecialDelivery = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Delivery Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Delivery Details:</h2>
                     <div className="mb-2">
@@ -137,7 +142,6 @@ const SpecialDelivery = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
@@ -145,6 +149,14 @@ const SpecialDelivery = ({ onClose }) => {
                 >
                     Submit Delivery Request
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Added Order Successfully! Just wait for the confirmation. Thank you!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

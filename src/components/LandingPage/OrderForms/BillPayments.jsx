@@ -3,22 +3,35 @@ import { db } from '../../../utils/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
-const BillPayments = ({ onClose }) => {
+const OrderForm = ({ onClose, serviceName }) => {
+
     const { currentUser } = useAuth();
 
     const [formData, setFormData] = useState({
-        service: 'Bill Payment',
+        service: 'Bill Payments', 
         status: 'Pending',
-        customerFirstName: '',
-        customerLastName: '',
-        phoneNumber: '',
-        emailAddress: '',
-        billType: '',
-        accountNumber: '',
+        senderFirstName: '',
+        senderLastName: '',
+        senderPhone: '',
+        senderAddressHouse: '',
+        senderAddressStreet: '',
+        senderAddressBarangay: '',
+        senderAddressCity: '',
+        senderAddressRegion: '',
+        senderAddressZIP: '',
+        receiverFirstName: '',
+        receiverLastName: '',
+        receiverPhone: '',
+        receiverAddressHouse: '',
+        receiverAddressStreet: '',
+        receiverAddressBarangay: '',
+        receiverAddressCity: '',
+        receiverAddressRegion: '',
+        receiverAddressZIP: '',
         amount: '',
-        billDate: '',
-        dueDate: '',
     });
+
+    const [showPopup, setShowPopup] = useState(false);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -36,147 +49,108 @@ const BillPayments = ({ onClose }) => {
         }
 
         try {
-            const paymentData = {
+            const orderData = {
                 ...formData,
                 userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
 
-            const result = await addDoc(collection(db, 'orders'), paymentData);
-            console.log('Bill Payment created with ID:', result.id);
-            onClose();
+            const result = await addDoc(collection(db, 'orders'), orderData);
+            console.log('Order created with ID:', result.id);
+
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                onClose();
+            }, 3000);
         } catch (error) {
-            console.error('Error adding bill payment:', error.message);
+            console.error('Error adding order:', error.message);
         }
     };
 
     return (
         <div className='flex justify-center min-h-screen w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
-                <h1 className="text-2xl font-bold text-center mb-6">Bill Payment</h1>
+            <h1 className="text-2xl font-bold text-center mb-6">Bill Payments</h1>
 
-                <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Customer Information:</h2>
+                <div className="mb-2">
+                    <h2 className="font-semibold mb-2">Sender Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
-                        <div>
-                            <label htmlFor="customerFirstName" className="block mb-1">First Name:</label>
-                            <input
-                                type="text"
-                                id="customerFirstName"
-                                className="border p-2 w-full rounded"
-                                required
-                                name='customerFirstName'
-                                value={formData.customerFirstName}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="customerLastName" className="block mb-1">Last Name:</label>
-                            <input
-                                type="text"
-                                id="customerLastName"
-                                className="border p-2 w-full rounded"
-                                required
-                                name='customerLastName'
-                                value={formData.customerLastName}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="mb-2">
-                        <label htmlFor="phoneNumber" className="block mb-1">Phone Number:</label>
                         <input
                             type="text"
-                            id="phoneNumber"
+                            placeholder="First Name"
                             className="border p-2 w-full rounded"
                             required
-                            name='phoneNumber'
-                            value={formData.phoneNumber}
+                            name='senderFirstName'
+                            value={formData.senderFirstName}
                             onChange={handleInputChange}
                         />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="emailAddress" className="block mb-1">Email Address:</label>
                         <input
-                            type="email"
-                            id="emailAddress"
+                            type="text"
+                            placeholder="Last Name"
                             className="border p-2 w-full rounded"
                             required
-                            name='emailAddress'
-                            value={formData.emailAddress}
+                            name='senderLastName'
+                            value={formData.senderLastName}
                             onChange={handleInputChange}
                         />
                     </div>
+                    <input
+                        type="text"
+                        placeholder="Phone Number"
+                        className="border p-2 w-full rounded mb-4"
+                        required
+                        name='senderPhone'
+                        value={formData.senderPhone}
+                        onChange={handleInputChange}
+                    />
+                </div>
+
+                <div className="mb-2">
+                    <h2 className="font-semibold mb-2">Receiver Information:</h2>
+                    <div className="grid lg:grid-cols-2 gap-2 mb-2">
+                        <input
+                            type="text"
+                            placeholder="First Name"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='receiverFirstName'
+                            value={formData.receiverFirstName}
+                            onChange={handleInputChange}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Last Name"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='receiverLastName'
+                            value={formData.receiverLastName}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Phone Number"
+                        className="border p-2 w-full rounded mb-4"
+                        required
+                        name='receiverPhone'
+                        value={formData.receiverPhone}
+                        onChange={handleInputChange}
+                    />
                 </div>
 
                 <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Bill Information:</h2>
-                    <div className="mb-2">
-                        <label htmlFor="billType" className="block mb-1">Bill Type:</label>
-                        <input
-                            type="text"
-                            id="billType"
-                            placeholder="e.g., Electricity, Water"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='billType'
-                            value={formData.billType}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="mb-2">
-                        <label htmlFor="accountNumber" className="block mb-1">Account Number:</label>
-                        <input
-                            type="text"
-                            id="accountNumber"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='accountNumber'
-                            value={formData.accountNumber}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                </div>
-
-                <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Payment Details:</h2>
-                    <div className="mb-2">
-                        <label htmlFor="amount" className="block mb-1">Amount:</label>
-                        <input
-                            type="number"
-                            id="amount"
-                            placeholder="e.g., 500"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='amount'
-                            value={formData.amount}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="mb-2">
-                        <label htmlFor="billDate" className="block mb-1">Bill Date:</label>
-                        <input
-                            type="date"
-                            id="billDate"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='billDate'
-                            value={formData.billDate}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="dueDate" className="block mb-1">Due Date:</label>
-                        <input
-                            type="date"
-                            id="dueDate"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='dueDate'
-                            value={formData.dueDate}
-                            onChange={handleInputChange}
-                        />
-                    </div>
+                    <h2 className="font-semibold mb-2">Amount:</h2>
+                    <input
+                        type="text"
+                        placeholder="e.g. 500"
+                        className="border p-2 w-full rounded"
+                        required
+                        name='amount'
+                        value={formData.amount}
+                        onChange={handleInputChange}
+                    />
                 </div>
 
                 <button
@@ -184,11 +158,19 @@ const BillPayments = ({ onClose }) => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Submit Payment
+                    Send Order
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Added Order Successfully! Just wait for the confirmation. Thank you!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
-export default BillPayments;
+export default OrderForm;

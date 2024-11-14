@@ -5,6 +5,7 @@ import { useAuth } from '../../../hooks/useAuth';
 
 const HatidSundo = ({ onClose }) => {
     const { currentUser } = useAuth();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         service: 'Hatid Sundo', 
@@ -42,7 +43,13 @@ const HatidSundo = ({ onClose }) => {
 
             const result = await addDoc(collection(db, 'orders'), hatidSundoData);
             console.log('Hatid Sundo request created with ID:', result.id);
-            onClose();
+            
+            setShowPopup(true);
+    
+            setTimeout(() => {
+                setShowPopup(false);
+                onClose();
+            }, 3000);
         } catch (error) {
             console.error('Error adding Hatid Sundo request:', error.message);
         }
@@ -53,7 +60,6 @@ const HatidSundo = ({ onClose }) => {
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Hatid Sundo</h1>
 
-                {/* Customer Information */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Customer Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -96,7 +102,6 @@ const HatidSundo = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Trip Information */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Trip Information:</h2>
                     <div className="mb-2">
@@ -125,7 +130,6 @@ const HatidSundo = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Pickup Time and Special Requests */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Additional Details:</h2>
                     <div className="mb-2">
@@ -152,7 +156,6 @@ const HatidSundo = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
@@ -160,6 +163,14 @@ const HatidSundo = ({ onClose }) => {
                 >
                     Submit Request
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Added Order Successfully! Just wait for the confirmation. Thank you!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

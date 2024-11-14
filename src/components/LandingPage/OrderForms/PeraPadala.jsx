@@ -5,6 +5,7 @@ import { useAuth } from '../../../hooks/useAuth';
 
 const PeraPadala = ({ onClose }) => {
     const { currentUser } = useAuth();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         service: 'Pera Padala',
@@ -40,7 +41,13 @@ const PeraPadala = ({ onClose }) => {
             };
     
             await addDoc(collection(db, 'orders'), orderData);
-            onClose();
+            
+            setShowPopup(true);
+    
+            setTimeout(() => {
+                setShowPopup(false);
+                onClose();
+            }, 3000);
         } catch (error) {
             console.error('Error adding order:', error.message);
         }
@@ -51,7 +58,6 @@ const PeraPadala = ({ onClose }) => {
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Pera Padala</h1>
 
-                {/* Sender Information */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Sender Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -94,7 +100,6 @@ const PeraPadala = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Sender Address */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Sender Address:</h2>
                     <input
@@ -108,7 +113,6 @@ const PeraPadala = ({ onClose }) => {
                     />
                 </div>
 
-                {/* Receiver Information */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Receiver Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -151,7 +155,6 @@ const PeraPadala = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Receiver Address */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Receiver Address:</h2>
                     <input
@@ -165,7 +168,6 @@ const PeraPadala = ({ onClose }) => {
                     />
                 </div>
 
-                {/* Amount */}
                 <div className="mb-4">
                     <label htmlFor="amount" className="block mb-2">Amount (PHP):</label>
                     <input
@@ -179,7 +181,6 @@ const PeraPadala = ({ onClose }) => {
                     />
                 </div>
 
-                {/* Submit Button */}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
                     type="submit"
@@ -187,6 +188,14 @@ const PeraPadala = ({ onClose }) => {
                 >
                     Send Order
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Added Order Successfully! Just wait for the confirmation. Thank you!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

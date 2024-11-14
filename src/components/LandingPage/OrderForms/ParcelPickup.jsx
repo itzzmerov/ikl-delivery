@@ -5,6 +5,7 @@ import { useAuth } from '../../../hooks/useAuth';
 
 const ParcelPickup = ({ onClose }) => {
     const { currentUser } = useAuth();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         service: 'Parcel Pickup', 
@@ -41,7 +42,13 @@ const ParcelPickup = ({ onClose }) => {
 
             const result = await addDoc(collection(db, 'orders'), parcelData);
             console.log('Parcel Pickup request created with ID:', result.id);
-            onClose();
+            
+            setShowPopup(true);
+    
+            setTimeout(() => {
+                setShowPopup(false);
+                onClose();
+            }, 3000);
         } catch (error) {
             console.error('Error adding Parcel Pickup request:', error.message);
         }
@@ -52,7 +59,6 @@ const ParcelPickup = ({ onClose }) => {
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Parcel Pickup</h1>
 
-                {/* Customer Information */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Customer Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
@@ -95,7 +101,6 @@ const ParcelPickup = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Parcel Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Parcel Details:</h2>
                     <div className="mb-2">
@@ -124,7 +129,6 @@ const ParcelPickup = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Weight Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Weight Information:</h2>
                     <div className="mb-2">
@@ -142,7 +146,6 @@ const ParcelPickup = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
@@ -150,6 +153,14 @@ const ParcelPickup = ({ onClose }) => {
                 >
                     Submit Pickup Request
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Added Order Successfully! Just wait for the confirmation. Thank you!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
