@@ -131,14 +131,14 @@ const Sidebar = ({ isCollapsed }) => {
                     {!isCollapsed && <span className="ml-3">Riders</span>}
                 </NavLink>
 
-                <NavLink
+                {/* <NavLink
                     to="/admin/analytics"
                     className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
                         ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
                 >
                     <FaChartBar size={23} className="text-lightWhite min-w-[23px]" />
                     {!isCollapsed && <span className="ml-3">Analytics</span>}
-                </NavLink>
+                </NavLink> */}
             </nav>
         </div>
     );
