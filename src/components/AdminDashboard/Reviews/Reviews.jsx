@@ -33,15 +33,15 @@ const Reviews = () => {
     //     }
     // };
 
-    const openReviewForm = () => {
-        navigate("/admin/reviews/new-review")
-    }
+    // const openReviewForm = () => {
+    //     navigate("/admin/reviews/new-review")
+    // }
 
     return (
         <div className="p-8 flex-1">
             <div className='flex justify-between items-center mb-2'>
                 <h1 className="text-2xl font-semibold mb-4">Review List</h1>
-                <button onClick={openReviewForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'><AddIcon /> Add New Review</button>
+                {/* <button onClick={openReviewForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'><AddIcon /> Add New Review</button> */}
             </div>
 
             <div className="min-w-full h-96 overflow-x-auto overflow-y-auto">
