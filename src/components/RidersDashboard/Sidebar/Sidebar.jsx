@@ -26,9 +26,9 @@ const Sidebar = ({ isCollapsed }) => {
                 </NavLink>
 
                 <NavLink
-                    to="/riders/order-history"
+                    to="/riders/orders-history"
                     className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
-                        ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
+                        ${isCollapsed ? 'justify-center ' : ''}${isActive ? 'bg-gray-700' : ''}`}
                 >
                     <FaStar size={23} className="text-lightWhite min-w-[23px]" />
                     {!isCollapsed && <span className="ml-3">View Orders History</span>}

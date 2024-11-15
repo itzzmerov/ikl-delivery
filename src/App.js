@@ -4,6 +4,7 @@ import Register from "./components/Register/Register";
 import LandingPage from "./components/LandingPage";
 import { useAuth } from "./hooks/useAuth";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
+import RiderDashboard from "./components/RidersDashboard/RiderDashboard";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/admin/*" element={<PrivateRoute element={<AdminDashboard />} />} />
+        <Route path="/riders/*" element={<PrivateRoute element={<RiderDashboard />} />} />
       </Routes>
     </div>
   );

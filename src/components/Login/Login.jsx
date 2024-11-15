@@ -35,6 +35,8 @@ const Login = () => {
 
                 if (userData.userType === 'admin') {
                     navigate('/admin');
+                } else if (userData.userType === 'rider') {
+                    navigate('/rider');
                 } else {
                     navigate('/');
                 }

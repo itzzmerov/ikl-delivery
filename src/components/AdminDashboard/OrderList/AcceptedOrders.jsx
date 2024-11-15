@@ -22,25 +22,6 @@ const AcceptedOrders = () => {
         fetchOrders();
     }, []);
 
-    // const handleAcceptOrder = (orderId) => {
-    //     setSelectedOrderId(orderId);
-    //     setShowModal(true);
-    // };
-
-    // const handleRejectOrder = async (orderId) => {
-    //     try {
-    //         await updateDoc(doc(db, "orders", orderId), { status: 'Rejected' });
-    //         alert("Order rejected successfully");
-    //         fetchOrders();
-    //     } catch (error) {
-    //         console.error("Error rejecting order:", error);
-    //     }
-    // };
-
-    // const handleUpdateOrder = (orderId) => {
-    //     navigate(`/admin/order/${orderId}/update-order`);
-    // };
-
     const handleCompleteOrder = async (orderId) => {
         try {
             await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });

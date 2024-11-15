@@ -2,31 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../hooks/useAuth';
+import AddIcon from '@mui/icons-material/Add';
 
 const OrderList = () => {
     const navigate = useNavigate();
-    const { currentUser } = useAuth();
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [serviceFilter, setServiceFilter] = useState("All");
 
     const fetchOrders = async () => {
-        try {
-            if (!currentUser) {
-                console.log("User is not authenticated");
-                return;
-            }
-    
-            const response = await getDocs(collection(db, "orders"));
-            const orderList = response.docs
-                .map((doc) => ({ id: doc.id, ...doc.data() }))
-                .filter((order) => order.riderId === currentUser.uid && order.status === 'Accepted'); // Use currentUser.uid
-            setOrders(orderList);
-        } catch (error) {
-            console.error("Error fetching orders:", error);
-        }
+        const response = await getDocs(collection(db, "orders"));
+        const orderList = response.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setOrders(orderList);
     };
 
     useEffect(() => {
@@ -36,12 +24,6 @@ const OrderList = () => {
     const handleCompleteOrder = async (orderId) => {
         try {
             await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
-
-            if (currentUser) {
-                const riderDocRef = doc(db, "users", currentUser.uid);
-                await updateDoc(riderDocRef, { status: 'Available' });
-            }
-
             alert("Order status updated to Completed successfully");
             fetchOrders();
         } catch (error) {
@@ -49,12 +31,16 @@ const OrderList = () => {
         }
     };
 
+    const openOrderForm = () => {
+        navigate("/admin/order/new-order");
+    };
+
     const handleFilterChange = (e) => {
         setServiceFilter(e.target.value);
     };
 
     const getTableColumns = () => {
-        switch (serviceFilter) {
+      switch (serviceFilter) {
             case 'Food Delivery':
                 return [
                     { name: 'Status', key: 'status' },
@@ -153,6 +139,9 @@ const OrderList = () => {
                         <option value="Bill Payment">Bill Payment</option>
                         <option value="Pera Padala">Pera Padala</option>
                     </select>
+                    <button onClick={openOrderForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'>
+                        <AddIcon /> Add Order
+                    </button>
                 </div>
             </div>
 
