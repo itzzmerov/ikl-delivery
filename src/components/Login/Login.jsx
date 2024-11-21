@@ -22,7 +22,7 @@ const Login = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         try {
             const response = await signInWithEmailAndPassword(auth, formData.email, formData.password);
             const userId = response.user.uid;
@@ -36,7 +36,7 @@ const Login = () => {
                 if (userData.userType === 'admin') {
                     navigate('/admin');
                 } else if (userData.userType === 'rider') {
-                    navigate('/rider');
+                    navigate('/riders');
                 } else {
                     navigate('/');
                 }
