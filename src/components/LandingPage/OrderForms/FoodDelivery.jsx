@@ -16,6 +16,7 @@ const FoodDelivery = ({ onClose }) => {
         storePreference: '',
         itemsToBuy: '',
         estimatedPrice: '',
+        customerAddress: '',
         specialInstructions: '',
     });
 
@@ -138,6 +139,18 @@ const FoodDelivery = ({ onClose }) => {
                             required
                             name='estimatedPrice'
                             value={formData.estimatedPrice}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="customerAddress" className="block mb-1">Customer Address:</label>
+                        <input
+                            type="text"
+                            id="customerAddress"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='customerAddress'
+                            value={formData.customerAddress}
                             onChange={handleInputChange}
                         />
                     </div>
