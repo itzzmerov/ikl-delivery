@@ -17,6 +17,7 @@ import PamalengkeForm from '../OrderForms/Pamalengke';
 import BillPaymentForm from '../OrderForms/BillPayments';
 import ParcelPickupForm from '../OrderForms/ParcelPickup';
 import SpecialDelivery from '../OrderForms/SpecialDelivery';
+import MedicineForm from '../OrderForms/Medicine';
 
 const localImages = {
     'Food Delivery': FoodDelivery,
@@ -89,6 +90,8 @@ const Services = () => {
                 return <HatidSundoForm onClose={closeOrderForm} />;
             case 'Pamalengke':
                 return <PamalengkeForm onClose={closeOrderForm} />;
+            case 'Medicine':
+                return <MedicineForm onClose={closeOrderForm} />;
             case 'Bill Payments':
                 return <BillPaymentForm onClose={closeOrderForm} />;
             case 'Parcel Pickup':
@@ -122,8 +125,8 @@ const Services = () => {
                                 </button>
 
                                 {isOrderFormVisible && (
-                                    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-                                        <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-2xl bg-lightWhite p-6 rounded-lg overflow-y-auto h-[80vh] shadow-lg">
+                                    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 h-[100vh]">
+                                        <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-2xl bg-lightWhite p-6 rounded-lg overflow-y-auto max-h-[80vh] shadow-lg">
                                             <button
                                                 onClick={closeOrderForm}
                                                 className="absolute top-2 right-2 bg-gray-200 text-darkBlack rounded-full p-2"

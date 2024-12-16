@@ -3,20 +3,19 @@ import { db } from '../../../utils/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
-const FoodDelivery = ({ onClose }) => {
+const Medicine = ({ onClose }) => {
     const { currentUser } = useAuth();
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Food Delivery',
+        service: 'Medicine', 
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
         phoneNumber: '',
+        listOfItems: '',
         storePreference: '',
-        itemsToBuy: '',
         estimatedPrice: '',
-        customerAddress: '',
         specialInstructions: '',
     });
 
@@ -36,31 +35,30 @@ const FoodDelivery = ({ onClose }) => {
         }
 
         try {
-            const deliveryData = {
+            const medicineData = {
                 ...formData,
-                userId: currentUser.uid,
+                userId: currentUser.uid, 
                 createdAt: new Date().toISOString(),
             };
 
-            const result = await addDoc(collection(db, 'orders'), deliveryData);
-            console.log('Food Delivery request created with ID:', result.id);
-
+            const result = await addDoc(collection(db, 'orders'), medicineData);
+            console.log('Medicine request created with ID:', result.id);
+            
             setShowPopup(true);
-
+    
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
             }, 3000);
-
         } catch (error) {
-            console.error('Error adding Food Delivery request:', error.message);
+            console.error('Error adding Medicine request:', error.message);
         }
     };
 
     return (
         <div className='flex justify-center h-auto w-full rounded-full'>
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
-                <h1 className="text-2xl font-bold text-center mb-6">Food Delivery</h1>
+                <h1 className="text-2xl font-bold text-center mb-6">Medicine</h1>
 
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Customer Information:</h2>
@@ -105,46 +103,41 @@ const FoodDelivery = ({ onClose }) => {
                 </div>
 
                 <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Food Delivery Details:</h2>
+                    <h2 className="font-semibold mb-2">Shopping Details:</h2>
+                    <div className="mb-2">
+                        <label htmlFor="listOfItems" className="block mb-1">List of Items:</label>
+                        <textarea
+                            id="listOfItems"
+                            placeholder="e.g., 2kg rice, 1 dozen eggs"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='listOfItems'
+                            value={formData.listOfItems}
+                            onChange={handleInputChange}
+                        />
+                    </div>
                     <div className="mb-2">
                         <label htmlFor="storePreference" className="block mb-1">Store Preference:</label>
-                        <select
+                        <input
+                            type="text"
                             id="storePreference"
-                            name="storePreference"
+                            placeholder="e.g., Mercury Drug, Southstar"
                             className="border p-2 w-full rounded"
+                            name='storePreference'
                             value={formData.storePreference}
                             onChange={handleInputChange}
-                            required
-                        >
-                            <option value="">Select Store</option>
-                            <option value="McDonald's">McDonald's</option>
-                            <option value="Jollibee">Jollibee</option>
-                            <option value="Pizzakaya">Pizzakaya</option>
-                            <option value="Alberto's">Alberto's</option>
-                            <option value="The Lokal Bar">The Lokal Bar/Resto/Coffee</option>
-                        </select>
+                        />
                     </div>
-                    <div className="mb-2">
-                        <label htmlFor="itemsToBuy" className="block mb-1">Items to Buy:</label>
-                        <select
-                            id="itemsToBuy"
-                            name="itemsToBuy"
-                            className="border p-2 w-full rounded"
-                            value={formData.itemsToBuy}
-                            onChange={handleInputChange}
-                            required
-                        >
-                            <option value="">Select Item</option>
-                            <option value="Burger">Burger</option>
-                            <option value="Fries">Fries</option>
-                            <option value="Chicken Meal">Chicken Meal</option>
-                        </select>
-                    </div>
+                </div>
+
+                <div className="mb-4">
+                    <h2 className="font-semibold mb-2">Additional Details:</h2>
                     <div className="mb-2">
                         <label htmlFor="estimatedPrice" className="block mb-1">Estimated Price:</label>
                         <input
                             type="number"
                             id="estimatedPrice"
+                            placeholder="e.g., 1000"
                             className="border p-2 w-full rounded"
                             required
                             name='estimatedPrice'
@@ -152,24 +145,12 @@ const FoodDelivery = ({ onClose }) => {
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="mb-2">
-                        <label htmlFor="customerAddress" className="block mb-1">Customer Address:</label>
-                        <input
-                            type="text"
-                            id="customerAddress"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='customerAddress'
-                            value={formData.customerAddress}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="mb-2">
+                    <div className="mb-4">
                         <label htmlFor="specialInstructions" className="block mb-1">Special Instructions:</label>
                         <textarea
                             id="specialInstructions"
+                            placeholder="Any specific instructions for the shopper"
                             className="border p-2 w-full rounded"
-                            required
                             name='specialInstructions'
                             value={formData.specialInstructions}
                             onChange={handleInputChange}
@@ -182,9 +163,9 @@ const FoodDelivery = ({ onClose }) => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Submit Delivery Request
+                    Submit Request
                 </button>
-
+                
                 {showPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
@@ -197,4 +178,4 @@ const FoodDelivery = ({ onClose }) => {
     );
 };
 
-export default FoodDelivery;
+export default Medicine;
