@@ -8,7 +8,7 @@ const FoodDelivery = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Food Delivery', 
+        service: 'Food Delivery',
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -34,24 +34,24 @@ const FoodDelivery = ({ onClose }) => {
             console.error('User not logged in');
             return;
         }
-    
+
         try {
             const deliveryData = {
                 ...formData,
-                userId: currentUser.uid, 
+                userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
-    
+
             const result = await addDoc(collection(db, 'orders'), deliveryData);
             console.log('Food Delivery request created with ID:', result.id);
-    
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
             }, 3000);
-    
+
         } catch (error) {
             console.error('Error adding Food Delivery request:', error.message);
         }
@@ -108,27 +108,35 @@ const FoodDelivery = ({ onClose }) => {
                     <h2 className="font-semibold mb-2">Food Delivery Details:</h2>
                     <div className="mb-2">
                         <label htmlFor="storePreference" className="block mb-1">Store Preference:</label>
-                        <input
-                            type="text"
+                        <select
                             id="storePreference"
+                            name="storePreference"
                             className="border p-2 w-full rounded"
-                            required
-                            name='storePreference'
                             value={formData.storePreference}
                             onChange={handleInputChange}
-                        />
+                            required
+                        >
+                            <option value="">Select Store</option>
+                            <option value="McDo">McDo</option>
+                            <option value="Jollibee">Jollibee</option>
+                            <option value="Mang Inasal">Mang Inasal</option>
+                        </select>
                     </div>
                     <div className="mb-2">
                         <label htmlFor="itemsToBuy" className="block mb-1">Items to Buy:</label>
-                        <textarea
+                        <select
                             id="itemsToBuy"
-                            placeholder="e.g., Burger, Fries, Chicken Meal, etc."
+                            name="itemsToBuy"
                             className="border p-2 w-full rounded"
-                            required
-                            name='itemsToBuy'
                             value={formData.itemsToBuy}
                             onChange={handleInputChange}
-                        />
+                            required
+                        >
+                            <option value="">Select Item</option>
+                            <option value="Burger">Burger</option>
+                            <option value="Fries">Fries</option>
+                            <option value="Chicken Meal">Chicken Meal</option>
+                        </select>
                     </div>
                     <div className="mb-2">
                         <label htmlFor="estimatedPrice" className="block mb-1">Estimated Price:</label>
