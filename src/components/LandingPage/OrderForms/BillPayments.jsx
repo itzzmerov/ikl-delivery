@@ -66,96 +66,123 @@ const BillPayments = ({ onClose }) => {
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Customer Information:</h2>
                     <div className="grid lg:grid-cols-2 gap-2 mb-2">
+                        <div>
+                            <label htmlFor="customerFirstName" className="block mb-1">First Name:</label>
+                            <input
+                                type="text"
+                                id="customerFirstName"
+                                className="border p-2 w-full rounded"
+                                name="customerFirstName"
+                                value={formData.customerFirstName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="customerLastName" className="block mb-1">Last Name:</label>
+                            <input
+                                type="text"
+                                id="customerLastName"
+                                className="border p-2 w-full rounded"
+                                name="customerLastName"
+                                value={formData.customerLastName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="phoneNumber" className="block mb-1">Phone Number:</label>
                         <input
                             type="text"
-                            placeholder="First Name"
+                            id="phoneNumber"
                             className="border p-2 w-full rounded"
-                            required
-                            name='customerFirstName'
-                            value={formData.customerFirstName}
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
                             onChange={handleInputChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            className="border p-2 w-full rounded"
                             required
-                            name='customerLastName'
-                            value={formData.customerLastName}
-                            onChange={handleInputChange}
                         />
                     </div>
-                    <input
-                        type="text"
-                        placeholder="Phone Number"
-                        className="border p-2 w-full rounded mb-2"
-                        required
-                        name='phoneNumber'
-                        value={formData.phoneNumber}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        className="border p-2 w-full rounded mb-4"
-                        required
-                        name='emailAddress'
-                        value={formData.emailAddress}
-                        onChange={handleInputChange}
-                    />
+                    <div className="mb-4">
+                        <label htmlFor="emailAddress" className="block mb-1">Email Address:</label>
+                        <input
+                            type="email"
+                            id="emailAddress"
+                            className="border p-2 w-full rounded"
+                            name="emailAddress"
+                            value={formData.emailAddress}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
                 </div>
 
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Bill Information:</h2>
-                    <input
-                        type="text"
-                        placeholder="Bill Type (e.g., Electricity, Water)"
-                        className="border p-2 w-full rounded mb-2"
-                        required
-                        name='billType'
-                        value={formData.billType}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Account Number"
-                        className="border p-2 w-full rounded mb-2"
-                        required
-                        name='accountNumber'
-                        value={formData.accountNumber}
-                        onChange={handleInputChange}
-                    />
+                    <div className="mb-2">
+                        <label htmlFor="billType" className="block mb-1">Bill Type:</label>
+                        <input
+                            type="text"
+                            id="billType"
+                            className="border p-2 w-full rounded"
+                            name="billType"
+                            value={formData.billType}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="accountNumber" className="block mb-1">Account Number:</label>
+                        <input
+                            type="text"
+                            id="accountNumber"
+                            className="border p-2 w-full rounded"
+                            name="accountNumber"
+                            value={formData.accountNumber}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
                 </div>
 
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Payment Details:</h2>
-                    <input
-                        type="number"
-                        placeholder="Amount"
-                        className="border p-2 w-full rounded mb-2"
-                        required
-                        name='amount'
-                        value={formData.amount}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        type="date"
-                        placeholder="Bill Date"
-                        className="border p-2 w-full rounded mb-2"
-                        required
-                        name='billDate'
-                        value={formData.billDate}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        type="date"
-                        placeholder="Due Date"
-                        className="border p-2 w-full rounded mb-4"
-                        required
-                        name='dueDate'
-                        value={formData.dueDate}
-                        onChange={handleInputChange}
-                    />
+                    <div className="mb-2">
+                        <label htmlFor="amount" className="block mb-1">Amount:</label>
+                        <input
+                            type="number"
+                            id="amount"
+                            className="border p-2 w-full rounded"
+                            name="amount"
+                            value={formData.amount}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="billDate" className="block mb-1">Bill Date:</label>
+                        <input
+                            type="date"
+                            id="billDate"
+                            className="border p-2 w-full rounded"
+                            name="billDate"
+                            value={formData.billDate}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="dueDate" className="block mb-1">Due Date:</label>
+                        <input
+                            type="date"
+                            id="dueDate"
+                            className="border p-2 w-full rounded"
+                            name="dueDate"
+                            value={formData.dueDate}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
                 </div>
 
                 <button
