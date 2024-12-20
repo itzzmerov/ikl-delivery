@@ -20,13 +20,12 @@ const Medicine = ({ onClose }) => {
         address: '',
     });
 
-    // Fetch user data from Firestore
     useEffect(() => {
         const fetchUserData = async () => {
             if (!currentUser) return;
 
             try {
-                const userDoc = doc(db, 'users', currentUser.uid); // Assuming user data is stored in 'users' collection
+                const userDoc = doc(db, 'users', currentUser.uid);
                 const userSnapshot = await getDoc(userDoc);
 
                 if (userSnapshot.exists()) {
@@ -36,6 +35,7 @@ const Medicine = ({ onClose }) => {
                         customerFirstName: userData.firstName || '',
                         customerLastName: userData.lastName || '',
                         address: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                        phoneNumber: userData.phoneNumber || '',
                     }));
                 }
             } catch (error) {
@@ -140,7 +140,6 @@ const Medicine = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Shopping Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Shopping Details:</h2>
                     <div className="mb-2">
@@ -169,7 +168,6 @@ const Medicine = ({ onClose }) => {
                     </div>
                 </div>
 
-                {/* Additional Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Additional Details:</h2>
                     <div className="mb-2">

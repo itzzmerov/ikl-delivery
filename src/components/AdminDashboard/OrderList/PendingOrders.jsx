@@ -118,6 +118,17 @@ const PendingOrders = () => {
                     { name: 'Receiver Address', key: 'receiverAddress' },
                     { name: 'Amount', key: 'amount' }
                 ];
+            case 'Medicine':
+                return [
+                    { name: 'Status', key: 'status' },
+                    { name: 'Customer Name', key: 'customerName' },
+                    { name: 'Sender Address', key: 'address' },
+                    { name: 'Phone Number', key: 'phoneNumber' },
+                    { name: 'List of Items', key: 'listOfItems' },
+                    { name: 'Store Preference', key: 'storePreference' },
+                    { name: 'Estimated Price', key: 'estimatedPrice' },
+                    { name: 'Special Instructions', key: 'specialInstructions' }
+                ];
             default:
                 return [
                     { name: 'Status', key: 'status' },
@@ -141,6 +152,7 @@ const PendingOrders = () => {
                         <option value="Special Delivery">Special Delivery</option>
                         <option value="Parcel Pickup">Parcel Pickup</option>
                         <option value="Pamalengke">Pamalengke</option>
+                        <option value="Medicine">Medicine</option>
                         <option value="Hatid Sundo">Hatid Sundo</option>
                         <option value="Bill Payment">Bill Payment</option>
                         <option value="Pera Padala">Pera Padala</option>
@@ -185,7 +197,7 @@ const PendingOrders = () => {
                                                             : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
-                                        <td className="py-2 px-4 border-b flex gap-2">
+                                        <td className="py-2 px-4 border-b flex flex-col gap-2">
                                             <button
                                                 onClick={() => handleAcceptOrder(order.id)}
                                                 className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
