@@ -3,13 +3,13 @@ import { db } from '../../../utils/firebase';
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
-import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
+// import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 
 const CompletedOrders = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [selectedOrderId, setSelectedOrderId] = useState(null);
+    // const [showModal, setShowModal] = useState(false);
+    // const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [serviceFilter, setServiceFilter] = useState("All");
 
     const fetchOrders = async () => {
@@ -41,15 +41,15 @@ const CompletedOrders = () => {
     //     navigate(`/admin/order/${orderId}/update-order`);
     // };
 
-    const handleCompleteOrder = async (orderId) => {
-        try {
-            await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
-            alert("Order status updated to Completed successfully");
-            fetchOrders();
-        } catch (error) {
-            console.error("Error completing order:", error);
-        }
-    };
+    // const handleCompleteOrder = async (orderId) => {
+    //     try {
+    //         await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
+    //         alert("Order status updated to Completed successfully");
+    //         fetchOrders();
+    //     } catch (error) {
+    //         console.error("Error completing order:", error);
+    //     }
+    // };
 
     const openOrderForm = () => {
         navigate("/admin/order/new-order");

@@ -32,8 +32,6 @@ const UpdateRider = () => {
             if (response.exists()) {
                 const riderData = response.data();
 
-                const { address } = riderData;
-
                 setFormData({
                     firstName: riderData.firstName || '',
                     middleName: riderData.middleName || '',
