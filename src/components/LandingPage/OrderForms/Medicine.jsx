@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const Medicine = ({ onClose }) => {
@@ -8,7 +8,7 @@ const Medicine = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Medicine', 
+        service: 'Medicine',
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -17,7 +17,34 @@ const Medicine = ({ onClose }) => {
         storePreference: '',
         estimatedPrice: '',
         specialInstructions: '',
+        address: '',
     });
+
+    // Fetch user data from Firestore
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid); // Assuming user data is stored in 'users' collection
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        address: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -37,15 +64,15 @@ const Medicine = ({ onClose }) => {
         try {
             const medicineData = {
                 ...formData,
-                userId: currentUser.uid, 
+                userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
 
             const result = await addDoc(collection(db, 'orders'), medicineData);
             console.log('Medicine request created with ID:', result.id);
-            
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
@@ -89,6 +116,17 @@ const Medicine = ({ onClose }) => {
                         </div>
                     </div>
                     <div className="mb-2">
+                        <label htmlFor="address" className="block mb-1">Address:</label>
+                        <textarea
+                            id="address"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='address'
+                            value={formData.address}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="mb-2">
                         <label htmlFor="phoneNumber" className="block mb-1">Phone Number:</label>
                         <input
                             type="text"
@@ -102,13 +140,14 @@ const Medicine = ({ onClose }) => {
                     </div>
                 </div>
 
+                {/* Shopping Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Shopping Details:</h2>
                     <div className="mb-2">
                         <label htmlFor="listOfItems" className="block mb-1">List of Items:</label>
                         <textarea
                             id="listOfItems"
-                            placeholder="e.g., 2kg rice, 1 dozen eggs"
+                            placeholder="e.g., 2 Biogesic, 1 Bioflu"
                             className="border p-2 w-full rounded"
                             required
                             name='listOfItems'
@@ -130,6 +169,7 @@ const Medicine = ({ onClose }) => {
                     </div>
                 </div>
 
+                {/* Additional Details */}
                 <div className="mb-4">
                     <h2 className="font-semibold mb-2">Additional Details:</h2>
                     <div className="mb-2">
@@ -163,9 +203,9 @@ const Medicine = ({ onClose }) => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Submit Request
+                    Submit
                 </button>
-                
+
                 {showPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">

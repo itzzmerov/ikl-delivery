@@ -19,12 +19,12 @@ const AddNewCustomer = () => {
         email: '',
         password: '',
         phoneNumber: '',
-        userAddressHouse: '',
-        userAddressStreet: '',
-        userAddressBarangay: '',
-        userAddressCity: '',
-        userAddressRegion: '',
-        userAddressZIP: '',
+        house: '',
+        street: '',
+        barangay: '',
+        city: '',
+        region: '',
+        zip: '',
     })
 
     const handleInputChange = (event) => {
@@ -39,15 +39,6 @@ const AddNewCustomer = () => {
         e.preventDefault();
         console.log(formData);
 
-        const address = {
-            house: formData.userAddressHouse,
-            street: formData.userAddressStreet,
-            barangay: formData.userAddressBarangay,
-            city: formData.userAddressCity,
-            region: formData.userAddressRegion,
-            zip: formData.userAddressZIP,
-        };
-
         const customerData = {
             firstName: formData.firstName,
             middleName: formData.middleName,
@@ -56,8 +47,13 @@ const AddNewCustomer = () => {
             username: formData.username,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
+            house: formData.house,
+            street: formData.street,
+            barangay: formData.barangay,
+            city: formData.city,
+            region: formData.region,
+            zip: formData.zip,
             createdAt: serverTimestamp(),
-            address: address,
         };
 
         try {
@@ -140,55 +136,55 @@ const AddNewCustomer = () => {
                         type="text"
                         placeholder="House No."
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressHouse"
+                        name="house"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressHouse}
+                        value={formData.house}
                     />
                     <input
                         type="text"
                         placeholder="Street"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressStreet"
+                        name="street"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressStreet}
+                        value={formData.street}
                     />
                     <input
                         type="text"
                         placeholder="Barangay"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressBarangay"
+                        name="barangay"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressBarangay}
+                        value={formData.barangay}
                     />
                     <input
                         type="text"
                         placeholder="City"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressCity"
+                        name="city"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressCity}
+                        value={formData.city}
                     />
                     <input
                         type="text"
                         placeholder="Region"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressRegion"
+                        name="region"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressRegion}
+                        value={formData.region}
                     />
                     <input
                         type="text"
                         placeholder="ZIP Code"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressZIP"
+                        name="zip"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressZIP}
+                        value={formData.zip}
                     />
 
                     <div className='w-full flex mb-2'>

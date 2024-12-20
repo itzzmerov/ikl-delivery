@@ -17,12 +17,12 @@ const UpdateCustomer = () => {
         username: '',
         email: '',
         phoneNumber: '',
-        userAddressHouse: '',
-        userAddressStreet: '',
-        userAddressBarangay: '',
-        userAddressCity: '',
-        userAddressRegion: '',
-        userAddressZIP: '',
+        street: '',
+        house: '',
+        barangay: '',
+        city: '',
+        region: '',
+        zip: '',
     });
 
     const fetchCustomer = async () => {
@@ -30,8 +30,6 @@ const UpdateCustomer = () => {
             const response = await getDoc(doc(db, "users", id));
             if (response.exists()) {
                 const customerData = response.data();
-                
-                const { address } = customerData;
 
                 setFormData({
                     firstName: customerData.firstName || '',
@@ -41,12 +39,12 @@ const UpdateCustomer = () => {
                     email: customerData.email || '',
                     phoneNumber: customerData.phoneNumber || '',
                     userType: customerData.userType || 'customer',
-                    userAddressHouse: address ? address.house : '',
-                    userAddressStreet: address ? address.street : '',
-                    userAddressBarangay: address ? address.barangay : '',
-                    userAddressCity: address ? address.city : '',
-                    userAddressRegion: address ? address.region : '',
-                    userAddressZIP: address ? address.zip : '',
+                    house: customerData.house,
+                    street: customerData.street,
+                    barangay: customerData.barangay,
+                    city: customerData.city,
+                    region: customerData.region,
+                    zip: customerData.zip,
                 });
             } else {
                 console.log("No such document found!");
@@ -74,12 +72,12 @@ const UpdateCustomer = () => {
         console.log(formData);
 
         const updatedAddress = {
-            house: formData.userAddressHouse,
-            street: formData.userAddressStreet,
-            barangay: formData.userAddressBarangay,
-            city: formData.userAddressCity,
-            region: formData.userAddressRegion,
-            zip: formData.userAddressZIP,
+            house: formData.house,
+            street: formData.street,
+            barangay: formData.barangay,
+            city: formData.city,
+            region: formData.region,
+            zip: formData.zip,
         };
 
         try {
@@ -104,7 +102,7 @@ const UpdateCustomer = () => {
                 <h1 className="text-2xl font-semibold mb-4">
                     <span onClick={() => navigate('/admin/customers')} className='cursor-pointer text-blue-900 hover:text-blue-600'>
                         Customers
-                    </span> 
+                    </span>
                     <ArrowForwardIosIcon /> Update Customer
                 </h1>
             </div>
@@ -159,55 +157,55 @@ const UpdateCustomer = () => {
                         type="text"
                         placeholder="House No."
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressHouse"
+                        name="house"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressHouse}
+                        value={formData.house}
                     />
                     <input
                         type="text"
                         placeholder="Street"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressStreet"
+                        name="street"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressStreet}
+                        value={formData.street}
                     />
                     <input
                         type="text"
                         placeholder="Barangay"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressBarangay"
+                        name="barangay"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressBarangay}
+                        value={formData.barangay}
                     />
                     <input
                         type="text"
                         placeholder="City"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressCity"
+                        name="city"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressCity}
+                        value={formData.city}
                     />
                     <input
                         type="text"
                         placeholder="Region"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressRegion"
+                        name="region"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressRegion}
+                        value={formData.region}
                     />
                     <input
                         type="text"
                         placeholder="ZIP Code"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressZIP"
+                        name="zip"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressZIP}
+                        value={formData.zip}
                     />
 
                     <div className='w-full flex mb-2'>

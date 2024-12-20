@@ -20,12 +20,12 @@ const AddNewRider = () => {
         email: '',
         password: '',
         phoneNumber: '',
-        userAddressHouse: '',
-        userAddressStreet: '',
-        userAddressBarangay: '',
-        userAddressCity: '',
-        userAddressRegion: '',
-        userAddressZIP: '',
+        house: '',
+        street: '',
+        barangay: '',
+        city: '',
+        region: '',
+        zip: '',
     });
 
     const handleInputChange = (event) => {
@@ -39,15 +39,6 @@ const AddNewRider = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const address = {
-            house: formData.userAddressHouse,
-            street: formData.userAddressStreet,
-            barangay: formData.userAddressBarangay,
-            city: formData.userAddressCity,
-            region: formData.userAddressRegion,
-            zip: formData.userAddressZIP,
-        };
-
         const RiderData = {
             firstName: formData.firstName,
             middleName: formData.middleName,
@@ -57,12 +48,16 @@ const AddNewRider = () => {
             username: formData.username,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
+            house: formData.house,
+            street: formData.street,
+            barangay: formData.barangay,
+            city: formData.city,
+            region: formData.region,
+            zip: formData.zip,
             createdAt: serverTimestamp(),
-            address: address,
         };
 
         try {
-            // Step 1: Create user in Firebase Authentication
             const userCredential = await createUserWithEmailAndPassword(
                 auth,
                 formData.email,
@@ -70,10 +65,9 @@ const AddNewRider = () => {
             );
             const user = userCredential.user;
 
-            // Step 2: Add rider details to Firestore with user UID
             const result = await addDoc(collection(db, "users"), {
                 ...RiderData,
-                uid: user.uid, // Store Firebase Auth UID
+                uid: user.uid,
             });
 
             console.log('Rider added successfully:', result);
@@ -141,12 +135,15 @@ const AddNewRider = () => {
                         value={formData.lastName}
                     />
                     <h3>Address Information:</h3>
-                    <input type="text" placeholder="House No." className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="userAddressHouse" required onChange={handleInputChange} value={formData.userAddressHouse} />
-                    <input type="text" placeholder="Street" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="userAddressStreet" required onChange={handleInputChange} value={formData.userAddressStreet} />
-                    <input type="text" placeholder="Barangay" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="userAddressBarangay" required onChange={handleInputChange} value={formData.userAddressBarangay} />
-                    <input type="text" placeholder="City" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="userAddressCity" required onChange={handleInputChange} value={formData.userAddressCity} />
+                    <input type="text" placeholder="House No." className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="house" required onChange={handleInputChange} value={formData.house} />
+                    <input type="text" placeholder="Street" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="street" required onChange={handleInputChange} value={formData.street} />
+                    <input type="text" placeholder="Barangay" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="barangay" required onChange={handleInputChange} value={formData.barangay} />
+                    <input type="text" placeholder="City" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="city" required onChange={handleInputChange} value={formData.city} />
+                    <input type="text" placeholder="Region" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="region" required onChange={handleInputChange} value={formData.region} />
+                    <input type="text" placeholder="ZIP Code" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="zip" required onChange={handleInputChange} value={formData.zip} />
                     <h3>Account Information:</h3>
                     <input type="text" placeholder="Username" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="username" required onChange={handleInputChange} value={formData.username} />
+                    <input type="text" placeholder="Phone Number" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="phoneNumber" required onChange={handleInputChange} value={formData.phoneNumber} />
                     <input type="email" placeholder="Email" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="email" required onChange={handleInputChange} value={formData.email} />
                     <input type="password" placeholder="Password" className="border border-gray-400 p-2 mb-4 w-full rounded-xl" name="password" required onChange={handleInputChange} value={formData.password} />
                 </div>

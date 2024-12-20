@@ -82,9 +82,9 @@ const Riders = () => {
                                     <td className="py-2 px-4 border-b">{rider.email}</td>
                                     <td className="py-2 px-4 border-b">{rider.phoneNumber}</td>
                                     <td className="py-2 px-4 border-b">
-                                        {rider.address?.house || "N/A"} {rider.address?.street || "N/A"}, {rider.address?.barangay || "N/A"}, {rider.address?.city || "N/A"} {rider.address?.zip || "N/A"}, {rider.address?.region || "N/A"}
+                                        {rider.house || "N/A"} {rider.street || "N/A"}, {rider.barangay || "N/A"}, {rider.city || "N/A"} {rider.zip || "N/A"}, {rider.region || "N/A"}
                                     </td>
-                                    <td className="py-2 px-4 border-b flex gap-2">
+                                    <td className="py-2 px-4 border-b flex flex-col gap-2">
                                         <button
                                             onClick={() => handleUpdateRiders(rider.id)}
                                             className="flex items-center gap-1 px-2 py-1 text-blue-500 border border-blue-500 rounded hover:bg-blue-500 hover:text-lightWhite transition"
