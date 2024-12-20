@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const SpecialDelivery = ({ onClose }) => {
@@ -8,7 +8,7 @@ const SpecialDelivery = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Special Delivery', 
+        service: 'Special Delivery',
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -17,6 +17,32 @@ const SpecialDelivery = ({ onClose }) => {
         specialInstructions: '',
         estimatedCost: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        address: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                        phoneNumber: userData.phoneNumber || '',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -37,14 +63,14 @@ const SpecialDelivery = ({ onClose }) => {
             const deliveryData = {
                 ...formData,
                 userId: currentUser.uid,
-                createdAt: new Date().toISOString(), 
+                createdAt: new Date().toISOString(),
             };
 
             const result = await addDoc(collection(db, 'orders'), deliveryData);
             console.log('Special Delivery request created with ID:', result.id);
-            
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
@@ -96,6 +122,18 @@ const SpecialDelivery = ({ onClose }) => {
                             required
                             name='phoneNumber'
                             value={formData.phoneNumber}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="customerAddress" className="block mb-1">Address:</label>
+                        <input
+                            type="text"
+                            id="customerAddress"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='address'
+                            value={formData.address}
                             onChange={handleInputChange}
                         />
                     </div>

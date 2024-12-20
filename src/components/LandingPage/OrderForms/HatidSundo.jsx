@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const HatidSundo = ({ onClose }) => {
@@ -8,7 +8,7 @@ const HatidSundo = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Hatid Sundo', 
+        service: 'Hatid Sundo',
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -18,6 +18,31 @@ const HatidSundo = ({ onClose }) => {
         pickupTime: '',
         specialRequests: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        phoneNumber: userData.phoneNumber || '',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -38,14 +63,14 @@ const HatidSundo = ({ onClose }) => {
             const hatidSundoData = {
                 ...formData,
                 userId: currentUser.uid,
-                createdAt: new Date().toISOString(), 
+                createdAt: new Date().toISOString(),
             };
 
             const result = await addDoc(collection(db, 'orders'), hatidSundoData);
             console.log('Hatid Sundo request created with ID:', result.id);
-            
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();

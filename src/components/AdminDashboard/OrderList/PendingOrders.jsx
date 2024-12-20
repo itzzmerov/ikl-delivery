@@ -197,7 +197,7 @@ const PendingOrders = () => {
                                                             : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
-                                        <td className="py-2 px-4 border-b flex flex-col gap-2">
+                                        <td className="py-2 px-4 border-b flex gap-2">
                                             <button
                                                 onClick={() => handleAcceptOrder(order.id)}
                                                 className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"

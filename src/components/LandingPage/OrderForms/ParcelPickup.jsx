@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const ParcelPickup = ({ onClose }) => {
@@ -15,8 +15,34 @@ const ParcelPickup = ({ onClose }) => {
         phoneNumber: '',
         parcelDetails: '',
         pickupLocation: '',
+        dropoffLocation: '',
         estimatedWeight: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        phoneNumber: userData.phoneNumber || '',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -123,6 +149,18 @@ const ParcelPickup = ({ onClose }) => {
                             required
                             name='pickupLocation'
                             value={formData.pickupLocation}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="dropoffLocation" className="block mb-1">Drop Off Location:</label>
+                        <input
+                            type="text"
+                            id="dropoffLocation"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='dropoffLocation'
+                            value={formData.dropoffLocation}
                             onChange={handleInputChange}
                         />
                     </div>

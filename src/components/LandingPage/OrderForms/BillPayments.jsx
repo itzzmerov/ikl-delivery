@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const BillPayments = ({ onClose }) => {
@@ -20,6 +20,32 @@ const BillPayments = ({ onClose }) => {
         billDate: '',
         dueDate: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        phoneNumber: userData.phoneNumber || '',
+                        emailAddress: userData.email || '',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -52,14 +78,13 @@ const BillPayments = ({ onClose }) => {
                 setShowPopup(false);
                 onClose();
             }, 3000);
-
         } catch (error) {
             console.error('Error adding bill payment:', error.message);
         }
     };
 
     return (
-        <div className='flex justify-center items-center h-auto w-full rounded-full'>
+        <div className="flex justify-center items-center h-auto w-full rounded-full">
             <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full text-darkBlack">
                 <h1 className="text-2xl font-bold text-center mb-6">Bill Payment</h1>
 
@@ -187,7 +212,7 @@ const BillPayments = ({ onClose }) => {
 
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
-                    type='submit'
+                    type="submit"
                     onClick={handleSubmit}
                 >
                     Submit Payment

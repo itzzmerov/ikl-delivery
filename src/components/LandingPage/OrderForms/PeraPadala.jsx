@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const PeraPadala = ({ onClose }) => {
@@ -21,6 +21,32 @@ const PeraPadala = ({ onClose }) => {
         amount: '',
     });
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        address: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                        phoneNumber: userData.phoneNumber || '',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
@@ -32,18 +58,18 @@ const PeraPadala = ({ onClose }) => {
             console.error('User not logged in');
             return;
         }
-    
+
         try {
             const orderData = {
                 ...formData,
                 userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
-    
+
             await addDoc(collection(db, 'orders'), orderData);
-            
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
@@ -92,8 +118,8 @@ const PeraPadala = ({ onClose }) => {
                             type="text"
                             id="customerPhone"
                             className="border p-2 w-full rounded"
-                            name="customerPhone"
-                            value={formData.customerPhone}
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
                             onChange={handleInputChange}
                             required
                         />
@@ -106,8 +132,8 @@ const PeraPadala = ({ onClose }) => {
                         type="text"
                         id="senderAddress"
                         className="border p-2 w-full rounded"
-                        name="senderAddress"
-                        value={formData.senderAddress}
+                        name="address"
+                        value={formData.address}
                         onChange={handleInputChange}
                         required
                     />
@@ -156,7 +182,7 @@ const PeraPadala = ({ onClose }) => {
                 </div>
 
                 <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Receiver Address:</h2>
+                    <h2 className=" mb-2">Receiver Address:</h2>
                     <input
                         type="text"
                         id="receiverAddress"

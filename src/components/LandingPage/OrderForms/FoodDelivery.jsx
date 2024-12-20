@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const FoodDelivery = ({ onClose }) => {
@@ -19,6 +19,33 @@ const FoodDelivery = ({ onClose }) => {
         customerAddress: '',
         specialInstructions: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (currentUser) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid); // Adjust 'users' to your collection name
+                    const userDoc = await getDoc(userDocRef);
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        setFormData((prevFormData) => ({
+                            ...prevFormData,
+                            customerFirstName: userData.firstName || '',
+                            customerLastName: userData.lastName || '',
+                            phoneNumber: userData.phoneNumber || '',
+                            customerAddress: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                        }));
+                    } else {
+                        console.error('No user data found!');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error.message);
+                }
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;

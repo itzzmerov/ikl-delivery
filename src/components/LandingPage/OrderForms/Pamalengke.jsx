@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const Pamalengke = ({ onClose }) => {
@@ -8,7 +8,7 @@ const Pamalengke = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
-        service: 'Pamalengke', 
+        service: 'Pamalengke',
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
@@ -18,6 +18,32 @@ const Pamalengke = ({ onClose }) => {
         estimatedPrice: '',
         specialInstructions: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!currentUser) return;
+
+            try {
+                const userDoc = doc(db, 'users', currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
+
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setFormData((prev) => ({
+                        ...prev,
+                        customerFirstName: userData.firstName || '',
+                        customerLastName: userData.lastName || '',
+                        address: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                        phoneNumber: userData.phoneNumber || '',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [currentUser]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -37,15 +63,15 @@ const Pamalengke = ({ onClose }) => {
         try {
             const pamalengkeData = {
                 ...formData,
-                userId: currentUser.uid, 
+                userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
             };
 
             const result = await addDoc(collection(db, 'orders'), pamalengkeData);
             console.log('Pamalengke request created with ID:', result.id);
-            
+
             setShowPopup(true);
-    
+
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
@@ -97,6 +123,18 @@ const Pamalengke = ({ onClose }) => {
                             required
                             name='phoneNumber'
                             value={formData.phoneNumber}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="customerAddress" className="block mb-1">Address:</label>
+                        <input
+                            type="text"
+                            id="customerAddress"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='address'
+                            value={formData.address}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -165,7 +203,7 @@ const Pamalengke = ({ onClose }) => {
                 >
                     Submit Request
                 </button>
-                
+
                 {showPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
