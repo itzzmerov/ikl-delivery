@@ -18,12 +18,12 @@ const UpdateRider = () => {
         username: '',
         email: '',
         phoneNumber: '',
-        userAddressHouse: '',
-        userAddressStreet: '',
-        userAddressBarangay: '',
-        userAddressCity: '',
-        userAddressRegion: '',
-        userAddressZIP: '',
+        house: '',
+        street: '',
+        barangay: '',
+        city: '',
+        region: '',
+        zip: '',
     });
 
     const fetchRider = async () => {
@@ -31,7 +31,7 @@ const UpdateRider = () => {
             const response = await getDoc(doc(db, "users", id));
             if (response.exists()) {
                 const riderData = response.data();
-                
+
                 const { address } = riderData;
 
                 setFormData({
@@ -43,12 +43,12 @@ const UpdateRider = () => {
                     phoneNumber: riderData.phoneNumber || '',
                     userType: riderData.userType || 'rider',
                     status: riderData.status || '',
-                    userAddressHouse: address ? address.house : '',
-                    userAddressStreet: address ? address.street : '',
-                    userAddressBarangay: address ? address.barangay : '',
-                    userAddressCity: address ? address.city : '',
-                    userAddressRegion: address ? address.region : '',
-                    userAddressZIP: address ? address.zip : '',
+                    house: riderData.house || '',
+                    street: riderData.street || '',
+                    barangay: riderData.barangay || '',
+                    city: riderData.city || '',
+                    region: riderData.region || '',
+                    zip: riderData.zip || '',
                 });
             } else {
                 console.log("No such document found!");
@@ -76,19 +76,19 @@ const UpdateRider = () => {
         console.log(formData);
 
         const updatedAddress = {
-            house: formData.userAddressHouse,
-            street: formData.userAddressStreet,
-            barangay: formData.userAddressBarangay,
-            city: formData.userAddressCity,
-            region: formData.userAddressRegion,
-            zip: formData.userAddressZIP,
+            house: formData.house,
+            street: formData.street,
+            barangay: formData.barangay,
+            city: formData.city,
+            region: formData.region,
+            zip: formData.zip,
         };
 
         try {
             const updatedData = {
                 ...formData,
-                address: updatedAddress, 
-                updatedAt: serverTimestamp(), 
+                address: updatedAddress,
+                updatedAt: serverTimestamp(),
             };
 
             await updateDoc(doc(db, "users", id), updatedData);
@@ -106,7 +106,7 @@ const UpdateRider = () => {
                 <h1 className="text-2xl font-semibold mb-4">
                     <span onClick={() => navigate('/admin/riders')} className='cursor-pointer text-blue-900 hover:text-blue-600'>
                         Riders
-                    </span> 
+                    </span>
                     <ArrowForwardIosIcon /> Update Rider
                 </h1>
             </div>
@@ -123,7 +123,7 @@ const UpdateRider = () => {
                 </div>
 
                 <div className="mb-4">
-                <select
+                    <select
                         id="status"
                         name="status"
                         className="border border-gray-400 p-2 mb-4 w-[20%] rounded-xl"
@@ -134,7 +134,7 @@ const UpdateRider = () => {
                         <option value="Available">Available</option>
                         <option value="Not Available">Not Available</option>
                     </select>
-                    
+
                     <div className='w-full flex mb-2'>
                         <h3>Personal Information:</h3>
                     </div>
@@ -173,55 +173,55 @@ const UpdateRider = () => {
                         type="text"
                         placeholder="House No."
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressHouse"
+                        name="house"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressHouse}
+                        value={formData.house}
                     />
                     <input
                         type="text"
                         placeholder="Street"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressStreet"
+                        name="street"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressStreet}
+                        value={formData.street}
                     />
                     <input
                         type="text"
                         placeholder="Barangay"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressBarangay"
+                        name="barangay"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressBarangay}
+                        value={formData.barangay}
                     />
                     <input
                         type="text"
                         placeholder="City"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressCity"
+                        name="city"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressCity}
+                        value={formData.city}
                     />
                     <input
                         type="text"
                         placeholder="Region"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressRegion"
+                        name="region"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressRegion}
+                        value={formData.region}
                     />
                     <input
                         type="text"
                         placeholder="ZIP Code"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="userAddressZIP"
+                        name="zip"
                         required
                         onChange={handleInputChange}
-                        value={formData.userAddressZIP}
+                        value={formData.zip}
                     />
 
                     <div className='w-full flex mb-2'>
