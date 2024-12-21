@@ -6,6 +6,45 @@ import { useAuth } from '../../../hooks/useAuth';
 const FoodDelivery = ({ onClose }) => {
     const { currentUser } = useAuth();
     const [showPopup, setShowPopup] = useState(false);
+    const [menu, setMenu] = useState([]);
+    const [cart, setCart] = useState([]);
+    const [storeMenu, setStoreMenu] = useState({
+        "Jollibee": [
+            { name: "Crunchy Chicken Sandwich", price: 69 },
+            { name: "Crunchy Chicken Sandwich w/ Drink", price: 109 },
+            { name: "Jolly Hotdog & Pies", price: 61 },
+            { name: "2-pc Burger Steak Solo", price: 138 },
+            { name: "Chicken Nuggets (6pcs)", price: 120 }
+        ],
+        "McDonald's": [
+            { name: "Sulit Busog 1-pc Mushroom Pepper Steak w/ drink", price: 119 },
+            { name: "1-pc Chicken Mcdo w/ Fries Small", price: 164 },
+            { name: "Medium Fries", price: 89 },
+            { name: "1-pc Chicken Mcdo Solo", price: 92 },
+            { name: "2-pc Hotcakes Solo", price: 86 }
+        ],
+        "Alberto's": [
+            { name: "Meaty Royale", price: 249 },
+            { name: "Loaded Hawaiian", price: 264 },
+            { name: "Aloha", price: 216 },
+            { name: "Bacon Mushroom", price: 234 },
+            { name: "Creamy Cheese", price: 162 }
+        ],
+        "Shan and Hazel’s": [
+            { name: "Lomi", price: 150 },
+            { name: "Battered Chicken", price: 260 },
+            { name: "Chopsuey", price: 235 },
+            { name: "Shan’s Halo-Halo", price: 85 },
+            { name: "Garlic Chicken", price: 275 }
+        ],
+        "Kenoks": [
+            { name: "Beef Steak", price: 220 },
+            { name: "Beef Caldereta", price: 220 },
+            { name: "Beef Kare-Kare", price: 220 },
+            { name: "Pinakbet", price: 170 },
+            { name: "Lechon Manok", price: 200 }
+        ]
+    });
 
     const [formData, setFormData] = useState({
         service: 'Food Delivery',
@@ -14,17 +53,15 @@ const FoodDelivery = ({ onClose }) => {
         customerLastName: '',
         phoneNumber: '',
         storePreference: '',
-        itemsToBuy: '',
-        estimatedPrice: '',
         customerAddress: '',
-        specialInstructions: '',
+        specialInstructions: ''
     });
 
     useEffect(() => {
         const fetchUserData = async () => {
             if (currentUser) {
                 try {
-                    const userDocRef = doc(db, 'users', currentUser.uid); // Adjust 'users' to your collection name
+                    const userDocRef = doc(db, 'users', currentUser.uid);
                     const userDoc = await getDoc(userDocRef);
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
@@ -33,7 +70,7 @@ const FoodDelivery = ({ onClose }) => {
                             customerFirstName: userData.firstName || '',
                             customerLastName: userData.lastName || '',
                             phoneNumber: userData.phoneNumber || '',
-                            customerAddress: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`,
+                            customerAddress: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`
                         }));
                     } else {
                         console.error('No user data found!');
@@ -53,6 +90,31 @@ const FoodDelivery = ({ onClose }) => {
             ...formData,
             [name]: value,
         });
+        if (name === "storePreference") {
+            setMenu(storeMenu[value] || []);
+            setCart([]);
+        }
+    };
+
+    const handleAddToCart = (item) => {
+        const existingItem = cart.find(cartItem => cartItem.name === item.name);
+        if (existingItem) {
+            setCart(cart.map(cartItem =>
+                cartItem.name === item.name
+                    ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                    : cartItem
+            ));
+        } else {
+            setCart([...cart, { ...item, quantity: 1 }]);
+        }
+    };
+
+    const handleQuantityChange = (item, quantity) => {
+        setCart(cart.map(cartItem =>
+            cartItem.name === item.name
+                ? { ...cartItem, quantity: Math.max(1, quantity) }
+                : cartItem
+        ));
     };
 
     const handleSubmit = async (e) => {
@@ -66,6 +128,7 @@ const FoodDelivery = ({ onClose }) => {
             const deliveryData = {
                 ...formData,
                 userId: currentUser.uid,
+                itemsToBuy: cart,
                 createdAt: new Date().toISOString(),
             };
 
@@ -129,56 +192,6 @@ const FoodDelivery = ({ onClose }) => {
                             onChange={handleInputChange}
                         />
                     </div>
-                </div>
-
-                <div className="mb-4">
-                    <h2 className="font-semibold mb-2">Food Delivery Details:</h2>
-                    <div className="mb-2">
-                        <label htmlFor="storePreference" className="block mb-1">Store Preference:</label>
-                        <select
-                            id="storePreference"
-                            name="storePreference"
-                            className="border p-2 w-full rounded"
-                            value={formData.storePreference}
-                            onChange={handleInputChange}
-                            required
-                        >
-                            <option value="">Select Store</option>
-                            <option value="McDonald's">McDonald's</option>
-                            <option value="Jollibee">Jollibee</option>
-                            <option value="Pizzakaya">Pizzakaya</option>
-                            <option value="Alberto's">Alberto's</option>
-                            <option value="The Lokal Bar">The Lokal Bar/Resto/Coffee</option>
-                        </select>
-                    </div>
-                    <div className="mb-2">
-                        <label htmlFor="itemsToBuy" className="block mb-1">Items to Buy:</label>
-                        <select
-                            id="itemsToBuy"
-                            name="itemsToBuy"
-                            className="border p-2 w-full rounded"
-                            value={formData.itemsToBuy}
-                            onChange={handleInputChange}
-                            required
-                        >
-                            <option value="">Select Item</option>
-                            <option value="Burger">Burger</option>
-                            <option value="Fries">Fries</option>
-                            <option value="Chicken Meal">Chicken Meal</option>
-                        </select>
-                    </div>
-                    <div className="mb-2">
-                        <label htmlFor="estimatedPrice" className="block mb-1">Estimated Price:</label>
-                        <input
-                            type="number"
-                            id="estimatedPrice"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='estimatedPrice'
-                            value={formData.estimatedPrice}
-                            onChange={handleInputChange}
-                        />
-                    </div>
                     <div className="mb-2">
                         <label htmlFor="customerAddress" className="block mb-1">Customer Address:</label>
                         <input
@@ -191,7 +204,62 @@ const FoodDelivery = ({ onClose }) => {
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="mb-2">
+                </div>
+
+                <div className="mb-4">
+                    <h2 className="font-semibold mb-2">Food Delivery Details:</h2>
+                    <div className="mb-4">
+                        <label htmlFor="storePreference" className="block mb-1">Store Preference:</label>
+                        <select
+                            id="storePreference"
+                            name="storePreference"
+                            className="border p-2 w-full rounded"
+                            value={formData.storePreference}
+                            onChange={handleInputChange}
+                            required
+                        >
+                            <option value="">Select Store</option>
+                            {Object.keys(storeMenu).map(store => (
+                                <option key={store} value={store}>{store}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                        {menu.map((item, index) => (
+                            <div key={index} className="border p-4 rounded shadow">
+                                <h3 className="font-semibold">{item.name}</h3>
+                                <p className="text-sm">Price: ₱{item.price}</p>
+                                <button
+                                    className="bg-darkGreen text-lightWhite mt-2 py-1 px-3 rounded"
+                                    onClick={() => handleAddToCart(item)}
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mb-4">
+                        <h2 className="font-semibold mb-2">Your Cart:</h2>
+                        {cart.length === 0 ? (
+                            <p>No items in cart.</p>
+                        ) : (
+                            cart.map((item, index) => (
+                                <div key={index} className="flex items-center justify-between mb-2">
+                                    <p>{item.name} - ₱{item.price} x</p>
+                                    <input
+                                        type="number"
+                                        value={item.quantity}
+                                        onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
+                                        className="w-16 border p-1 rounded"
+                                    />
+                                </div>
+                            ))
+                        )}
+                    </div>
+                    
+                    {/* <div className="mb-2">
                         <label htmlFor="specialInstructions" className="block mb-1">Special Instructions:</label>
                         <textarea
                             id="specialInstructions"
@@ -201,12 +269,11 @@ const FoodDelivery = ({ onClose }) => {
                             value={formData.specialInstructions}
                             onChange={handleInputChange}
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
-                    type='submit'
                     onClick={handleSubmit}
                 >
                     Submit Delivery Request
@@ -215,7 +282,7 @@ const FoodDelivery = ({ onClose }) => {
                 {showPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="bg-darkGreen text-white py-3 px-6 rounded-lg shadow-md">
-                            <p>Added Order Successfully! Just wait for the confirmation. Thank you!</p>
+                            <p>Order added successfully! Please wait for confirmation.</p>
                         </div>
                     </div>
                 )}
