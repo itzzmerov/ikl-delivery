@@ -64,8 +64,7 @@ const CancelledOrders = () => {
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Item/s to buy', key: 'itemsToBuy' },
-                    { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' }
+                    { name: 'Total Price', key: 'totalPrice' },
                 ];
             case 'Special Delivery':
                 return [
@@ -204,10 +203,22 @@ const CancelledOrders = () => {
                                                         ? `${order.customerFirstName} ${order.customerLastName}`
                                                         : key === 'receiverName' && order.receiverFirstName && order.receiverLastName
                                                             ? `${order.receiverFirstName} ${order.receiverLastName}`
-                                                            : order[key] !== undefined ? order[key] : 'N/A'}
+                                                            : key === 'itemsToBuy' && serviceFilter === 'Food Delivery' ? (
+                                                                <div>
+                                                                    {order.itemsToBuy && order.itemsToBuy.length > 0 ? (
+                                                                        order.itemsToBuy.map((item, index) => (
+                                                                            <div key={index}>
+                                                                                <p>{item.name} - {item.quantity} x ₱{item.price}</p>
+                                                                            </div>
+                                                                        ))
+                                                                    ) : (
+                                                                        <p>No items selected</p>
+                                                                    )}
+                                                                </div>
+                                                            ) : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
-                                        <td className="py-2 px-4 border-b flex flex-col gap-2">
+                                        <td className="py-2 px-4 border-b flex gap-2">
                                             <button
                                                 onClick={() => handleRevertOrder(order.id)}
                                                 className="text-red-500 hover:bg-red-500 hover:text-lightWhite border border-red-500 rounded py-2 px-4"

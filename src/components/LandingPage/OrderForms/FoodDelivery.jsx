@@ -54,7 +54,6 @@ const FoodDelivery = ({ onClose }) => {
         phoneNumber: '',
         storePreference: '',
         customerAddress: '',
-        specialInstructions: ''
     });
 
     useEffect(() => {
@@ -117,6 +116,10 @@ const FoodDelivery = ({ onClose }) => {
         ));
     };
 
+    const calculateTotal = () => {
+        return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!currentUser) {
@@ -125,10 +128,13 @@ const FoodDelivery = ({ onClose }) => {
         }
 
         try {
+            const totalPrice = calculateTotal();
+
             const deliveryData = {
                 ...formData,
                 userId: currentUser.uid,
                 itemsToBuy: cart,
+                totalPrice: totalPrice,
                 createdAt: new Date().toISOString(),
             };
 
@@ -245,31 +251,25 @@ const FoodDelivery = ({ onClose }) => {
                         {cart.length === 0 ? (
                             <p>No items in cart.</p>
                         ) : (
-                            cart.map((item, index) => (
-                                <div key={index} className="flex items-center justify-between mb-2">
-                                    <p>{item.name} - ₱{item.price} x</p>
-                                    <input
-                                        type="number"
-                                        value={item.quantity}
-                                        onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
-                                        className="w-16 border p-1 rounded"
-                                    />
+                            <>
+                                {cart.map((item, index) => (
+                                    <div key={index} className="flex items-center justify-between mb-2">
+                                        <p>{item.name} - ₱{item.price} x {item.quantity}</p>
+                                        <input
+                                            type="number"
+                                            value={item.quantity}
+                                            onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
+                                            className="w-16 border p-1 rounded"
+                                        />
+                                    </div>
+                                ))}
+                                <div className="flex justify-between mt-4 font-semibold">
+                                    <p>Total:</p>
+                                    <p>₱{calculateTotal()}</p>
                                 </div>
-                            ))
+                            </>
                         )}
                     </div>
-                    
-                    {/* <div className="mb-2">
-                        <label htmlFor="specialInstructions" className="block mb-1">Special Instructions:</label>
-                        <textarea
-                            id="specialInstructions"
-                            className="border p-2 w-full rounded"
-                            required
-                            name='specialInstructions'
-                            value={formData.specialInstructions}
-                            onChange={handleInputChange}
-                        />
-                    </div> */}
                 </div>
 
                 <button

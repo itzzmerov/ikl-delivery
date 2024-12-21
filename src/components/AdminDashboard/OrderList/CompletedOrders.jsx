@@ -3,13 +3,10 @@ import { db } from '../../../utils/firebase';
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
-// import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 
 const CompletedOrders = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
-    // const [showModal, setShowModal] = useState(false);
-    // const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [serviceFilter, setServiceFilter] = useState("All");
 
     const fetchOrders = async () => {
@@ -21,36 +18,6 @@ const CompletedOrders = () => {
     useEffect(() => {
         fetchOrders();
     }, []);
-
-    // const handleAcceptOrder = (orderId) => {
-    //     setSelectedOrderId(orderId);
-    //     setShowModal(true);
-    // };
-
-    // const handleRejectOrder = async (orderId) => {
-    //     try {
-    //         await updateDoc(doc(db, "orders", orderId), { status: 'Rejected' });
-    //         alert("Order rejected successfully");
-    //         fetchOrders();
-    //     } catch (error) {
-    //         console.error("Error rejecting order:", error);
-    //     }
-    // };
-
-    // const handleUpdateOrder = (orderId) => {
-    //     navigate(`/admin/order/${orderId}/update-order`);
-    // };
-
-    // const handleCompleteOrder = async (orderId) => {
-    //     try {
-    //         await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
-    //         alert("Order status updated to Completed successfully");
-    //         fetchOrders();
-    //     } catch (error) {
-    //         console.error("Error completing order:", error);
-    //     }
-    // };
-
     const openOrderForm = () => {
         navigate("/admin/order/new-order");
     };
@@ -68,8 +35,7 @@ const CompletedOrders = () => {
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Item/s to buy', key: 'itemsToBuy' },
-                    { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' }
+                    { name: 'Total Price', key: 'totalPrice' },
                 ];
             case 'Special Delivery':
                 return [
@@ -184,7 +150,6 @@ const CompletedOrders = () => {
                             {getTableColumns().map(({ name }, index) => (
                                 <th key={index} className="py-2 px-4 border-b">{name}</th>
                             ))}
-                            {/* <th className="py-2 px-4 border-b">Actions</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -208,25 +173,21 @@ const CompletedOrders = () => {
                                                         ? `${order.customerFirstName} ${order.customerLastName}`
                                                         : key === 'receiverName' && order.receiverFirstName && order.receiverLastName
                                                             ? `${order.receiverFirstName} ${order.receiverLastName}`
-                                                            : order[key] !== undefined ? order[key] : 'N/A'}
+                                                            : key === 'itemsToBuy' && serviceFilter === 'Food Delivery' ? (
+                                                                <div>
+                                                                    {order.itemsToBuy && order.itemsToBuy.length > 0 ? (
+                                                                        order.itemsToBuy.map((item, index) => (
+                                                                            <div key={index}>
+                                                                                <p>{item.name} - {item.quantity} x ₱{item.price}</p>
+                                                                            </div>
+                                                                        ))
+                                                                    ) : (
+                                                                        <p>No items selected</p>
+                                                                    )}
+                                                                </div>
+                                                            ) : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
-                                        {/* <td className="py-2 px-4 border-b flex gap-2">
-                                            <button
-                                                onClick={() => handleCompleteOrder(order.id)}
-                                                className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
-                                            >
-                                                Completed
-                                            </button>
-
-                                            {showModal && (
-                                                <RiderAssignmentModal
-                                                    orderId={selectedOrderId}
-                                                    onClose={() => setShowModal(false)}
-                                                    onSubmit={fetchOrders}
-                                                />
-                                            )}
-                                        </td> */}
                                     </tr>
                                 ))
                         )}
