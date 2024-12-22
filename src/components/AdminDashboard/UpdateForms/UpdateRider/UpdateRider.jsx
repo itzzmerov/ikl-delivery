@@ -69,6 +69,7 @@ const UpdateRider = () => {
         });
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
