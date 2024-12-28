@@ -35,24 +35,19 @@ const Services = () => {
     const [selectedService, setSelectedService] = useState('');
     const [serviceItemsWithPrice, setServiceItemsWithPrice] = useState([]);
 
-    const generateDummyPrice = () => {
-        const minPrice = 100;
-        const maxPrice = 150;
-        return `₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice} - ₱${Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice}`;
-    };
-
     const fetchServices = async () => {
         try {
             const querySnapshot = await getDocs(collection(db, 'services'));
             const fetchedServices = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
                 name: doc.data().name,
+                basePrice: doc.data().basePrice,
             }));
 
             const servicesWithImagesAndPrices = fetchedServices.map((service) => ({
                 name: service.name,
                 image: localImages[service.name] || FoodDelivery,
-                price: generateDummyPrice(),
+                price: `₱${service.basePrice}`,
             }));
 
             setServiceItemsWithPrice(servicesWithImagesAndPrices);
