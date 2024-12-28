@@ -58,6 +58,7 @@ const Services = () => {
                         <tr className="text-left">
                             <th className="py-2 px-4 border-b">Name</th>
                             <th className="py-2 px-4 border-b">Description</th>
+                            <th className="py-2 px-4 border-b">Delivery Fee</th>
                             <th className="py-2 px-4 border-b">Created At</th>
                             <th className="py-2 px-4 border-b">Actions</th>
                         </tr>
@@ -74,6 +75,7 @@ const Services = () => {
                                 <tr key={service.id} className="text-left">
                                     <td className="py-2 px-4 border-b">{service.name}</td>
                                     <td className="py-2 px-4 border-b">{service.description}</td>
+                                    <td className="py-2 px-4 border-b">{service.basePrice}</td>
                                     <td className="py-2 px-4 border-b">
                                         {service.created_at ? new Date(service.created_at).toLocaleDateString("en-US", {
                                             month: "short",

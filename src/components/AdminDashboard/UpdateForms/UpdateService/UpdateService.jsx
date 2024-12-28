@@ -14,6 +14,7 @@ const UpdateService = () => {
     const [formData, setFormData] = useState({
         name: '',
         description: '',
+        basePrice: '',
     })
 
     const fetchServices = async () => {
@@ -93,6 +94,17 @@ const UpdateService = () => {
                         name='description'
                         id='description'
                         value={formData.description}
+                        onChange={handleInputChange}
+                    />
+                    <h3 className='mb-2'>Base Delivery Fee:</h3>
+                    <input
+                        type="number"
+                        placeholder="Enter base price (e.g., 50)"
+                        className="border p-2 w-full rounded mb-4"
+                        required
+                        name='basePrice'
+                        id='basePrice'
+                        value={formData.basePrice}
                         onChange={handleInputChange}
                     />
                 </div>
