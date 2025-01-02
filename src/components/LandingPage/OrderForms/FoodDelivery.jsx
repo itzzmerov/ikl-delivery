@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const FoodDelivery = ({ onClose }) => {
@@ -8,6 +8,7 @@ const FoodDelivery = ({ onClose }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [menu, setMenu] = useState([]);
     const [cart, setCart] = useState([]);
+    const [basePrice, setBasePrice] = useState(0);
     const [storeMenu, setStoreMenu] = useState({
         "Jollibee": [
             { name: "Crunchy Chicken Sandwich", price: 69 },
