@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../utils/firebase';
-import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 
 const ParcelPickup = ({ onClose }) => {
     const { currentUser } = useAuth();
     const [showPopup, setShowPopup] = useState(false);
+    const [basePrice, setBasePrice] = useState(0);
 
     const [formData, setFormData] = useState({
         service: 'Parcel Pickup',
@@ -41,7 +42,25 @@ const ParcelPickup = ({ onClose }) => {
             }
         };
 
+        const fetchBasePrice = async () => {
+            try {
+                const servicesQuery = query(
+                    collection(db, 'services'),
+                    where('name', '==', 'Bill Payments')
+                );
+                const querySnapshot = await getDocs(servicesQuery);
+
+                if (!querySnapshot.empty) {
+                    const serviceData = querySnapshot.docs[0].data();
+                    setBasePrice(serviceData.basePrice);
+                }
+            } catch (error) {
+                console.error('Error fetching base price:', error);
+            }
+        };
+
         fetchUserData();
+        fetchBasePrice();
     }, [currentUser]);
 
     const handleInputChange = (event) => {
@@ -64,6 +83,7 @@ const ParcelPickup = ({ onClose }) => {
                 ...formData,
                 userId: currentUser.uid,
                 createdAt: new Date().toISOString(),
+                basePrice,
             };
 
             const result = await addDoc(collection(db, 'orders'), parcelData);
@@ -182,6 +202,13 @@ const ParcelPickup = ({ onClose }) => {
                     </div>
                 </div>
 
+                {basePrice !== null && (
+                    <div className="mt-4 text-right">
+                        <p className="text-lg font-semibold py-4">
+                            Delivery Fee: <span className="text-darkGreen">₱{basePrice}</span>
+                        </p>
+                    </div>
+                )}
                 <button
                     className="bg-darkBlack text-lightWhite py-2 w-full rounded"
                     type='submit'
