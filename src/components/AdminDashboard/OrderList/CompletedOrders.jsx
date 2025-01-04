@@ -115,6 +115,8 @@ const CompletedOrders = () => {
                     { name: 'Services', key: 'service' },
                     { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
+                    { name: 'Rider Name', key: 'riderName' },
+                    { name: 'Delivery Fee', key: 'basePrice' },
                 ];
         }
     };

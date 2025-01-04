@@ -13,6 +13,8 @@ const Login = () => {
         password: '',
     });
 
+    const [welcomeMessage, setWelcomeMessage] = useState(''); // Welcome message state
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({
@@ -33,12 +35,17 @@ const Login = () => {
                 const userData = userDoc.data();
                 console.log('User data:', userData);
 
+                setWelcomeMessage(
+                    `Welcome back, ${userData.firstName || 'User'}! You are logged in as ${userData.userType || 'a user'
+                    }.`
+                );
+
                 if (userData.userType === 'admin') {
-                    navigate('/admin');
+                    setTimeout(() => navigate('/admin'), 3000);
                 } else if (userData.userType === 'rider') {
-                    navigate('/riders');
+                    setTimeout(() => navigate('/riders'), 3000);
                 } else {
-                    navigate('/');
+                    setTimeout(() => navigate('/'), 3000);
                 }
             } else {
                 console.error('No user data found');
@@ -56,6 +63,13 @@ const Login = () => {
                 </Link>
 
                 <h2 className="text-3xl font-Montserrat font-semibold mb-6">LOGIN</h2>
+
+                {/* Display welcome message */}
+                {welcomeMessage && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center">
+                        {welcomeMessage}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="w-full flex flex-col items-center justify-center">
                     <input
