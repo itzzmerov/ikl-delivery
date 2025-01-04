@@ -9,35 +9,36 @@ const OrdersPage = ({ onClose }) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+
+    const fetchOrders = async () => {
+        if (!currentUser) return;
+
+        const ordersRef = collection(db, 'orders');
+        const q = query(ordersRef, where('userId', '==', currentUser.uid), where('status', '==', 'Pending'));
+
+        try {
+            const querySnapshot = await getDocs(q);
+            const fetchedOrders = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+
+            const sortedOrders = fetchedOrders.sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return dateB - dateA;
+            });
+
+            setOrders(sortedOrders);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            if (!currentUser) return;
-
-            const ordersRef = collection(db, 'orders');
-            const q = query(ordersRef, where('userId', '==', currentUser.uid), where('status', '==', 'Pending'));
-
-            try {
-                const querySnapshot = await getDocs(q);
-                const fetchedOrders = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-
-                const sortedOrders = fetchedOrders.sort((a, b) => {
-                    const dateA = new Date(a.createdAt);
-                    const dateB = new Date(b.createdAt);
-                    return dateB - dateA;
-                });
-
-                setOrders(sortedOrders);
-            } catch (error) {
-                console.error('Error fetching orders:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchOrders();
     }, [currentUser]);
 
@@ -46,17 +47,19 @@ const OrdersPage = ({ onClose }) => {
             const orderDocRef = doc(db, 'orders', orderId);
             await updateDoc(orderDocRef, { status: 'Cancelled' });
 
-            setOrders((prevOrders) =>
-                prevOrders.map((order) =>
-                    order.id === orderId ? { ...order, status: 'Cancelled' } : order
-                )
-            );
-
+            // Show popup message
+            setPopupMessage('Order successfully cancelled!');
             setShowPopup(true);
+
+            // Refresh orders
+            await fetchOrders();
 
             setTimeout(() => setShowPopup(false), 2000);
         } catch (error) {
             console.error('Error cancelling order:', error);
+            setPopupMessage('Failed to cancel the order.');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 2000);
         }
     };
 
@@ -108,6 +111,14 @@ const OrdersPage = ({ onClose }) => {
                     <p>No pending orders found.</p>
                 )}
             </div>
+
+            {showPopup && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                        <p>{popupMessage}</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
