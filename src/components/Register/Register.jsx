@@ -8,6 +8,8 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 const Register = () => {
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+    const [popupType, setPopupType] = useState('success');
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -59,8 +61,8 @@ const Register = () => {
                 updatedAt: serverTimestamp(),
             });
 
-            console.log('Signup and Firestore document creation successful.');
-
+            setPopupMessage('Created Account Successfully! Please login!');
+            setPopupType('success');
             setShowPopup(true);
 
             setTimeout(() => {
@@ -69,6 +71,18 @@ const Register = () => {
             }, 2000);
         } catch (error) {
             console.error('Error during registration:', error.message);
+
+            if (error.code === 'auth/email-already-in-use') {
+                setPopupMessage('Email is already in use. Please use another one!');
+            } else {
+                setPopupMessage('An error occurred. Please try again.');
+            }
+            setPopupType('error');
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 3000);
         }
     };
 
@@ -183,15 +197,6 @@ const Register = () => {
                         value={formData.username}
                     />
                     <input
-                        type="email"
-                        placeholder="Email Address"
-                        className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="email"
-                        required
-                        onChange={handleInputChange}
-                        value={formData.email}
-                    />
-                    <input
                         type="text"
                         placeholder="Phone Number"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
@@ -200,6 +205,16 @@ const Register = () => {
                         onChange={handleInputChange}
                         value={formData.phoneNumber}
                     />
+                    <input
+                        type="email"
+                        placeholder="Email Address"
+                        className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
+                        name="email"
+                        required
+                        onChange={handleInputChange}
+                        value={formData.email}
+                    />
+
                     <input
                         type="password"
                         placeholder="Password"
@@ -224,8 +239,11 @@ const Register = () => {
 
                 {showPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
-                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
-                            <p>Created Account Successfully!</p>
+                        <div
+                            className={`py-3 px-6 rounded-lg shadow-md ${popupType === 'success' ? 'bg-green-600' : 'bg-red-600'
+                                } text-white`}
+                        >
+                            <p>{popupMessage}</p>
                         </div>
                     </div>
                 )}
