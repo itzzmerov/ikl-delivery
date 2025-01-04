@@ -18,7 +18,7 @@ const OrderList = () => {
                 console.log("User is not authenticated");
                 return;
             }
-    
+
             const response = await getDocs(collection(db, "orders"));
             const orderList = response.docs
                 .map((doc) => ({ id: doc.id, ...doc.data() }))
@@ -130,6 +130,9 @@ const OrderList = () => {
                 return [
                     { name: 'Status', key: 'status' },
                     { name: 'Services', key: 'service' },
+                    { name: 'Customer Name', key: 'customerName' },
+                    { name: 'Phone Number', key: 'phoneNumber' },
+                    { name: 'Delivery Fee', key: 'basePrice' },
                 ];
         }
     };
