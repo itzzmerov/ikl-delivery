@@ -200,15 +200,6 @@ const AddNewCustomer = () => {
                         value={formData.username}
                     />
                     <input
-                        type="email"
-                        placeholder="Email Address"
-                        className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="email"
-                        required
-                        onChange={handleInputChange}
-                        value={formData.email}
-                    />
-                    <input
                         type="text"
                         placeholder="Phone Number"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
@@ -216,6 +207,15 @@ const AddNewCustomer = () => {
                         required
                         onChange={handleInputChange}
                         value={formData.phoneNumber}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email Address"
+                        className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
+                        name="email"
+                        required
+                        onChange={handleInputChange}
+                        value={formData.email}
                     />
                     <input
                         type="password"
