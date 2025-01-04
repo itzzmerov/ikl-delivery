@@ -102,6 +102,15 @@ const Sidebar = ({ isCollapsed }) => {
                 </div>
 
                 <NavLink
+                    to="/admin/riders-history"
+                    className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
+                        ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
+                >
+                    <GiFullMotorcycleHelmet size={23} className="text-lightWhite min-w-[23px]" />
+                    {!isCollapsed && <span className="ml-3">Rider's History</span>}
+                </NavLink>
+
+                <NavLink
                     to="/admin/services"
                     className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
                         ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}

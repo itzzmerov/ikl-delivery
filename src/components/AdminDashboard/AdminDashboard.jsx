@@ -23,6 +23,7 @@ import AcceptedOrders from './OrderList/AcceptedOrders';
 import RejectedOrders from './OrderList/RejectedOrders';
 import CancelledOrders from './OrderList/CancelledOrders';
 import CompletedOrders from './OrderList/CompletedOrders';
+import RiderHistory from './RidersManagement/RidersHistory';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -45,6 +46,7 @@ const AdminDashboard = () => {
                         <Route path="reviews" element={<Reviews />} />
                         <Route path="customers" element={<Customers />} />
                         <Route path="riders" element={<Riders />} />
+                        <Route path="riders-history" element={<RiderHistory />} />
                         <Route path="analytics" element={<Analytics />} />
 
                         {/* Link for Orders */}
