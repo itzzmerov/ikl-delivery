@@ -142,6 +142,8 @@ const RejectedOrders = () => {
                 return [
                     { name: 'Status', key: 'status' },
                     { name: 'Services', key: 'service' },
+                    { name: 'Customer Name', key: 'customerName' },
+                    { name: 'Phone Number', key: 'phoneNumber' },
                 ];
         }
     };
