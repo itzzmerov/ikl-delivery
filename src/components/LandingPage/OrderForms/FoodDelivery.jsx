@@ -81,7 +81,24 @@ const FoodDelivery = ({ onClose }) => {
             }
         };
 
+        const fetchDeliveryFee = async () => {
+            try {
+                const servicesQuery = query(
+                    collection(db, 'services'),
+                    where('name', '==', 'Food Delivery')
+                );
+                const querySnapshot = await getDocs(servicesQuery);
+                if (!querySnapshot.empty) {
+                    const serviceData = querySnapshot.docs[0].data();
+                    setBasePrice(serviceData.basePrice);
+                }
+            } catch (error) {
+                console.error('Error fetching delivery fee:', error);
+            }
+        };
+
         fetchUserData();
+        fetchDeliveryFee();
     }, [currentUser]);
 
     const handleInputChange = (event) => {
@@ -118,7 +135,8 @@ const FoodDelivery = ({ onClose }) => {
     };
 
     const calculateTotal = () => {
-        return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+        const itemsTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+        return itemsTotal + Number(basePrice);
     };
 
     const handleSubmit = async (e) => {
@@ -264,6 +282,10 @@ const FoodDelivery = ({ onClose }) => {
                                         />
                                     </div>
                                 ))}
+                                <div className="flex justify-between mt-4 font-semibold">
+                                    <p>Delivery Fee:</p>
+                                    <p>₱{basePrice}</p>
+                                </div>
                                 <div className="flex justify-between mt-4 font-semibold">
                                     <p>Total:</p>
                                     <p>₱{calculateTotal()}</p>
