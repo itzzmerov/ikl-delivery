@@ -153,6 +153,7 @@ const FoodDelivery = ({ onClose }) => {
                 ...formData,
                 userId: currentUser.uid,
                 itemsToBuy: cart,
+                basePrice,
                 totalPrice: totalPrice,
                 createdAt: new Date().toISOString(),
             };
