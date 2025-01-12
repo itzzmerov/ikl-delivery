@@ -8,11 +8,48 @@ const CompletedOrders = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [serviceFilter, setServiceFilter] = useState("All");
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
     const fetchOrders = async () => {
         const response = await getDocs(collection(db, "orders"));
         const orderList = response.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setOrders(orderList);
+    };
+
+    const handleViewOrder = (order) => {
+        const transformedOrder = {
+            Status: order.status || 'N/A',
+            Service: order.service || 'N/A',
+            'Customer Name': `${order.customerFirstName || 'N/A'} ${order.customerLastName || 'N/A'}`,
+            'Phone Number': `${order.phoneNumber || 'N/A'}`,
+            'Address': `${order.address || order.customerAddress || order.pickupLocation || 'N/A'}`,
+            ...Object.fromEntries(
+                Object.entries(order).filter(
+                    ([key]) => !['id', 'userId', 'createdAt', 'updatedAt', 'riderId', 'completedAt', 'acceptedAt', 'customerFirstName', 'customerLastName', 'customerPhone', 'customerAddress', 'address', 'phoneNumber', 'senderAddress', 'status', 'service', 'itemsToBuy'].includes(key)
+                )
+            ),
+        };
+
+        if (order.basePrice !== undefined) {
+            transformedOrder['Delivery Fee'] = order.basePrice;
+            delete transformedOrder.basePrice;
+        }
+
+        if (order.receiverFirstName !== undefined) {
+            transformedOrder['Receiver Name'] = `${order.receiverFirstName || 'N/A'} ${order.receiverLastName || 'N/A'}`;
+            delete transformedOrder.receiverFirstName;
+            delete transformedOrder.receiverLastName;
+        }
+
+        if (order.itemsToBuy && order.itemsToBuy.length > 0) {
+            transformedOrder['Items to Buy'] = order.itemsToBuy;
+        }
+
+        setSelectedOrder(transformedOrder);
+    };
+
+    const closeViewModal = () => {
+        setSelectedOrder(null);
     };
 
     useEffect(() => {
@@ -154,6 +191,7 @@ const CompletedOrders = () => {
                             {getTableColumns().map(({ name }, index) => (
                                 <th key={index} className="py-2 px-4 border-b">{name}</th>
                             ))}
+                            <th className="py-2 px-4 border-b">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -192,6 +230,44 @@ const CompletedOrders = () => {
                                                             ) : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
+
+                                        <td className="py-2 px-4 border-b flex gap-2">
+                                            <button
+                                                onClick={() => handleViewOrder(order)}
+                                                className="text-blue-500 hover:bg-blue-500 hover:text-lightWhite border border-blue-500 rounded py-2 px-4"
+                                            >
+                                                View
+                                            </button>
+
+                                            {selectedOrder && (
+                                                <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-50">
+                                                    <div className="bg-white p-6 rounded-lg max-w-md w-full">
+                                                        <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+                                                        <div>
+                                                            {Object.entries(selectedOrder).map(([key, value]) => (
+                                                                <div key={key} className="mb-2">
+                                                                    <strong className="capitalize">{key.replace(/([A-Z])/g, ' $1')}: </strong>
+                                                                    {key === 'Items to Buy' && Array.isArray(value) ? (
+                                                                        <ul className="list-disc ml-5">
+                                                                            {value.map((item, index) => (
+                                                                                <li key={index}>
+                                                                                    {item.name} - {item.quantity} x ₱{item.price}
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    ) : (
+                                                                        <span>{String(value)}</span>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <div className="mt-4 flex justify-end">
+                                                            <button onClick={closeViewModal} className="bg-gray-500 text-white p-2 rounded">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </td>
                                     </tr>
                                 ))
                         )}
