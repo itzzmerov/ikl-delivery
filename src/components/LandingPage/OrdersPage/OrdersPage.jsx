@@ -68,9 +68,11 @@ const OrdersPage = ({ onClose }) => {
             Status: order.status || 'N/A',
             Service: order.service || 'N/A',
             'Customer Name': `${order.customerFirstName || 'N/A'} ${order.customerLastName || 'N/A'}`,
+            'Phone Number': `${order.phoneNumber || 'N/A'}`,
+            'Address': `${order.address || order.customerAddress || order.pickupLocation || 'N/A'}`,
             ...Object.fromEntries(
                 Object.entries(order).filter(
-                    ([key]) => !['id', 'userId', 'createdAt', 'customerFirstName', 'customerLastName', 'customerPhone', 'senderAddress', 'status', 'service'].includes(key)
+                    ([key]) => !['id', 'userId', 'createdAt', 'customerFirstName', 'customerLastName', 'customerPhone', 'customerAddress', 'address', 'phoneNumber', 'senderAddress', 'status', 'service', 'itemsToBuy'].includes(key)
                 )
             ),
         };
@@ -86,8 +88,13 @@ const OrdersPage = ({ onClose }) => {
             delete transformedOrder.receiverLastName;
         }
 
+        if (order.itemsToBuy && order.itemsToBuy.length > 0) {
+            transformedOrder['Items to Buy'] = order.itemsToBuy;
+        }
+
         setSelectedOrder(transformedOrder);
         setShowModal(true);
+        console.log(transformedOrder)
     };
 
     const closeModal = () => {
@@ -172,7 +179,17 @@ const OrdersPage = ({ onClose }) => {
                             {Object.entries(selectedOrder).map(([key, value]) => (
                                 <div key={key} className="mb-2">
                                     <strong className="capitalize">{key.replace(/([A-Z])/g, ' $1')}: </strong>
-                                    <span>{value}</span>
+                                    {key === 'Items to Buy' && Array.isArray(value) ? (
+                                        <ul className="list-disc ml-5">
+                                            {value.map((item, index) => (
+                                                <li key={index}>
+                                                    {item.name} - {item.quantity} x ₱{item.price}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <span>{String(value)}</span>
+                                    )}
                                 </div>
                             ))}
                         </div>
