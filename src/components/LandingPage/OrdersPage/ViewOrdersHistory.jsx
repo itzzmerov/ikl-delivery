@@ -61,8 +61,8 @@ const ViewOrdersHistory = ({ onClose }) => {
                         <table className="min-w-full bg-white border">
                             <thead>
                                 <tr className="bg-darkGreen text-lightWhite uppercase text-sm leading-normal">
-                                    <th className="py-3 px-6 text-left">Service</th>
                                     <th className="py-3 px-6 text-left">Status</th>
+                                    <th className="py-3 px-6 text-left">Service</th>
                                     <th className="py-3 px-6 text-left">Order Date</th>
                                     <th className="py-3 px-6 text-left">Rider Name</th>
                                 </tr>
@@ -70,8 +70,8 @@ const ViewOrdersHistory = ({ onClose }) => {
                             <tbody className="text-darkBlack text-sm">
                                 {orders.map((order) => (
                                     <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
-                                        <td className="py-3 px-6 text-left">{order.service}</td>
                                         <td className="py-3 px-6 text-left">{order.status}</td>
+                                        <td className="py-3 px-6 text-left">{order.service}</td>
                                         <td className="py-3 px-6 text-left">
                                             {order.createdAt
                                                 ? new Date(order.createdAt).toLocaleString()
