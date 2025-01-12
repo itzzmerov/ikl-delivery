@@ -276,7 +276,7 @@ const PendingOrders = () => {
                                             )}
 
                                             {selectedOrder && (
-                                                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                                                <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-50">
                                                     <div className="bg-white p-6 rounded-lg max-w-md w-full">
                                                         <h2 className="text-xl font-semibold mb-4">Order Details</h2>
                                                         <div>
