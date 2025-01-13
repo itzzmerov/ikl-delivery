@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db, auth } from '../../../../utils/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -65,12 +65,7 @@ const AddNewRider = () => {
             );
             const user = userCredential.user;
 
-            const result = await addDoc(collection(db, "users"), {
-                ...RiderData,
-                uid: user.uid,
-            });
-
-            console.log('Rider added successfully:', result);
+            await setDoc(doc(db, "users", user.uid), RiderData);
 
             setShowPopup(true);
 
