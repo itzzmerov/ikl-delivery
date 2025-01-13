@@ -35,14 +35,18 @@ const OrderList = () => {
 
     const handleCompleteOrder = async (orderId) => {
         try {
-            await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
+            const completedAt = new Date().toISOString();
+            await updateDoc(doc(db, "orders", orderId), {
+                status: 'Completed',
+                completedAt: completedAt
+            });
 
             if (currentUser) {
                 const riderDocRef = doc(db, "users", currentUser.uid);
                 await updateDoc(riderDocRef, { status: 'Available' });
             }
 
-            alert("Order status updated to Completed successfully");
+            alert("Order marked as completed successfully");
             fetchOrders();
         } catch (error) {
             console.error("Error completing order:", error);
