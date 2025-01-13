@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaHome, FaList, FaConciergeBell, FaStar, FaChartBar, FaUser } from 'react-icons/fa';
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
+import { HiDocumentReport } from "react-icons/hi";
 import { NavLink, useLocation } from 'react-router-dom';
 import { MdExpandMore } from "react-icons/md";
 import logo from '../../../images/logo.png';
@@ -151,7 +152,7 @@ const Sidebar = ({ isCollapsed }) => {
                     className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
                         ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
                 >
-                    <GiFullMotorcycleHelmet size={23} className="text-lightWhite min-w-[23px]" />
+                    <HiDocumentReport size={23} className="text-lightWhite min-w-[23px]" />
                     {!isCollapsed && <span className="ml-3">Reports</span>}
                 </NavLink>
 
