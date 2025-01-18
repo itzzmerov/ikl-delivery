@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import logo from '../../../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '../../../utils/firebase';
+import { auth, db } from '../../../utils/firebase';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../../../hooks/useAuth';
 import { FaCircleUser } from "react-icons/fa6";
 import OrdersPage from '../OrdersPage/OrdersPage';
 import ViewOrdersHistory from '../OrdersPage/ViewOrdersHistory';
+import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { MdNotificationsActive } from 'react-icons/md';
 
 const NavBar = () => {
     const { currentUser } = useAuth();
@@ -18,14 +20,18 @@ const NavBar = () => {
     const [isOrdersPageVisible, setIsOrdersPageVisible] = useState(false);
     const [isOrdersHistoryVisible, setIsOrdersHistoryVisible] = useState(false);
     const [logoutMessage, setLogoutMessage] = useState(false);
+    const [notificationOpen, setNotificationOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
     const dropdownRef = useRef(null);
+    const notificationRef = useRef(null);
 
     const handleLogout = async () => {
         try {
             await signOut(auth);
             setLogoutMessage(true);
             setDropdownOpen(false);
-            
+
             setTimeout(() => {
                 setLogoutMessage(false);
                 navigate("/");
@@ -55,6 +61,7 @@ const NavBar = () => {
         setIsOrdersHistoryVisible(false);
     };
 
+    // Sticky Navbar function
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 50) {
@@ -71,19 +78,50 @@ const NavBar = () => {
         };
     }, []);
 
+    // Close when click outside notification
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdownOpen(false);
             }
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setNotificationOpen(false);
+            }
         };
-    
+
         document.addEventListener('mousedown', handleClickOutside);
-    
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+
+    // Notification fetching
+    useEffect(() => {
+        if (currentUser) {
+            const q = query(collection(db, 'orders'), where('userId', '==', currentUser.uid), where('status', '==', 'Accepted'));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const newNotifications = snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setNotifications(newNotifications);
+                setUnreadCount(newNotifications.length);
+            });
+
+            return () => unsubscribe();
+        }
+    }, [currentUser]);
+
+    const toggleNotification = () => {
+        setNotificationOpen(!notificationOpen);
+
+        // Clear unread count when opening the notification dropdown
+        if (!notificationOpen) {
+            setUnreadCount(0);
+        }
+    };
 
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 bg-lightGreen text-lightWhite transition-all duration-300 ${scrolled ? 'py-2 shadow-lg' : 'py-4 shadow-none'}`}>
@@ -97,12 +135,46 @@ const NavBar = () => {
                     {!currentUser ? (
                         <Link to="/login" className="bg-darkBlack hover:bg-lightBlack text-lightWhite px-10 py-2 rounded-full">Login</Link>
                     ) : (
-                        <div className="relative">
+                        <div className="relative flex items-center space-x-4">
+
+                            {/* Notifications Icon */}
+                            <div className="relative" ref={notificationRef}>
+                                <button onClick={toggleNotification} className="relative">
+                                    <MdNotificationsActive className="w-8 h-8 text-white" />
+                                    {unreadCount > 0 && (
+                                        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                            {unreadCount}
+                                        </div>
+                                    )}
+                                </button>
+                                {notificationOpen && (
+                                    <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-80">
+                                        <h3 className="p-4 border-b font-semibold">Notifications</h3>
+                                        <ul>
+                                            {notifications
+                                                .slice() // Create a shallow copy of the array to avoid mutating the original
+                                                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp (newest first)
+                                                .map((notif) => (
+                                                    <li key={notif.id} className="p-4 hover:bg-gray-100 border-b">
+                                                        <span>Your "{notif.service}" order was accepted and has been assigned to rider: {notif.riderName}.</span>
+                                                    </li>
+                                                ))}
+                                            {notifications.length === 0 && (
+                                                <li className="p-4 text-center text-gray-500">No new notifications</li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+
                             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2">
                                 <FaCircleUser className="w-8 h-8 rounded-full" />
                             </button>
+
+
+
                             {dropdownOpen && (
-                                <div ref={dropdownRef} className="absolute right-0 mt-2 w-60 bg-white text-black rounded-lg shadow-lg">
+                                <div ref={dropdownRef} className="absolute right-0 mt-52 w-60 bg-white text-black rounded-lg shadow-lg">
                                     <div className="p-2">
                                         <p className="text-xs font-OpenSans">Logged in as:</p>
                                         <p className="text-sm font-semibold font-Montserrat">{currentUser.email}</p>
