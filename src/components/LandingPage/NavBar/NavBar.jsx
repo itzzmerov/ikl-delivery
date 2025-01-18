@@ -148,12 +148,12 @@ const NavBar = () => {
                                     )}
                                 </button>
                                 {notificationOpen && (
-                                    <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-80">
+                                    <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-80 max-h-96 overflow-y-auto">
                                         <h3 className="p-4 border-b font-semibold">Notifications</h3>
                                         <ul>
                                             {notifications
-                                                .slice() // Create a shallow copy of the array to avoid mutating the original
-                                                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Sort by timestamp (newest first)
+                                                .slice()
+                                                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
                                                 .map((notif) => (
                                                     <li key={notif.id} className="p-4 hover:bg-gray-100 border-b">
                                                         <span>Your "{notif.service}" order was accepted and has been assigned to rider: {notif.riderName}.</span>

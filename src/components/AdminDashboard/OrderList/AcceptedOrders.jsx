@@ -23,13 +23,18 @@ const AcceptedOrders = () => {
         fetchOrders();
     }, []);
 
-    const handleCompleteOrder = async (orderId) => {
+    const handleCompleteOrder = async (orderId, riderId) => {
         try {
             await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
-            alert("Order status updated to Completed successfully");
+
+            if (riderId) {
+                await updateDoc(doc(db, "users", riderId), { status: 'Available' });
+            }
+
+            alert("Order status updated to Completed and rider status updated to Available successfully");
             fetchOrders();
         } catch (error) {
-            console.error("Error completing order:", error);
+            console.error("Error completing order and updating rider:", error);
         }
     };
 
@@ -250,7 +255,7 @@ const AcceptedOrders = () => {
                                                 View
                                             </button>
                                             <button
-                                                onClick={() => handleCompleteOrder(order.id)}
+                                                onClick={() => handleCompleteOrder(order.id, order.riderId)}
                                                 className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
                                             >
                                                 Completed
