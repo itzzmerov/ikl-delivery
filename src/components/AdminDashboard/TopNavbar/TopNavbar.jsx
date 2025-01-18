@@ -28,9 +28,9 @@ const TopNavbar = ({ toggleSidebar }) => {
                 setIsAccountMenuVisible(false);
             }
         };
-    
+
         document.addEventListener('mousedown', handleClickOutside);
-    
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -44,6 +44,9 @@ const TopNavbar = ({ toggleSidebar }) => {
                 </button>
             </div>
             <div className="flex items-center gap-2 px-3">
+                {/* 
+                ~~~~~THIS ONE IS FOR SEARCH BAR~~~~~
+                
                 <div className='flex flex-row'>
                     <input
                         type="text"
@@ -53,23 +56,24 @@ const TopNavbar = ({ toggleSidebar }) => {
                     <button className="p-2 bg-white rounded-r-md border border-r-0">
                         <FaSearch size={20} />
                     </button>
-                </div>
-                
+                </div> 
+                */}
+
                 <FaBell size={30} className="cursor-pointer" />
 
                 <div className="relative">
-                    <FaUserCircle 
-                        size={35} 
-                        className="cursor-pointer" 
-                        onClick={handleAccountClick} 
+                    <FaUserCircle
+                        size={35}
+                        className="cursor-pointer"
+                        onClick={handleAccountClick}
                     />
                     {isAccountMenuVisible && (
-                        <div 
+                        <div
                             ref={accountMenuRef}
                             className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md border"
                         >
                             <ul className="text-sm text-gray-700">
-                                <li 
+                                <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                     onClick={handleLogout}
                                 >
