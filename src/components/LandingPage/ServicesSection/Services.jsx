@@ -10,6 +10,8 @@ import HatidSundo from '../../../images/hatid-sundo.jpg';
 import Pamalengke from '../../../images/pamalengke.jpg';
 import BillPayment from '../../../images/bill-payment.jpeg';
 import ParcelPickup from '../../../images/parcel-pickup.jpg';
+import SpecialDeliveryImage from '../../../images/special-delivery.jpg';
+import MedicineImage from '../../../images/medicine.jpg';
 import FoodDeliveryForm from '../OrderForms/FoodDelivery';
 import PeraPadalaForm from '../OrderForms/PeraPadala';
 import HatidSundoForm from '../OrderForms/HatidSundo';
@@ -26,6 +28,8 @@ const localImages = {
     'Pamalengke': Pamalengke,
     'Bill Payments': BillPayment,
     'Parcel Pickup': ParcelPickup,
+    'Medicine': MedicineImage,
+    'Special Delivery': SpecialDeliveryImage,
 };
 
 const Services = () => {
