@@ -13,6 +13,7 @@ const BillPayments = ({ onClose }) => {
         status: 'Pending',
         customerFirstName: '',
         customerLastName: '',
+        customerAddress: '',
         phoneNumber: '',
         emailAddress: '',
         billType: '',
@@ -38,6 +39,7 @@ const BillPayments = ({ onClose }) => {
                         customerLastName: userData.lastName || '',
                         phoneNumber: userData.phoneNumber || '',
                         emailAddress: userData.email || '',
+                        customerAddress: `${userData.house || ''}, ${userData.street || ''}, ${userData.barangay || ''}, ${userData.city || ''}, ${userData.region || ''}, ${userData.zip || ''}`
                     }));
                 }
             } catch (error) {
@@ -146,6 +148,18 @@ const BillPayments = ({ onClose }) => {
                             value={formData.phoneNumber}
                             onChange={handleInputChange}
                             required
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="customerAddress" className="block mb-1">Customer Address:</label>
+                        <input
+                            type="text"
+                            id="customerAddress"
+                            className="border p-2 w-full rounded"
+                            required
+                            name='customerAddress'
+                            value={formData.customerAddress}
+                            onChange={handleInputChange}
                         />
                     </div>
                     <div className="mb-4">
