@@ -5,6 +5,7 @@ import LandingPage from "./components/LandingPage";
 import { useAuth } from "./hooks/useAuth";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import RiderDashboard from "./components/RidersDashboard/RiderDashboard";
+import GoogleProfileForm from "./components/Login/GoogleProfileForm";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
+        <Route path="/complete-profile" element={<GoogleProfileForm />} />
         <Route path="/admin/*" element={<PrivateRoute element={<AdminDashboard />} />} />
         <Route path="/riders/*" element={<PrivateRoute element={<RiderDashboard />} />} />
       </Routes>

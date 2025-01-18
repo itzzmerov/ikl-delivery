@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Logo from '../../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, db } from '../../utils/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Login = () => {
         password: '',
     });
 
-    const [welcomeMessage, setWelcomeMessage] = useState(''); // Welcome message state
+    const [welcomeMessage, setWelcomeMessage] = useState('');
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -55,6 +55,38 @@ const Login = () => {
         }
     };
 
+    const handleGoogleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            const [firstName, lastName] = user.displayName.split(' ');
+
+            const userRef = doc(db, 'users', user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (docSnap.exists()) {
+                navigate('/');
+            } else {
+                await setDoc(userRef, {
+                    email: user.email,
+                    firstName,
+                    lastName,
+                    createdAt: serverTimestamp(),
+                });
+
+                navigate('/complete-profile', {
+                    state: { firstName, lastName, email: user.email, uid: user.uid },
+                });
+            }
+
+        } catch (error) {
+            console.error('Error during Google login:', error.message);
+        }
+    };
+
     return (
         <div className="flex justify-center items-center min-h-screen bg-lightWhite md:bg-darkWhite">
             <div className="flex flex-col items-center bg-lightWhite p-8 rounded-[50px] md:shadow-lg w-full sm:max-w-md lg:max-w-lg">
@@ -64,7 +96,6 @@ const Login = () => {
 
                 <h2 className="text-3xl font-Montserrat font-semibold mb-6">LOGIN</h2>
 
-                {/* Display welcome message */}
                 {welcomeMessage && (
                     <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center">
                         {welcomeMessage}
@@ -99,6 +130,13 @@ const Login = () => {
                         LOGIN
                     </button>
                 </form>
+
+                <button
+                    onClick={handleGoogleLogin}
+                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 mt-4 rounded-full"
+                >
+                    Sign in with Google
+                </button>
 
                 <p className="mt-4 text-sm">
                     Don't have an account? <Link to="/register" className="text-blue-500">Sign up here</Link>
