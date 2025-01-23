@@ -37,7 +37,6 @@ const TopNavbar = ({ toggleSidebar }) => {
                     id: doc.id,
                     ...doc.data(),
                 }));
-                newNotifications.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
                 setNotifications(newNotifications);
                 setUnreadCount(newNotifications.length);
             });
@@ -101,16 +100,26 @@ const TopNavbar = ({ toggleSidebar }) => {
                             <h3 className="p-4 border-b font-semibold">Notifications</h3>
                             <ul>
                                 {notifications.length > 0 ? (
-                                    notifications.map((notif) => (
-                                        <li key={notif.id} className="p-4 hover:bg-gray-100 border-b">
-                                            <span>
-                                                The "{notif.service}" order of {notif.customerLastName} was completed by{' '}
-                                                {notif.riderName}.
-                                            </span>
-                                        </li>
-                                    ))
+                                    notifications
+                                        .slice()
+                                        .sort((a, b) =>
+                                            new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
+                                        )
+                                        .map((notif) => (
+                                            <li
+                                                key={notif.id}
+                                                className="p-4 hover:bg-gray-100 border-b"
+                                            >
+                                                <span>
+                                                    The "{notif.service}" order of {notif.customerLastName} was completed by{' '}
+                                                    {notif.riderName}.
+                                                </span>
+                                            </li>
+                                        ))
                                 ) : (
-                                    <li className="p-4 text-center text-gray-500">No new notifications</li>
+                                    <li className="p-4 text-center text-gray-500">
+                                        No new notifications
+                                    </li>
                                 )}
                             </ul>
                         </div>
