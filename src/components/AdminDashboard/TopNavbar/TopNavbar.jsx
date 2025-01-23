@@ -103,7 +103,7 @@ const TopNavbar = ({ toggleSidebar }) => {
                                     notifications
                                         .slice()
                                         .sort((a, b) =>
-                                            new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
+                                            new Date(a.timestamp || 0) - new Date(b.timestamp || 0)
                                         )
                                         .map((notif) => (
                                             <li
@@ -111,7 +111,7 @@ const TopNavbar = ({ toggleSidebar }) => {
                                                 className="p-4 hover:bg-gray-100 border-b"
                                             >
                                                 <span>
-                                                    The "{notif.service}" order of {notif.customerLastName} was completed by{' '}
+                                                    The "{notif.service}" order of {notif.customerFirstName} {notif.customerLastName} was completed by{' '}
                                                     {notif.riderName}.
                                                 </span>
                                             </li>
