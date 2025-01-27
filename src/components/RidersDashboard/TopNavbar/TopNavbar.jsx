@@ -44,6 +44,7 @@ const TopNavbar = ({ toggleSidebar }) => {
                 </button>
             </div>
             <div className="flex items-center gap-2 px-3">
+                <br />
                 {/* <div className='flex flex-row'>
                     <input
                         type="text"
