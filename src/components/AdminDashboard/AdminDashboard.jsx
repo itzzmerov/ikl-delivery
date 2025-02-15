@@ -25,6 +25,9 @@ import CancelledOrders from './OrderList/CancelledOrders';
 import CompletedOrders from './OrderList/CompletedOrders';
 import RiderHistory from './RidersManagement/RidersHistory';
 import Reports from './Reports/Reports';
+import Admins from './AdminManagement/Admins';
+import UpdateAdmins from './UpdateForms/UpdateAdmins/UpdateAdmins';
+import AddNewAdmin from './AddForms/AddNewAdmin/AddNewAdmin';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -46,6 +49,7 @@ const AdminDashboard = () => {
                         <Route path="services" element={<Services />} />
                         <Route path="reviews" element={<Reviews />} />
                         <Route path="customers" element={<Customers />} />
+                        <Route path="admins" element={<Admins />} />
                         <Route path="riders" element={<Riders />} />
                         <Route path="riders-history" element={<RiderHistory />} />
                         <Route path="analytics" element={<Analytics />} />
@@ -62,6 +66,7 @@ const AdminDashboard = () => {
                         <Route path="order/new-order" element={<AddNewOrder />} />
                         <Route path="services/new-service" element={<AddNewService />} />
                         <Route path="customers/new-customer" element={<AddNewCustomer />} />
+                        <Route path="admins/new-admin" element={<AddNewAdmin />} />
                         <Route path="riders/new-rider" element={<AddNewRider />} />
                         <Route path="reviews/new-review" element={<AddReview />} />
 
@@ -69,6 +74,7 @@ const AdminDashboard = () => {
                         <Route path="order/:id/update-order" element={<UpdateOrder />} />
                         <Route path="services/:id/update-services" element={<UpdateService />} />
                         <Route path="customers/:id/update-customer" element={<UpdateCustomer />} />
+                        <Route path="admins/:id/update-admin" element={<UpdateAdmins />} />
                         <Route path="riders/:id/update-rider" element={<UpdateRider />} />
 
                     </Routes>
