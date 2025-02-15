@@ -27,6 +27,7 @@ import RiderHistory from './RidersManagement/RidersHistory';
 import Reports from './Reports/Reports';
 import Admins from './AdminManagement/Admins';
 import UpdateAdmins from './UpdateForms/UpdateAdmins/UpdateAdmins';
+import AddNewAdmin from './AddForms/AddNewAdmin/AddNewAdmin';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -65,6 +66,7 @@ const AdminDashboard = () => {
                         <Route path="order/new-order" element={<AddNewOrder />} />
                         <Route path="services/new-service" element={<AddNewService />} />
                         <Route path="customers/new-customer" element={<AddNewCustomer />} />
+                        <Route path="admins/new-admin" element={<AddNewAdmin />} />
                         <Route path="riders/new-rider" element={<AddNewRider />} />
                         <Route path="reviews/new-review" element={<AddReview />} />
 

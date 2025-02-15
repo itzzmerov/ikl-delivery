@@ -1,13 +1,14 @@
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { db } from '../../../../utils/firebase';
+import React, { useState } from 'react'
+import { auth, db } from '../../../../utils/firebase';
+import { collection, addDoc, serverTimestamp, setDoc, doc } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom';
 import { AiOutlineClose } from 'react-icons/ai';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-const UpdateAdmins = () => {
-    const { id } = useParams();
+const AddNewAdmin = () => {
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -16,100 +17,78 @@ const UpdateAdmins = () => {
         userType: 'admin',
         username: '',
         email: '',
+        password: '',
         phoneNumber: '',
-        street: '',
         house: '',
+        street: '',
         barangay: '',
         city: '',
         region: '',
         zip: '',
-    });
-
-    const fetchAdmin = async () => {
-        try {
-            const response = await getDoc(doc(db, "users", id));
-            if (response.exists()) {
-                const adminData = response.data();
-
-                setFormData({
-                    firstName: adminData.firstName || '',
-                    middleName: adminData.middleName || '',
-                    lastName: adminData.lastName || '',
-                    username: adminData.username || '',
-                    email: adminData.email || '',
-                    phoneNumber: adminData.phoneNumber || '',
-                    userType: adminData.userType || 'customer',
-                    house: adminData.house,
-                    street: adminData.street,
-                    barangay: adminData.barangay,
-                    city: adminData.city,
-                    region: adminData.region,
-                    zip: adminData.zip,
-                });
-            } else {
-                console.log("No such document found!");
-            }
-        } catch (error) {
-            console.error(error.message);
-        }
-    };
-
-    useEffect(() => {
-        fetchAdmin();
-        // eslint-disable-next-line
-    }, [id]);
+    })
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({
             ...formData,
             [name]: value
-        });
-    };
+        })
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
 
-        const updatedAddress = {
+        const adminData = {
+            firstName: formData.firstName,
+            middleName: formData.middleName,
+            lastName: formData.lastName,
+            userType: formData.userType,
+            username: formData.username,
+            email: formData.email,
+            phoneNumber: formData.phoneNumber,
             house: formData.house,
             street: formData.street,
             barangay: formData.barangay,
             city: formData.city,
             region: formData.region,
             zip: formData.zip,
+            createdAt: serverTimestamp(),
         };
 
         try {
-            const updatedData = {
-                ...formData,
-                address: updatedAddress,
+            const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+            const userId = userCredential.user.uid;
+
+            await setDoc(doc(db, 'users', userId), {
+                ...adminData,
+                password: '',
+                createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
-            };
+            });
 
-            await updateDoc(doc(db, "users", id), updatedData);
+            console.log('Admin added successfully to Firestore and Firebase Auth');
 
-            console.log("Admin data updated successfully.");
-            navigate("/admin/admins");
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+                navigate('/admin/admins');
+            }, 2000);
         } catch (error) {
-            console.error("Error updating customer data:", error.message);
+            console.error('Error adding admin:', error.message);
         }
     };
 
     return (
-        <div className='flex flex-col justify-center items-center min-h-screen w-full rounded-full p-8'>
+        <div className='flex flex-col items-center w-full p-8'>
             <div className='flex justify-start items-center w-full'>
-                <h1 className="text-2xl font-semibold mb-4">
-                    <span onClick={() => navigate('/admin/customers')} className='cursor-pointer text-blue-900 hover:text-blue-600'>
-                        Administrators
-                    </span>
-                    <ArrowForwardIosIcon /> Update Admin
-                </h1>
+                <h1 className="text-2xl font-semibold mb-4"><span onClick={() => navigate('/admin/admins')} className='cursor-pointer text-blue-900 hover:text-blue-600'>Administrators</span> <ArrowForwardIosIcon /> Add New Administrator</h1>
             </div>
-            <div className="bg-lightWhite p-2 lg:p-8 rounded-[50px] w-full">
+            <div className="bg-lightWhite p-2 lg:p-8 rounded-[25px] w-full text-darkBlack">
                 <div className="flex justify-between items-center mb-6">
                     <p></p>
-                    <h1 className="text-2xl font-bold">UPDATE ADMIN INFORMATION</h1>
+                    <h1 className="text-2xl font-bold">ADMIN LIST</h1>
                     <button
                         className="text-darkBlack hover:text-red-600"
                         onClick={() => navigate('/admin/admins')}
@@ -118,7 +97,7 @@ const UpdateAdmins = () => {
                     </button>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-2">
                     <div className='w-full flex mb-2'>
                         <h3>Personal Information:</h3>
                     </div>
@@ -221,6 +200,15 @@ const UpdateAdmins = () => {
                         value={formData.username}
                     />
                     <input
+                        type="text"
+                        placeholder="Phone Number"
+                        className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
+                        name="phoneNumber"
+                        required
+                        onChange={handleInputChange}
+                        value={formData.phoneNumber}
+                    />
+                    <input
                         type="email"
                         placeholder="Email Address"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
@@ -230,13 +218,13 @@ const UpdateAdmins = () => {
                         value={formData.email}
                     />
                     <input
-                        type="text"
-                        placeholder="Phone Number"
+                        type="password"
+                        placeholder="Password"
                         className="border border-gray-400 p-2 mb-4 w-full rounded-xl"
-                        name="phoneNumber"
+                        name="password"
                         required
                         onChange={handleInputChange}
-                        value={formData.phoneNumber}
+                        value={formData.password}
                     />
                 </div>
 
@@ -245,12 +233,20 @@ const UpdateAdmins = () => {
                     type='submit'
                     onClick={handleSubmit}
                 >
-                    Update Admin
+                    Add Admin
                 </button>
+
+                {showPopup && (
+                    <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                        <div className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md">
+                            <p>Successfully created an admin account!</p>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default UpdateAdmins;
+export default AddNewAdmin
