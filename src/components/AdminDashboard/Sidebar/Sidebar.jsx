@@ -148,6 +148,15 @@ const Sidebar = ({ isCollapsed }) => {
                 </NavLink>
 
                 <NavLink
+                    to="/admin/admins"
+                    className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
+                        ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
+                >
+                    <FaUser size={23} className="text-lightWhite min-w-[23px]" />
+                    {!isCollapsed && <span className="ml-3">Admins</span>}
+                </NavLink>
+
+                <NavLink
                     to="/admin/reports"
                     className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
                         ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
