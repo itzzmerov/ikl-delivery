@@ -115,7 +115,6 @@ const Services = () => {
                             <img src={service.image} alt={service.name} className="w-full h-[400px] object-cover" />
                             <div className="absolute inset-x-0 bottom-0 bg-darkGreen text-lightWhite p-4 flex flex-col items-center space-y-1">
                                 <h3 className="font-semibold text-[20px] font-Montserrat">{service.name}</h3>
-                                <p className="text-[16px]">{service.price}</p>
                                 <button
                                     className="border-lightWhite border-2 hover:bg-lightWhite hover:text-darkBlack text-lightWhite px-4 py-1 rounded-lg mt-2"
                                     onClick={() => openOrderForm(service.name)}
