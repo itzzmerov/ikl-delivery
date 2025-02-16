@@ -5,13 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import RiderAssignmentModal from '../Modals/RiderAssignmentModal/RiderAssignmentModal';
 
+
+
 const AcceptedOrders = () => {
+
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [serviceFilter, setServiceFilter] = useState("All");
+
+    const statusSteps = ['Accepted', 'Picked Up', 'On the Way', 'Completed'];
 
     const fetchOrders = async () => {
         const response = await getDocs(collection(db, "orders"));
@@ -22,21 +27,6 @@ const AcceptedOrders = () => {
     useEffect(() => {
         fetchOrders();
     }, []);
-
-    const handleCompleteOrder = async (orderId, riderId) => {
-        try {
-            await updateDoc(doc(db, "orders", orderId), { status: 'Completed' });
-
-            if (riderId) {
-                await updateDoc(doc(db, "users", riderId), { status: 'Available' });
-            }
-
-            alert("Order status updated to Completed and rider status updated to Available successfully");
-            fetchOrders();
-        } catch (error) {
-            console.error("Error completing order and updating rider:", error);
-        }
-    };
 
     const handleViewOrder = (order) => {
         const transformedOrder = {
@@ -208,6 +198,7 @@ const AcceptedOrders = () => {
                             {getTableColumns().map(({ name }, index) => (
                                 <th key={index} className="py-2 px-4 border-b">{name}</th>
                             ))}
+                            <th className="py-2 px-4 border-b">Status</th>
                             <th className="py-2 px-4 border-b">Actions</th>
                         </tr>
                     </thead>
@@ -220,7 +211,6 @@ const AcceptedOrders = () => {
                             </tr>
                         ) : (
                             orders
-                                // .filter(order => order.status === 'Accepted')
                                 .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
                                 .map((order) => (
                                     <tr key={order.id} className="text-left">
@@ -247,6 +237,26 @@ const AcceptedOrders = () => {
                                                             ) : order[key] !== undefined ? order[key] : 'N/A'}
                                             </td>
                                         ))}
+                                        <td className="py-2 px-4 border-b">
+                                            <div className="flex items-center justify-between mb-4">
+                                                {statusSteps.map((step, index) => (
+                                                    <div key={index} className="flex flex-col items-center">
+                                                        <div
+                                                            className={`w-8 h-8 flex items-center justify-center rounded-full text-white font-bold ${order.status === step
+                                                                ? 'bg-green-500'
+                                                                : index < statusSteps.indexOf(order.status)
+                                                                    ? 'bg-green-300'
+                                                                    : 'bg-gray-400'
+                                                                }`}
+                                                        >
+                                                            {index + 1}
+                                                        </div>
+                                                        <p className="text-xs mt-1">{step}</p>
+                                                    </div>
+
+                                                ))}
+                                            </div>
+                                        </td>
                                         <td className="py-2 px-4 border-b flex gap-2">
                                             <button
                                                 onClick={() => handleViewOrder(order)}
@@ -254,25 +264,21 @@ const AcceptedOrders = () => {
                                             >
                                                 View
                                             </button>
-                                            <button
-                                                onClick={() => handleCompleteOrder(order.id, order.riderId)}
-                                                className="text-green-600 hover:bg-green-600 hover:text-lightWhite border border-green-600 rounded py-2 px-4"
-                                            >
-                                                Completed
-                                            </button>
 
-                                            {showModal && (
+                                            {/* {showModal && (
                                                 <RiderAssignmentModal
                                                     orderId={selectedOrderId}
                                                     onClose={() => setShowModal(false)}
                                                     onSubmit={fetchOrders}
                                                 />
-                                            )}
+                                            )} */}
 
                                             {selectedOrder && (
-                                                <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-50">
+                                                <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
+
                                                     <div className="bg-white p-6 rounded-lg max-w-md w-full">
                                                         <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+
                                                         <div>
                                                             {Object.entries(selectedOrder).map(([key, value]) => (
                                                                 <div key={key} className="mb-2">

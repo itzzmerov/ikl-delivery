@@ -9,7 +9,7 @@ import Reviews from './Reviews/Reviews';
 import Customers from './CustomerManagement/Customers';
 import Riders from './RidersManagement/Riders';
 import UpdateOrder from './UpdateForms/UpdateOrder/UpdateOrder';
-import AddNewOrder from './AddForms/AddNewOrder/AddNewOrder'
+import AddNewOrder from './AddForms/AddNewOrder/AddNewOrder';
 import AddNewService from './AddForms/AddNewService/AddNewService';
 import UpdateService from './UpdateForms/UpdateService/UpdateService';
 import AddNewCustomer from './AddForms/AddNewCustomer/AddNewCustomer';
