@@ -52,7 +52,16 @@ const Sidebar = ({ isCollapsed }) => {
                     {!isCollapsed && <span className="ml-3">Dashboard</span>}
                 </NavLink>
 
-                <div className={`relative ${isCollapsed ? 'justify-center' : ''}`} ref={dropdownRef}>
+                <NavLink
+                    to="/admin/orders"
+                    className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
+                        ${isCollapsed ? 'justify-center ' : ''}${isActive ? 'bg-gray-700' : ''}`}
+                >
+                    <FaList size={23} className="text-lightWhite min-w-[23px]" />
+                    {!isCollapsed && <span className="ml-3">Orders</span>}
+                </NavLink>
+
+                {/* <div className={`relative ${isCollapsed ? 'justify-center' : ''}`} ref={dropdownRef}>
                     <button
                         onClick={toggleOrderDropdown}
                         className={`flex items-center w-full px-4 py-2 hover:bg-gray-700 ${isOrderDropdownOpen ? 'bg-gray-700' : ''}`}
@@ -100,7 +109,7 @@ const Sidebar = ({ isCollapsed }) => {
                             </NavLink>
                         </div>
                     )}
-                </div>
+                </div> */}
 
                 <NavLink
                     to="/admin/riders-history"

@@ -18,11 +18,11 @@ import AddNewRider from './AddForms/AddNewRider/AddNewRider';
 import UpdateRider from './UpdateForms/UpdateRider/UpdateRider';
 import AddReview from './AddForms/AddReviews/AddReview';
 
-import PendingOrders from './OrderList/PendingOrders';
+// import PendingOrders from './OrderList/PendingOrders';
 import AcceptedOrders from './OrderList/AcceptedOrders';
-import RejectedOrders from './OrderList/RejectedOrders';
-import CancelledOrders from './OrderList/CancelledOrders';
-import CompletedOrders from './OrderList/CompletedOrders';
+// import RejectedOrders from './OrderList/RejectedOrders';
+// import CancelledOrders from './OrderList/CancelledOrders';
+// import CompletedOrders from './OrderList/CompletedOrders';
 import RiderHistory from './RidersManagement/RidersHistory';
 import Reports from './Reports/Reports';
 import Admins from './AdminManagement/Admins';
@@ -56,11 +56,11 @@ const AdminDashboard = () => {
                         <Route path="reports" element={<Reports />} />
 
                         {/* Link for Orders */}
-                        <Route path="orders/pending-orders" element={<PendingOrders />} />
-                        <Route path="orders/accepted-orders" element={<AcceptedOrders />} />
-                        <Route path="orders/rejected-orders" element={<RejectedOrders />} />
-                        <Route path="orders/cancelled-orders" element={<CancelledOrders />} />
-                        <Route path="orders/completed-orders" element={<CompletedOrders />} />
+                        {/* <Route path="orders/pending-orders" element={<PendingOrders />} /> */}
+                        <Route path="orders" element={<AcceptedOrders />} />
+                        {/* <Route path="orders/rejected-orders" element={<RejectedOrders />} /> */}
+                        {/* <Route path="orders/cancelled-orders" element={<CancelledOrders />} /> */}
+                        {/* <Route path="orders/completed-orders" element={<CompletedOrders />} /> */}
 
                         {/* Adding New Data Links */}
                         <Route path="order/new-order" element={<AddNewOrder />} />

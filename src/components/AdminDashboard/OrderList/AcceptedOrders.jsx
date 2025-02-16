@@ -220,7 +220,7 @@ const AcceptedOrders = () => {
                             </tr>
                         ) : (
                             orders
-                                .filter(order => order.status === 'Accepted')
+                                // .filter(order => order.status === 'Accepted')
                                 .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
                                 .map((order) => (
                                     <tr key={order.id} className="text-left">
