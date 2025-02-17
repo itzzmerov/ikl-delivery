@@ -31,14 +31,28 @@ const TopNavbar = ({ toggleSidebar }) => {
 
     useEffect(() => {
         if (currentUser) {
-            const q = query(collection(db, 'orders'), where('status', '==', 'Completed'));
+            const q = query(collection(db, 'orders')); // Listen to all orders
             const unsubscribe = onSnapshot(q, (snapshot) => {
-                const newNotifications = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setNotifications(newNotifications);
-                setUnreadCount(newNotifications.length);
+                const newNotifications = snapshot.docChanges().map((change) => {
+                    if (change.type === "modified") { // Check if status was modified
+                        const data = change.doc.data();
+                        return {
+                            id: change.doc.id,
+                            service: data.service,
+                            customerFirstName: data.customerFirstName,
+                            customerLastName: data.customerLastName,
+                            status: data.status, // Get updated status
+                            riderName: data.riderName || "a rider", // Default if missing
+                            timestamp: data.timestamp || new Date() // Fallback for sorting
+                        };
+                    }
+                    return null;
+                }).filter(notif => notif !== null); // Remove null values
+
+                if (newNotifications.length > 0) {
+                    setNotifications((prev) => [...newNotifications, ...prev]); // Add new notifications to the list
+                    setUnreadCount((prev) => prev + newNotifications.length);
+                }
             });
 
             return () => unsubscribe();
@@ -111,8 +125,7 @@ const TopNavbar = ({ toggleSidebar }) => {
                                                 className="p-4 hover:bg-gray-100 border-b"
                                             >
                                                 <span>
-                                                    The "{notif.service}" order of {notif.customerFirstName} {notif.customerLastName} was completed by{' '}
-                                                    {notif.riderName}.
+                                                    The "{notif.service}" order of {notif.customerFirstName} {notif.customerLastName} was {notif.status} by {notif.riderName}.
                                                 </span>
                                             </li>
                                         ))
