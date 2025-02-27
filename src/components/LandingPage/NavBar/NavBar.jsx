@@ -117,10 +117,10 @@ const NavBar = () => {
     const toggleNotification = () => {
         setNotificationOpen(!notificationOpen);
 
-        // // Clear unread count when opening the notification dropdown
-        // if (!notificationOpen) {
-        //     setUnreadCount(0);
-        // }
+        // Clear unread count when opening the notification dropdown
+        if (!notificationOpen) {
+            setUnreadCount(1);
+        }
     };
 
     return (
