@@ -119,7 +119,7 @@ const NavBar = () => {
 
         // Clear unread count when opening the notification dropdown
         if (!notificationOpen) {
-            setUnreadCount(1);
+            setUnreadCount(0);
         }
     };
 
