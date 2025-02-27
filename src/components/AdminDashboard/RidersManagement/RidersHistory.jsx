@@ -25,7 +25,8 @@ const RiderHistory = () => {
         { name: "Service", key: "service" },
         { name: "Delivery Fee", key: "basePrice" },
         { name: "Customer Name", key: "customerName" },
-        { name: "Customer Phone Number", key: "phoneNumber" }
+        { name: "Customer Phone Number", key: "phoneNumber" },
+        { name: "Date", key: "createdAt" }
     ];
 
     // Filter data based on rider name
