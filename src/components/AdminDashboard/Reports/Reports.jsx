@@ -147,7 +147,7 @@ const Reports = () => {
         <tbody>
           {filteredOrders.map((order) => (
             <tr key={order.id}>
-              <td className="border px-4 py-2">{formatDate(order.completedAt)}</td>
+              <td className="border px-4 py-2">{formatDate(order.updatedAt)}</td>
               <td className="border px-4 py-2">{order.service}</td>
               <td className="border px-4 py-2">
                 {order.customerFirstName + " " + order.customerLastName}
