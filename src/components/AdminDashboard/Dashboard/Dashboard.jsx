@@ -3,6 +3,7 @@ import { db } from '../../../utils/firebase';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
 import { FaUserFriends, FaClipboardList, FaMotorcycle, FaStar } from 'react-icons/fa';
+import { BarChart, Bar, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
     const [numCustomers, setNumCustomers] = useState(0);
@@ -10,6 +11,13 @@ const Dashboard = () => {
     const [numRiders, setNumRiders] = useState(0);
     const [averageReviews, setAverageReviews] = useState(0);
     const [userName, setUserName] = useState("Admin");
+
+    //ORDERS
+    const [ordersPerYear, setOrdersPerYear] = useState([]);
+    const [ordersPerMonth, setOrdersPerMonth] = useState([]);
+    const [servicesPerMonth, setServicesPerMonth] = useState([]);
+    const [servicesPerWeek, setServicesPerWeek] = useState([]);
+    const [ridersPerMonth, setRidersPerMonth] = useState([]);
 
     const fetchUserName = async () => {
         const auth = getAuth();
@@ -33,10 +41,33 @@ const Dashboard = () => {
         setNumCustomers(response.docs.length);
     };
 
-    const fetchOrders = async () => {
+    const fetchOrdersData = async () => {
         const ordersQuery = collection(db, "orders");
         const response = await getDocs(ordersQuery);
-        setNumOrders(response.docs.length);
+        const orders = response.docs.map(doc => doc.data());
+
+        const ordersByYear = {};
+        const ordersByMonth = {};
+        const servicesByMonth = {};
+        const servicesByWeek = {};
+
+        orders.forEach(order => {
+            const date = new Date(order.createdAt);
+            const year = date.getFullYear();
+            const month = date.toLocaleString('default', { month: 'short' });
+            const week = `Week ${Math.ceil(date.getDate() / 7)}`;
+            const service = order.serviceType;
+
+            ordersByYear[year] = (ordersByYear[year] || 0) + 1;
+            ordersByMonth[month] = (ordersByMonth[month] || 0) + 1;
+            servicesByMonth[service] = (servicesByMonth[service] || 0) + 1;
+            servicesByWeek[week] = (servicesByWeek[week] || 0) + 1;
+        });
+
+        setOrdersPerYear(Object.entries(ordersByYear).map(([year, count]) => ({ year, count })));
+        setOrdersPerMonth(Object.entries(ordersByMonth).map(([month, count]) => ({ month, count })));
+        setServicesPerMonth(Object.entries(servicesByMonth).map(([service, count]) => ({ service, count })));
+        setServicesPerWeek(Object.entries(servicesByWeek).map(([week, count]) => ({ week, count })));
     };
 
     const fetchRiders = async () => {
@@ -67,7 +98,7 @@ const Dashboard = () => {
     useEffect(() => {
         fetchUserName();
         fetchCustomers();
-        fetchOrders();
+        fetchOrdersData();
         fetchRiders();
         fetchAverageReviews();
     }, []);
@@ -101,6 +132,71 @@ const Dashboard = () => {
                     </div>
                 ))}
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+                <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={ordersPerYear}>
+                            <XAxis dataKey="year" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="count" fill="#8884d8" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                    <h3 className="text-lg font-semibold text-center">Orders Per Year</h3>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={ordersPerMonth}>
+                            <XAxis dataKey="month" />
+                            <YAxis />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="count" stroke="#82ca9d" />
+                        </LineChart>
+                    </ResponsiveContainer>
+                    <h3 className="text-lg font-semibold text-center">Orders Per Month</h3>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={servicesPerMonth}>
+                            <XAxis dataKey="service" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="count" fill="#ff7300" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                    <h3 className="text-lg font-semibold text-center">Services Per Month</h3>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={servicesPerWeek}>
+                            <XAxis dataKey="week" />
+                            <YAxis />
+                            <Tooltip />
+                            <Area type="monotone" dataKey="count" fill="#ffc658" />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                    <h3 className="text-lg font-semibold text-center">Services Per Week</h3>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                            <Pie data={ridersPerMonth} dataKey="count" nameKey="month" cx="50%" cy="50%" outerRadius={100}>
+                                {ridersPerMonth.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042'][index % 4]} />
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                        </PieChart>
+                    </ResponsiveContainer>
+                    <h3 className="text-lg font-semibold text-center">Riders Per Month</h3>
+                </div>
+            </div>
+
         </div>
     );
 };
