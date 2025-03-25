@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../../utils/firebase';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
-import { FaUserFriends, FaClipboardList, FaMotorcycle, FaStar } from 'react-icons/fa'; // Import React Icons
+import { FaUserFriends, FaClipboardList, FaMotorcycle, FaStar } from 'react-icons/fa';
 
 const Dashboard = () => {
     const [numCustomers, setNumCustomers] = useState(0);
@@ -17,7 +17,7 @@ const Dashboard = () => {
 
         if (currentUser) {
             const userId = currentUser.uid;
-            const userRef = doc(db, "users", userId); 
+            const userRef = doc(db, "users", userId);
             const userDoc = await getDoc(userRef);
 
             if (userDoc.exists()) {
