@@ -10,6 +10,8 @@ const Riders = () => {
     const navigate = useNavigate();
     const [riders, setRiders] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchRiders = async () => {
         const customersQuery = query(collection(db, "users"), where("userType", "==", "rider"));
@@ -26,25 +28,25 @@ const Riders = () => {
         navigate(`/admin/riders/${id}/update-rider`);
     };
 
-    const handleDeleteRiders = async (id) => {
-        try {
-            await deleteDoc(doc(db, 'users', id));
-
-            setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-                fetchRiders();
-            }, 2000);
-
-        } catch (error) {
-            console.error(error);
+    const handleDeleteRiders = async () => {
+        if (deleteId) {
+            try {
+                await deleteDoc(doc(db, 'users', deleteId));
+                setShowPopup(true);
+                setShowConfirm(false);
+                setTimeout(() => {
+                    setShowPopup(false);
+                    fetchRiders();
+                }, 2000);
+            } catch (error) {
+                console.error(error);
+            }
         }
     };
 
     const openRiderForm = () => {
         navigate("/admin/riders/new-rider")
-    }
+    };
 
     return (
         <div className="p-8 flex-1">
@@ -69,7 +71,7 @@ const Riders = () => {
                     <tbody>
                         {riders.length === 0 ? (
                             <tr>
-                                <td colSpan="4" className="py-4 text-center">
+                                <td colSpan="7" className="py-4 text-center">
                                     No data found
                                 </td>
                             </tr>
@@ -93,20 +95,12 @@ const Riders = () => {
                                             <span>Edit</span>
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteRiders(rider.id)}
+                                            onClick={() => { setShowConfirm(true); setDeleteId(rider.id); }}
                                             className="flex items-center gap-1 px-2 py-1 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-lightWhite transition"
                                         >
                                             <DeleteIcon fontSize="small" />
                                             <span>Delete</span>
                                         </button>
-
-                                        {showPopup && (
-                                            <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
-                                                <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
-                                                    <p>Successfully deleted a rider!</p>
-                                                </div>
-                                            </div>
-                                        )}
                                     </td>
                                 </tr>
                             ))
@@ -114,8 +108,38 @@ const Riders = () => {
                     </tbody>
                 </table>
             </div>
+
+            {showPopup && (
+                <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                    <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
+                        <p>Successfully deleted a rider!</p>
+                    </div>
+                </div>
+            )}
+
+            {showConfirm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                        <p className="mb-4">Are you sure you want to delete this rider?</p>
+                        <div className="flex justify-center gap-4">
+                            <button
+                                onClick={handleDeleteRiders}
+                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                            >
+                                Yes, Delete
+                            </button>
+                            <button
+                                onClick={() => setShowConfirm(false)}
+                                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-    )
+    );
 }
 
-export default Riders
+export default Riders;

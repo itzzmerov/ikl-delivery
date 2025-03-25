@@ -10,6 +10,7 @@ const Admins = () => {
     const navigate = useNavigate();
     const [admins, setAdmins] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState(null);
 
     const fetchAdmins = async () => {
         const adminsQuery = query(collection(db, "users"), where("userType", "==", "admin"));
@@ -26,19 +27,20 @@ const Admins = () => {
         navigate(`/admin/admins/${id}/update-admin`);
     };
 
-    const handleDeleteAdmins = async (id) => {
-        try {
-            await deleteDoc(doc(db, 'users', id));
-
-            setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-                fetchAdmins();
-            }, 2000);
-
-        } catch (error) {
-            console.error(error);
+    const handleDeleteAdmins = async () => {
+        if (confirmDelete) {
+            try {
+                await deleteDoc(doc(db, 'users', confirmDelete));
+                setShowPopup(true);
+                setTimeout(() => {
+                    setShowPopup(false);
+                    fetchAdmins();
+                }, 2000);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setConfirmDelete(null);
+            }
         }
     };
 
@@ -68,7 +70,7 @@ const Admins = () => {
                     <tbody>
                         {admins.length === 0 ? (
                             <tr>
-                                <td colSpan="4" className="py-4 text-center">
+                                <td colSpan="6" className="py-4 text-center">
                                     No data found
                                 </td>
                             </tr>
@@ -91,20 +93,12 @@ const Admins = () => {
                                             <span>Edit</span>
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteAdmins(admin.id)}
+                                            onClick={() => setConfirmDelete(admin.id)}
                                             className="flex items-center gap-1 px-2 py-1 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-lightWhite transition"
                                         >
                                             <DeleteIcon fontSize="small" />
                                             <span>Delete</span>
                                         </button>
-
-                                        {showPopup && (
-                                            <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
-                                                <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
-                                                    <p>Successfully deleted an administrator!</p>
-                                                </div>
-                                            </div>
-                                        )}
                                     </td>
                                 </tr>
                             ))
@@ -112,8 +106,28 @@ const Admins = () => {
                     </tbody>
                 </table>
             </div>
+            
+            {confirmDelete && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <p className="mb-4">Are you sure you want to delete this administrator?</p>
+                        <div className="flex justify-end gap-2">
+                            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                            <button onClick={handleDeleteAdmins} className="px-4 py-2 bg-red-500 text-white rounded">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {showPopup && (
+                <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                    <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
+                        <p>Successfully deleted an administrator!</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
 
-export default Admins
+export default Admins;
