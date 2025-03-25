@@ -10,6 +10,8 @@ const Services = () => {
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [serviceToDelete, setServiceToDelete] = useState(null);
 
     const fetchServices = async () => {
         const response = await getDocs(collection(db, "services"));
@@ -25,30 +27,34 @@ const Services = () => {
         navigate(`/admin/services/${id}/update-services`);
     };
 
-    const handleDeleteServices = async (id) => {
+    const handleDeleteServices = async () => {
+        if (!serviceToDelete) return;
+
         try {
-            await deleteDoc(doc(db, 'services', id));
+            await deleteDoc(doc(db, 'services', serviceToDelete));
             setShowPopup(true);
+            setShowConfirm(false);
 
             setTimeout(() => {
                 setShowPopup(false);
                 fetchServices();
             }, 2000);
-
         } catch (error) {
             console.error(error);
         }
     };
 
     const openServiceForm = () => {
-        navigate("/admin/services/new-service")
-    }
+        navigate("/admin/services/new-service");
+    };
 
     return (
         <div className="p-8 flex-1">
             <div className='flex justify-between items-center mb-2'>
                 <h1 className="text-2xl font-semibold mb-4">Services List</h1>
-                <button onClick={openServiceForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'><AddIcon /> Add New Service</button>
+                <button onClick={openServiceForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'>
+                    <AddIcon /> Add New Service
+                </button>
             </div>
 
             {/* Scrollable container */}
@@ -66,7 +72,7 @@ const Services = () => {
                     <tbody>
                         {services.length === 0 ? (
                             <tr>
-                                <td colSpan="4" className="py-4 text-center">
+                                <td colSpan="5" className="py-4 text-center">
                                     No data found
                                 </td>
                             </tr>
@@ -92,20 +98,15 @@ const Services = () => {
                                             <span>Edit</span>
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteServices(service.id)}
+                                            onClick={() => {
+                                                setServiceToDelete(service.id);
+                                                setShowConfirm(true);
+                                            }}
                                             className="flex items-center gap-1 px-2 py-1 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-lightWhite transition"
                                         >
                                             <DeleteIcon fontSize="small" />
                                             <span>Delete</span>
                                         </button>
-
-                                        {showPopup && (
-                                            <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
-                                                <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
-                                                    <p>Successfully deleted a service!</p>
-                                                </div>
-                                            </div>
-                                        )}
                                     </td>
                                 </tr>
                             ))
@@ -113,8 +114,40 @@ const Services = () => {
                     </tbody>
                 </table>
             </div>
-        </div>
-    )
-}
 
-export default Services
+            {/* Delete confirmation popup */}
+            {showConfirm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <p className="text-lg font-semibold mb-4">Are you sure you want to delete this?</p>
+                        <div className="flex justify-end gap-3">
+                            <button 
+                                onClick={() => setShowConfirm(false)}
+                                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition"
+                            >
+                                No
+                            </button>
+                            <button 
+                                onClick={handleDeleteServices}
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                            >
+                                Yes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Success popup */}
+            {showPopup && (
+                <div className="fixed inset-0 flex items-start justify-center mt-5 z-50">
+                    <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-md">
+                        <p>Successfully deleted a service!</p>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Services;
