@@ -49,13 +49,13 @@ const Riders = () => {
     };
 
     return (
-        <div className="p-8 h-[100vh] flex-1">
+        <div className="p-8 h-[89vh] flex-1">
             <div className='flex justify-between items-center mb-2'>
                 <h1 className="text-2xl font-semibold mb-4">Riders List</h1>
                 <button onClick={openRiderForm} className='bg-darkBlack p-2 text-lightWhite hover:bg-lightBlack'><AddIcon /> Add New Rider</button>
             </div>
 
-            <div className="min-w-full h-[80%] overflow-x-auto overflow-y-auto">
+            <div className="min-w-full h-[90%] overflow-x-auto overflow-y-auto">
                 <table className="min-w-full bg-lightWhite border border-gray-200">
                     <thead className="bg-gray-800 text-lightWhite sticky top-0">
                         <tr className="text-left">
