@@ -18,23 +18,15 @@ const AcceptedOrders = () => {
 
     const statusSteps = ['Accepted', 'Picked Up', 'On the Way', 'Completed'];
 
+    const fetchOrders = async () => {
+        const response = await getDocs(collection(db, "orders"));
+        const orderList = response.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setOrders(orderList);
+    };
+
     useEffect(() => {
-        const fetchOrders = async () => {
-          try {
-            const ordersCollection = collection(db, "orders");
-            const orderSnapshot = await getDocs(ordersCollection);
-            const orderList = orderSnapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
-            console.log("Fetched Orders:", orderList); // Check if data is fetched
-            setOrders(orderList);
-          } catch (error) {
-            console.error("Error fetching orders:", error);
-          }
-        };
         fetchOrders();
-      }, []);
+    }, []);
 
     const handleViewOrder = (order) => {
         const transformedOrder = {
@@ -90,6 +82,7 @@ const AcceptedOrders = () => {
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Item/s to buy', key: 'itemsToBuy' },
                     { name: 'Total Price', key: 'totalPrice' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Special Delivery':
                 return [
@@ -98,7 +91,8 @@ const AcceptedOrders = () => {
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Description', key: 'description' },
                     { name: 'Special Instructions', key: 'specialInstructions' },
-                    { name: 'Estimated Cost', key: 'estimatedCost' }
+                    { name: 'Estimated Cost', key: 'estimatedCost' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Parcel Pickup':
                 return [
@@ -107,7 +101,8 @@ const AcceptedOrders = () => {
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Parcel Details', key: 'parcelDetails' },
                     { name: 'Pickup Location', key: 'pickupLocation' },
-                    { name: 'Estimated Weight', key: 'estimatedWeight' }
+                    { name: 'Estimated Weight', key: 'estimatedWeight' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Pamalengke':
                 return [
@@ -117,7 +112,8 @@ const AcceptedOrders = () => {
                     { name: 'List of Items', key: 'listOfItems' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' }
+                    { name: 'Special Instructions', key: 'specialInstructions' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Hatid Sundo':
                 return [
@@ -127,7 +123,8 @@ const AcceptedOrders = () => {
                     { name: 'Pickup Location', key: 'pickupLocation' },
                     { name: 'Dropoff Location', key: 'dropoffLocation' },
                     { name: 'Pickup Time', key: 'pickupTime' },
-                    { name: 'Special Requests', key: 'specialRequests' }
+                    { name: 'Special Requests', key: 'specialRequests' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Bill Payment':
                 return [
@@ -139,7 +136,8 @@ const AcceptedOrders = () => {
                     { name: 'Account Number', key: 'accountNumber' },
                     { name: 'Amount', key: 'amount' },
                     { name: 'Bill Date', key: 'billDate' },
-                    { name: 'Due Date', key: 'dueDate' }
+                    { name: 'Due Date', key: 'dueDate' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Pera Padala':
                 return [
@@ -150,7 +148,8 @@ const AcceptedOrders = () => {
                     { name: 'Receiver Name', key: 'receiverName' },
                     { name: 'Receiver Phone', key: 'receiverPhone' },
                     { name: 'Receiver Address', key: 'receiverAddress' },
-                    { name: 'Amount', key: 'amount' }
+                    { name: 'Amount', key: 'amount' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Medicine':
                 return [
@@ -161,7 +160,8 @@ const AcceptedOrders = () => {
                     { name: 'List of Items', key: 'listOfItems' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' }
+                    { name: 'Special Instructions', key: 'specialInstructions' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             default:
                 return [
@@ -169,6 +169,7 @@ const AcceptedOrders = () => {
                     { name: 'Services', key: 'service' },
                     { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
         }
     };
@@ -220,6 +221,7 @@ const AcceptedOrders = () => {
                         ) : (
                             orders
                                 .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
+                                .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
                                 .map((order) => (
                                     <tr key={order.id} className="text-left">
                                         {getTableColumns().map(({ key }, index) => (
