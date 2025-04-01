@@ -82,7 +82,6 @@ const AcceptedOrders = () => {
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Item/s to buy', key: 'itemsToBuy' },
                     { name: 'Total Price', key: 'totalPrice' },
-                    { name: 'Date Created', key: 'createdAt' },
                 ];
             case 'Special Delivery':
                 return [
@@ -91,8 +90,7 @@ const AcceptedOrders = () => {
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Description', key: 'description' },
                     { name: 'Special Instructions', key: 'specialInstructions' },
-                    { name: 'Estimated Cost', key: 'estimatedCost' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Estimated Cost', key: 'estimatedCost' }
                 ];
             case 'Parcel Pickup':
                 return [
@@ -101,8 +99,7 @@ const AcceptedOrders = () => {
                     { name: 'Phone Number', key: 'phoneNumber' },
                     { name: 'Parcel Details', key: 'parcelDetails' },
                     { name: 'Pickup Location', key: 'pickupLocation' },
-                    { name: 'Estimated Weight', key: 'estimatedWeight' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Estimated Weight', key: 'estimatedWeight' }
                 ];
             case 'Pamalengke':
                 return [
@@ -112,8 +109,7 @@ const AcceptedOrders = () => {
                     { name: 'List of Items', key: 'listOfItems' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Special Instructions', key: 'specialInstructions' }
                 ];
             case 'Hatid Sundo':
                 return [
@@ -123,8 +119,7 @@ const AcceptedOrders = () => {
                     { name: 'Pickup Location', key: 'pickupLocation' },
                     { name: 'Dropoff Location', key: 'dropoffLocation' },
                     { name: 'Pickup Time', key: 'pickupTime' },
-                    { name: 'Special Requests', key: 'specialRequests' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Special Requests', key: 'specialRequests' }
                 ];
             case 'Bill Payment':
                 return [
@@ -136,8 +131,7 @@ const AcceptedOrders = () => {
                     { name: 'Account Number', key: 'accountNumber' },
                     { name: 'Amount', key: 'amount' },
                     { name: 'Bill Date', key: 'billDate' },
-                    { name: 'Due Date', key: 'dueDate' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Due Date', key: 'dueDate' }
                 ];
             case 'Pera Padala':
                 return [
@@ -148,8 +142,7 @@ const AcceptedOrders = () => {
                     { name: 'Receiver Name', key: 'receiverName' },
                     { name: 'Receiver Phone', key: 'receiverPhone' },
                     { name: 'Receiver Address', key: 'receiverAddress' },
-                    { name: 'Amount', key: 'amount' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Amount', key: 'amount' }
                 ];
             case 'Medicine':
                 return [
@@ -160,8 +153,7 @@ const AcceptedOrders = () => {
                     { name: 'List of Items', key: 'listOfItems' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' },
-                    { name: 'Date Created', key: 'createdAt' },
+                    { name: 'Special Instructions', key: 'specialInstructions' }
                 ];
             default:
                 return [
@@ -169,7 +161,6 @@ const AcceptedOrders = () => {
                     { name: 'Services', key: 'service' },
                     { name: 'Customer Name', key: 'customerName' },
                     { name: 'Phone Number', key: 'phoneNumber' },
-                    { name: 'Date Created', key: 'createdAt' },
                 ];
         }
     };
@@ -221,7 +212,6 @@ const AcceptedOrders = () => {
                         ) : (
                             orders
                                 .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
-                                .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
                                 .map((order) => (
                                     <tr key={order.id} className="text-left">
                                         {getTableColumns().map(({ key }, index) => (
