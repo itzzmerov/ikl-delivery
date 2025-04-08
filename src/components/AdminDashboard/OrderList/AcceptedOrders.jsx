@@ -29,12 +29,23 @@ const AcceptedOrders = () => {
     }, []);
 
     const handleViewOrder = (order) => {
+
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);  // Convert the Firebase date string to a Date object
+            return new Intl.DateTimeFormat('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            }).format(date); // Format the date as "February 27, 2025"
+        };
+
         const transformedOrder = {
             Status: order.status || 'N/A',
             Service: order.service || 'N/A',
             'Customer Name': `${order.customerFirstName || 'N/A'} ${order.customerLastName || 'N/A'}`,
             'Phone Number': `${order.phoneNumber || 'N/A'}`,
             'Address': `${order.address || order.customerAddress || order.pickupLocation || 'N/A'}`,
+            'Date Created': order.createdAt ? formatDate(order.createdAt) : 'N/A',
             ...Object.fromEntries(
                 Object.entries(order).filter(
                     ([key]) => !['id', 'userId', 'createdAt', 'customerFirstName', 'customerLastName', 'customerPhone', 'customerAddress', 'address', 'phoneNumber', 'senderAddress', 'status', 'service', 'itemsToBuy'].includes(key)
@@ -153,7 +164,8 @@ const AcceptedOrders = () => {
                     { name: 'List of Items', key: 'listOfItems' },
                     { name: 'Store Preference', key: 'storePreference' },
                     { name: 'Estimated Price', key: 'estimatedPrice' },
-                    { name: 'Special Instructions', key: 'specialInstructions' }
+                    { name: 'Special Instructions', key: 'specialInstructions' },
+                    { name: 'Date Created', key: 'createdAt' },
                 ];
             default:
                 return [
@@ -212,6 +224,12 @@ const AcceptedOrders = () => {
                         ) : (
                             orders
                                 .filter(order => serviceFilter === 'All' || order.service === serviceFilter)
+                                .sort((a, b) => {
+                                    // Check if createdAt is a Firebase Timestamp or a JavaScript Date
+                                    const dateA = a.createdAt instanceof Date ? a.createdAt : (a.createdAt ? new Date(a.createdAt) : new Date(0));
+                                    const dateB = b.createdAt instanceof Date ? b.createdAt : (b.createdAt ? new Date(b.createdAt) : new Date(0));
+                                    return dateB - dateA; // Sort descending (latest date first)
+                                })
                                 .map((order) => (
                                     <tr key={order.id} className="text-left">
                                         {getTableColumns().map(({ key }, index) => (
