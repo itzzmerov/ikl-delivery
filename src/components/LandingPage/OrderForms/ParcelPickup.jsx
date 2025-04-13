@@ -85,9 +85,8 @@ const ParcelPickup = ({ onClose }) => {
                 createdAt: new Date().toISOString(),
                 basePrice,
             };
-    
-            const orderRef = await addDoc(collection(db, 'orders'), parcelData);
-            console.log('Parcel Pickup request created with ID:', orderRef.id);
+     
+            await addDoc(collection(db, 'orders'), parcelData);
     
             const notificationMessage = `${formData.customerFirstName} ${formData.customerLastName} has placed a new ${formData.service} order.`;
             await addDoc(collection(db, 'notifications'), {

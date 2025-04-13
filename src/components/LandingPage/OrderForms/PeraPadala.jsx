@@ -89,6 +89,13 @@ const PeraPadala = ({ onClose }) => {
 
             await addDoc(collection(db, 'orders'), orderData);
 
+            const notificationMessage = `${formData.customerFirstName} ${formData.customerLastName} has placed a new ${formData.service} order.`;
+                await addDoc(collection(db, 'notifications'), {
+                    message: notificationMessage,
+                    timestamp: new Date(),
+                    status: "unread",
+            });
+
             setShowPopup(true);
 
             setTimeout(() => {
