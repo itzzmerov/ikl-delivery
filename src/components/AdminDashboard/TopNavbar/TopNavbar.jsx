@@ -5,6 +5,10 @@ import { signOut } from 'firebase/auth';
 import { collection, query, orderBy, limit, onSnapshot, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { Timestamp } from 'firebase/firestore';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const TopNavbar = ({ toggleSidebar }) => {
     const { currentUser } = useAuth();
@@ -18,7 +22,14 @@ const TopNavbar = ({ toggleSidebar }) => {
     useEffect(() => {
         const q = query(collection(db, 'notifications'), orderBy('timestamp', 'desc'), limit(20));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setNotifications(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setNotifications(snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    ...data,
+                    timestamp: data.timestamp?.seconds ? Timestamp.fromMillis(data.timestamp.seconds * 1000) : null
+                };
+            }));
         });
         return () => unsubscribe();
     }, []);
@@ -82,7 +93,13 @@ const TopNavbar = ({ toggleSidebar }) => {
                             ) : (
                                 notifications.map((notif) => (
                                     <li key={notif.id} className="px-4 py-2 hover:bg-gray-100 border-b">
-                                        {notif.message}
+                                        <div className="font-medium">{notif.message}</div>
+                                        <div className="text-xs text-gray-500">
+                                            {notif.timestamp ? dayjs(notif.timestamp.toDate()).fromNow() : ''}
+                                        </div>
+                                        {/* <div className="text-xs text-gray-500">
+                                            {notif.timestamp?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div> */}
                                     </li>
                                 ))
                             )}
