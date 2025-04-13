@@ -20,7 +20,7 @@ const Medicine = ({ onClose }) => {
         specialInstructions: '',
         address: '',
     });
-
+ 
     useEffect(() => {
         const fetchUserData = async () => {
             if (!currentUser) return;
@@ -90,6 +90,13 @@ const Medicine = ({ onClose }) => {
 
             const result = await addDoc(collection(db, 'orders'), medicineData);
             console.log('Medicine request created with ID:', result.id);
+
+            const notificationMessage = `${formData.customerFirstName} ${formData.customerLastName} has placed a new ${formData.service} order.`;
+            await addDoc(collection(db, 'notifications'), {
+                message: notificationMessage,
+                timestamp: new Date(),
+                status: "unread",
+            });
 
             setShowPopup(true);
 
