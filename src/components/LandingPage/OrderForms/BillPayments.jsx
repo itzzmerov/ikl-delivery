@@ -46,7 +46,7 @@ const BillPayments = ({ onClose }) => {
                 console.error('Error fetching user data:', error);
             }
         };
-
+ 
         const fetchBasePrice = async () => {
             try {
                 const servicesQuery = query(
@@ -93,6 +93,13 @@ const BillPayments = ({ onClose }) => {
 
             const result = await addDoc(collection(db, 'orders'), paymentData);
             console.log('Bill Payment created with ID:', result.id);
+
+            const notificationMessage = `${formData.customerFirstName} ${formData.customerLastName} has placed a new ${formData.service} order.`;
+            await addDoc(collection(db, 'notifications'), {
+                message: notificationMessage,
+                timestamp: new Date(),
+                status: "unread",
+            });
 
             setShowPopup(true);
 

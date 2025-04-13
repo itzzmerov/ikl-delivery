@@ -37,7 +37,7 @@ const FoodDelivery = ({ onClose }) => {
             { name: "Chopsuey", price: 235 },
             { name: "Shan’s Halo-Halo", price: 85 },
             { name: "Garlic Chicken", price: 275 }
-        ],
+        ], 
         "Kenoks": [
             { name: "Beef Steak", price: 220 },
             { name: "Beef Caldereta", price: 220 },
@@ -161,6 +161,13 @@ const FoodDelivery = ({ onClose }) => {
 
             const result = await addDoc(collection(db, 'orders'), deliveryData);
             console.log('Food Delivery request created with ID:', result.id);
+
+            const notificationMessage = `${formData.customerFirstName} ${formData.customerLastName} has placed a new ${formData.service} order.`;
+            await addDoc(collection(db, 'notifications'), {
+                message: notificationMessage,
+                timestamp: new Date(),
+                status: "unread",
+            });
 
             setShowPopup(true);
 
