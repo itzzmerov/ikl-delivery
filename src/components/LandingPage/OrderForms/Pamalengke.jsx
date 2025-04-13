@@ -95,6 +95,7 @@ const Pamalengke = ({ onClose }) => {
                 message: notificationMessage,
                 timestamp: new Date(),
                 status: "unread",
+                userId: currentUser.uid,
             });
 
             setShowPopup(true);
