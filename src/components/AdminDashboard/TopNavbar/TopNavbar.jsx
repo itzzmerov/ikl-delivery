@@ -2,19 +2,36 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaBars, FaBell, FaUserCircle } from 'react-icons/fa';
 import { auth, db } from '../../../utils/firebase';
 import { signOut } from 'firebase/auth';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot, addDoc, deleteDoc, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const TopNavbar = ({ toggleSidebar }) => {
     const { currentUser } = useAuth();
     const [isAccountMenuVisible, setIsAccountMenuVisible] = useState(false);
-    const [notificationOpen, setNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
-    const [unreadCount, setUnreadCount] = useState(0);
+    const [isNotificationsVisible, setIsNotificationsVisible] = useState(false);
     const navigate = useNavigate();
     const accountMenuRef = useRef(null);
-    const notificationRef = useRef(null);
+    const notificationsRef = useRef(null);
+
+    useEffect(() => {
+        const q = query(collection(db, 'notifications'), orderBy('timestamp', 'desc'), limit(20));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            setNotifications(snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    ...data,
+                    timestamp: data.timestamp?.seconds ? Timestamp.fromMillis(data.timestamp.seconds * 1000) : null
+                };
+            }));
+        });
+        return () => unsubscribe();
+    }, []);
 
     const handleAccountClick = () => {
         setIsAccountMenuVisible(!isAccountMenuVisible);
@@ -29,60 +46,34 @@ const TopNavbar = ({ toggleSidebar }) => {
         }
     };
 
-    useEffect(() => {
-        if (currentUser) {
-            const q = query(collection(db, 'orders')); // Listen to all orders
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                const newNotifications = snapshot.docChanges().map((change) => {
-                    if (change.type === "modified") { // Check if status was modified
-                        const data = change.doc.data();
-                        return {
-                            id: change.doc.id,
-                            service: data.service,
-                            customerFirstName: data.customerFirstName,
-                            customerLastName: data.customerLastName,
-                            status: data.status, // Get updated status
-                            riderName: data.riderName || "a rider", // Default if missing
-                            timestamp: data.timestamp || new Date() // Fallback for sorting
-                        };
-                    }
-                    return null;
-                }).filter(notif => notif !== null); // Remove null values
-
-                if (newNotifications.length > 0) {
-                    setNotifications((prev) => [...newNotifications, ...prev]); // Add new notifications to the list
-                    setUnreadCount((prev) => prev + newNotifications.length);
-                }
+    const handleBellClick = async () => {
+        const newVisibility = !isNotificationsVisible;
+        setIsNotificationsVisible(newVisibility);
+    
+        if (newVisibility) {
+            // Mark unread notifications as read in Firestore
+            const unreadNotifs = notifications.filter(n => n.status === 'unread');
+            unreadNotifs.forEach(async (notif) => {
+                const notifRef = doc(db, 'notifications', notif.id);
+                await updateDoc(notifRef, { status: 'read' });
             });
-
-            return () => unsubscribe();
         }
-    }, [currentUser]);
+    };
+    
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
-                accountMenuRef.current &&
-                !accountMenuRef.current.contains(event.target) &&
-                notificationRef.current &&
-                !notificationRef.current.contains(event.target)
+                accountMenuRef.current && !accountMenuRef.current.contains(event.target) &&
+                notificationsRef.current && !notificationsRef.current.contains(event.target)
             ) {
                 setIsAccountMenuVisible(false);
-                setNotificationOpen(false);
+                setIsNotificationsVisible(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
-    const toggleNotification = () => {
-        setNotificationOpen(!notificationOpen);
-
-        if (!notificationOpen) {
-            setUnreadCount(0);
-        }
-    };
 
     return (
         <div className="w-full flex items-center justify-between bg-lightWhite p-4 shadow">
@@ -95,49 +86,36 @@ const TopNavbar = ({ toggleSidebar }) => {
                     <FaBars />
                 </button>
             </div>
-            <div className="flex items-center gap-4">
-                <div className="relative" ref={notificationRef}>
-                    <button
-                        onClick={toggleNotification}
-                        className="relative"
-                        aria-label="View Notifications"
-                    >
-                        <FaBell className="w-8 h-8 text-black cursor-pointer" />
-                        {unreadCount > 0 && (
-                            <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {unreadCount}
-                            </div>
-                        )}
-                    </button>
-                    {notificationOpen && (
-                        <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-80 max-h-96 z-50 overflow-y-auto">
-                            <h3 className="p-4 border-b font-semibold">Notifications</h3>
-                            <ul>
-                                {notifications.length > 0 ? (
-                                    notifications
-                                        .slice()
-                                        .sort((a, b) =>
-                                            new Date(a.timestamp || 0) - new Date(b.timestamp || 0)
-                                        )
-                                        .map((notif) => (
-                                            <li
-                                                key={notif.id}
-                                                className="p-4 hover:bg-gray-100 border-b"
-                                            >
-                                                <span>
-                                                    The "{notif.service}" order of {notif.customerFirstName} {notif.customerLastName} was {notif.status} by {notif.riderName}.
-                                                </span>
-                                            </li>
-                                        ))
-                                ) : (
-                                    <li className="p-4 text-center text-gray-500">
-                                        No new notifications
-                                    </li>
-                                )}
-                            </ul>
-                        </div>
+            <div className="flex items-center gap-4 relative">
+                <div className="relative">
+                    <FaBell className="w-8 h-8 text-black cursor-pointer" onClick={handleBellClick} />
+                    {notifications.filter(n => n.status === 'unread').length > 0 && (
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                            {notifications.filter(n => n.status === 'unread').length}
+                        </span>
                     )}
                 </div>
+                {isNotificationsVisible && (
+                    <div ref={notificationsRef} className="absolute right-10 top-12 w-64 bg-white shadow-lg rounded-md border p-2 z-50">
+                        <ul className="text-sm text-gray-700 max-h-60 overflow-y-auto">
+                            {notifications.length === 0 ? (
+                                <li className="px-4 py-2 text-gray-500">No new notifications</li>
+                            ) : (
+                                notifications.map((notif) => (
+                                    <li key={notif.id} className={`px-4 py-2 hover:bg-gray-100 border-b ${notif.status === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}>
+                                        <div className="font-medium">{notif.message}</div>
+                                        <div className="text-xs text-gray-500">
+                                            {notif.timestamp ? dayjs(notif.timestamp.toDate()).fromNow() : ''}
+                                        </div>
+                                        {/* <div className="text-xs text-gray-500">
+                                            {notif.timestamp?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div> */}
+                                    </li>
+                                ))
+                            )}
+                        </ul>
+                    </div>
+                )}
                 <div className="relative">
                     <FaUserCircle
                         size={35}

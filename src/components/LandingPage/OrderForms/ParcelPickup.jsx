@@ -77,7 +77,7 @@ const ParcelPickup = ({ onClose }) => {
             console.error('User not logged in');
             return;
         }
-
+    
         try {
             const parcelData = {
                 ...formData,
@@ -85,12 +85,17 @@ const ParcelPickup = ({ onClose }) => {
                 createdAt: new Date().toISOString(),
                 basePrice,
             };
-
-            const result = await addDoc(collection(db, 'orders'), parcelData);
-            console.log('Parcel Pickup request created with ID:', result.id);
-
+     
+            await addDoc(collection(db, 'orders'), parcelData);
+    
+            const notificationMessage = `${formData.customerFirstName} ${formData.customerLastName} has placed a new ${formData.service} order.`;
+            await addDoc(collection(db, 'notifications'), {
+                message: notificationMessage,
+                timestamp: new Date(),
+                status: "unread",
+            });
+    
             setShowPopup(true);
-
             setTimeout(() => {
                 setShowPopup(false);
                 onClose();
@@ -99,6 +104,7 @@ const ParcelPickup = ({ onClose }) => {
             console.error('Error adding Parcel Pickup request:', error.message);
         }
     };
+    
 
     return (
         <div className='flex justify-center h-auto w-full rounded-full'>
