@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaBars, FaBell, FaUserCircle } from 'react-icons/fa';
 import { auth, db } from '../../../utils/firebase';
 import { signOut } from 'firebase/auth';
-import { collection, query, orderBy, limit, onSnapshot, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot, addDoc, deleteDoc, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { Timestamp } from 'firebase/firestore';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -47,9 +46,20 @@ const TopNavbar = ({ toggleSidebar }) => {
         }
     };
 
-    const handleBellClick = () => {
-        setIsNotificationsVisible(!isNotificationsVisible);
+    const handleBellClick = async () => {
+        const newVisibility = !isNotificationsVisible;
+        setIsNotificationsVisible(newVisibility);
+    
+        if (newVisibility) {
+            // Mark unread notifications as read in Firestore
+            const unreadNotifs = notifications.filter(n => n.status === 'unread');
+            unreadNotifs.forEach(async (notif) => {
+                const notifRef = doc(db, 'notifications', notif.id);
+                await updateDoc(notifRef, { status: 'read' });
+            });
+        }
     };
+    
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -79,9 +89,9 @@ const TopNavbar = ({ toggleSidebar }) => {
             <div className="flex items-center gap-4 relative">
                 <div className="relative">
                     <FaBell className="w-8 h-8 text-black cursor-pointer" onClick={handleBellClick} />
-                    {notifications.length > 0 && (
+                    {notifications.filter(n => n.status === 'unread').length > 0 && (
                         <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-                            {notifications.length}
+                            {notifications.filter(n => n.status === 'unread').length}
                         </span>
                     )}
                 </div>
@@ -92,7 +102,7 @@ const TopNavbar = ({ toggleSidebar }) => {
                                 <li className="px-4 py-2 text-gray-500">No new notifications</li>
                             ) : (
                                 notifications.map((notif) => (
-                                    <li key={notif.id} className="px-4 py-2 hover:bg-gray-100 border-b">
+                                    <li key={notif.id} className={`px-4 py-2 hover:bg-gray-100 border-b ${notif.status === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}>
                                         <div className="font-medium">{notif.message}</div>
                                         <div className="text-xs text-gray-500">
                                             {notif.timestamp ? dayjs(notif.timestamp.toDate()).fromNow() : ''}
