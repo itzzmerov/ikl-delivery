@@ -17,19 +17,36 @@ const TopNavbar = ({ toggleSidebar }) => {
     const navigate = useNavigate();
     const accountMenuRef = useRef(null);
     const notificationsRef = useRef(null);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
         const q = query(collection(db, 'notifications'), orderBy('timestamp', 'desc'), limit(20));
+        
+        // const unsubscribe = onSnapshot(q, (snapshot) => {
+        //     setNotifications(snapshot.docs.map(doc => {
+        //         const data = doc.data();
+        //         return {
+        //             id: doc.id,
+        //             ...data,
+        //             timestamp: data.timestamp?.seconds ? Timestamp.fromMillis(data.timestamp.seconds * 1000) : null
+        //         };
+        //     }));
+        // });
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setNotifications(snapshot.docs.map(doc => {
+            const notifData = snapshot.docs.map((doc) => {
                 const data = doc.data();
                 return {
                     id: doc.id,
                     ...data,
                     timestamp: data.timestamp?.seconds ? Timestamp.fromMillis(data.timestamp.seconds * 1000) : null
                 };
-            }));
+            });
+
+            setNotifications(notifData);
+            setUnreadCount(notifData.filter((n) => n.isread_admin === 'unread').length);
         });
+
         return () => unsubscribe();
     }, []);
 
@@ -89,9 +106,9 @@ const TopNavbar = ({ toggleSidebar }) => {
             <div className="flex items-center gap-4 relative">
                 <div className="relative">
                     <FaBell className="w-8 h-8 text-black cursor-pointer" onClick={handleBellClick} />
-                    {notifications.filter(n => n.status === 'unread').length > 0 && (
+                    {notifications.filter(n => n.isread_admin === 'unread').length > 0 && (
                         <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-                            {notifications.filter(n => n.status === 'unread').length}
+                            {notifications.filter(n => n.isread_admin === 'unread').length}
                         </span>
                     )}
                 </div>

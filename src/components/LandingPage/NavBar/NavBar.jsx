@@ -123,7 +123,7 @@ const NavBar = () => {
                 });
     
                 setNotifications(notifData);
-                setUnreadCount(notifData.filter((n) => n.status === 'unread').length);
+                setUnreadCount(notifData.filter((n) => n.isread_customer === 'unread').length);
             });
     
             return () => unsubscribe();
@@ -143,8 +143,6 @@ const NavBar = () => {
     
             setUnreadCount(0);
         }
-
-        console.log("Current User UID:", currentUser?.uid);
     };
 
     return (
