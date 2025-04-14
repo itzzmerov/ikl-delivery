@@ -14,6 +14,7 @@ const Login = () => {
     });
 
     const [welcomeMessage, setWelcomeMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -34,6 +35,13 @@ const Login = () => {
             if (userDoc.exists()) {
                 const userData = userDoc.data();
                 console.log('User data:', userData);
+
+                if (!userData.isVerified) {
+                    setErrorMessage(
+                        'Your account is currently undergoing the verification process. Please wait for confirmation before attempting to log in.'
+                    );
+                    return;
+                }
 
                 setWelcomeMessage(
                     `Welcome back, ${userData.firstName || 'User'}! You are logged in as ${userData.userType || 'a user'
@@ -99,6 +107,12 @@ const Login = () => {
                 {welcomeMessage && (
                     <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center">
                         {welcomeMessage}
+                    </div>
+                )}
+
+                {errorMessage && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">
+                        {errorMessage}
                     </div>
                 )}
 

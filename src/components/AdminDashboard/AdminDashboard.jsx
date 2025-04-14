@@ -28,6 +28,7 @@ import Reports from './Reports/Reports';
 import Admins from './AdminManagement/Admins';
 import UpdateAdmins from './UpdateForms/UpdateAdmins/UpdateAdmins';
 import AddNewAdmin from './AddForms/AddNewAdmin/AddNewAdmin';
+import UserVerification from './UserVerification/UserVerification';
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -54,6 +55,7 @@ const AdminDashboard = () => {
                         <Route path="riders-history" element={<RiderHistory />} />
                         <Route path="analytics" element={<Analytics />} />
                         <Route path="reports" element={<Reports />} />
+                        <Route path="user-verification" element={<UserVerification />} />
 
                         {/* Link for Orders */}
                         {/* <Route path="orders/pending-orders" element={<PendingOrders />} /> */}

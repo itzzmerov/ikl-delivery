@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Logo from '../../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth, db } from '../../utils/firebase';
+import { auth, db, storage } from '../../utils/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Register = () => {
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [popupType, setPopupType] = useState('success');
+    const [idFile, setIdFile] = useState(null);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -36,32 +38,49 @@ const Register = () => {
         });
     };
 
+    const handleIdUpload = (e) => {
+        setIdFile(e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+
+        if (!idFile) {
+            setPopupMessage('Please upload a valid ID before registering.');
+            setPopupType('error');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000);
+            return;
+        }
+
         try {
             const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             const userId = response.user.uid;
 
+            // Upload ID image to Firebase Storage
+            const idStorageRef = ref(storage, `id_uploads/${userId}.jpg`);
+            await uploadBytes(idStorageRef, idFile);
+            const idUrl = await getDownloadURL(idStorageRef);
+
+            // Create user document
             await setDoc(doc(db, 'users', userId), {
-                firstName: formData.firstName,
-                middleName: formData.middleName,
-                lastName: formData.lastName,
-                username: formData.username,
-                email: formData.email,
-                phoneNumber: formData.phoneNumber,
-                userType: formData.userType,
-                house: formData.house,
-                street: formData.street,
-                barangay: formData.barangay,
-                city: formData.city,
-                region: formData.region,
-                zip: formData.zip,
+                ...formData,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
+                isVerified: false, // important for restricting usage
             });
 
-            setPopupMessage('Created Account Successfully! Please login!');
+            // Create verification entry
+            await setDoc(doc(db, 'id_verifications', userId), {
+                userId,
+                fullName: `${formData.firstName} ${formData.middleName} ${formData.lastName}`,
+                email: formData.email,
+                uploadedIdUrl: idUrl,
+                status: 'pending',
+                submittedAt: serverTimestamp(),
+            });
+
+            setPopupMessage('Account created successfully! Waiting for admin verification.');
             setPopupType('success');
             setShowPopup(true);
 
@@ -69,9 +88,9 @@ const Register = () => {
                 setShowPopup(false);
                 navigate('/login');
             }, 2000);
+
         } catch (error) {
             console.error('Error during registration:', error.message);
-
             if (error.code === 'auth/email-already-in-use') {
                 setPopupMessage('Email is already in use. Please use another one!');
             } else {
@@ -79,10 +98,7 @@ const Register = () => {
             }
             setPopupType('error');
             setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-            }, 3000);
+            setTimeout(() => setShowPopup(false), 3000);
         }
     };
 
@@ -224,6 +240,11 @@ const Register = () => {
                         onChange={handleInputChange}
                         value={formData.password}
                     />
+
+                    <div className="w-full mb-4">
+                        <label className="block mb-1 font-medium">Upload Valid ID (Image Only):</label>
+                        <input type="file" accept="image/*" onChange={handleIdUpload} required className="w-full border border-gray-400 rounded-xl p-2" />
+                    </div>
 
                     <button
                         type="submit"
