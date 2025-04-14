@@ -52,10 +52,10 @@ const TopNavbar = ({ toggleSidebar }) => {
     
         if (newVisibility) {
             // Mark unread notifications as read in Firestore
-            const unreadNotifs = notifications.filter(n => n.status === 'unread');
+            const unreadNotifs = notifications.filter(n => n.isread_admin === 'unread');
             unreadNotifs.forEach(async (notif) => {
                 const notifRef = doc(db, 'notifications', notif.id);
-                await updateDoc(notifRef, { status: 'read' });
+                await updateDoc(notifRef, { isread_admin: 'read' });
             });
         }
     };
@@ -102,7 +102,7 @@ const TopNavbar = ({ toggleSidebar }) => {
                                 <li className="px-4 py-2 text-gray-500">No new notifications</li>
                             ) : (
                                 notifications.map((notif) => (
-                                    <li key={notif.id} className={`px-4 py-2 hover:bg-gray-100 border-b ${notif.status === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}>
+                                    <li key={notif.id} className={`px-4 py-2 hover:bg-gray-100 border-b ${notif.isread_admin === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}>
                                         <div className="font-medium">{notif.message}</div>
                                         <div className="text-xs text-gray-500">
                                             {notif.timestamp ? dayjs(notif.timestamp.toDate()).fromNow() : ''}

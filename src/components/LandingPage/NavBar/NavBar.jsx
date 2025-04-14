@@ -135,10 +135,10 @@ const NavBar = () => {
         setNotificationOpen(newOpen);
     
         if (newOpen) {
-            const unread = notifications.filter(n => n.status === 'unread');
+            const unread = notifications.filter(n => n.isread_customer === 'unread');
             unread.forEach(async (notif) => {
                 const notifRef = doc(db, 'notifications', notif.id);
-                await updateDoc(notifRef, { status: 'read' });
+                await updateDoc(notifRef, { isread_customer: 'read' });
             });
     
             setUnreadCount(0);
@@ -181,7 +181,7 @@ const NavBar = () => {
                                                 notifications.map((notif) => (
                                                     <li
                                                         key={notif.id}
-                                                        className={`px-4 py-2 border-b ${notif.status === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}
+                                                        className={`px-4 py-2 border-b ${notif.isread_customer === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}
                                                     >
                                                         <div className="font-medium">{notif.message}</div>
                                                         <div className="text-xs text-gray-500">

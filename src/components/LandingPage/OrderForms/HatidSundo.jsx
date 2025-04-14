@@ -93,7 +93,9 @@ const HatidSundo = ({ onClose }) => {
             await addDoc(collection(db, 'notifications'), {
                 message: notificationMessage,
                 timestamp: new Date(),
-                status: "unread",
+                isread_customer: "unread",
+                isread_admin: "unread",
+                isread_rider: "unread",
                 userId: currentUser.uid,
             });
 
