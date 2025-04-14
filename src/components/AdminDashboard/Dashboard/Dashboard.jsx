@@ -9,7 +9,7 @@ const Dashboard = () => {
     const [numCustomers, setNumCustomers] = useState(0);
     const [userName, setUserName] = useState("Admin");
 
-    //DATA FOR CRDS
+    //DATA FOR CARDS
     const [numOrders, setNumOrders] = useState(0);
     const [numRiders, setNumRiders] = useState(0);
     const [averageReviews, setAverageReviews] = useState(0);
@@ -46,15 +46,17 @@ const Dashboard = () => {
         const response = await getDocs(ordersQuery);
         const orders = response.docs.map(doc => doc.data());
 
+        setNumOrders(orders.length);
+
         const ordersByMonth = {};
         const servicesByMonth = {};
         const servicesByWeek = {};
 
         orders.forEach(order => {
-            if (!order.createdAt) return; // Skip if createdAt is missing
+            if (!order.createdAt) return;
 
             const date = new Date(order.createdAt);
-            if (isNaN(date.getTime())) return; // Skip if createdAt is an invalid date
+            if (isNaN(date.getTime())) return;
 
             const month = date.toLocaleString('default', { month: 'short' });
             const week = `Week ${Math.ceil(date.getDate() / 7)}`;
@@ -68,7 +70,7 @@ const Dashboard = () => {
         setOrdersPerMonth(
             Object.entries(ordersByMonth)
                 .map(([month, count]) => ({ month, count }))
-                .filter(item => item.count > 0) // Ensure count is valid
+                .filter(item => item.count > 0)
         );
 
         setServicesPerMonth(
@@ -117,7 +119,6 @@ const Dashboard = () => {
         fetchAverageReviews();
     }, []);
 
-    // Define card data
     const cards = [
         { title: 'Customers', value: numCustomers, icon: <FaUserFriends />, bgColor: 'bg-gradient-to-r from-blue-500 to-green-400', textColor: 'text-white' },
         { title: 'Orders', value: numOrders, icon: <FaClipboardList />, bgColor: 'bg-gradient-to-r from-purple-400 to-pink-500', textColor: 'text-white' },
