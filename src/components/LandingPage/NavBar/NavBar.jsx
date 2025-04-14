@@ -8,8 +8,11 @@ import { useAuth } from '../../../hooks/useAuth';
 import { FaCircleUser } from "react-icons/fa6";
 import OrdersPage from '../OrdersPage/OrdersPage';
 import ViewOrdersHistory from '../OrdersPage/ViewOrdersHistory';
-import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, orderBy, limit } from 'firebase/firestore';
 import { MdNotificationsActive } from 'react-icons/md';
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const NavBar = () => {
     const { currentUser } = useAuth();
@@ -100,27 +103,48 @@ const NavBar = () => {
     // Notification fetching
     useEffect(() => {
         if (currentUser) {
-            const q = query(collection(db, 'orders'), where('userId', '==', currentUser.uid), where('status', '==', 'Accepted'));
+            const q = query(
+                collection(db, 'notifications'),
+                where('userId', '==', currentUser.uid),
+                orderBy('timestamp', 'desc'),
+                limit(20)
+            );
+    
             const unsubscribe = onSnapshot(q, (snapshot) => {
-                const newNotifications = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setNotifications(newNotifications);
-                setUnreadCount(newNotifications.length);
+                const notifData = snapshot.docs.map((doc) => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        ...data,
+                        timestamp: data.timestamp?.seconds
+                            ? new Date(data.timestamp.seconds * 1000)
+                            : null,
+                    };
+                });
+    
+                setNotifications(notifData);
+                setUnreadCount(notifData.filter((n) => n.status === 'unread').length);
             });
-
+    
             return () => unsubscribe();
         }
     }, [currentUser]);
 
     const toggleNotification = () => {
-        setNotificationOpen(!notificationOpen);
-
-        // Clear unread count when opening the notification dropdown
-        if (!notificationOpen) {
+        const newOpen = !notificationOpen;
+        setNotificationOpen(newOpen);
+    
+        if (newOpen) {
+            const unread = notifications.filter(n => n.status === 'unread');
+            unread.forEach(async (notif) => {
+                const notifRef = doc(db, 'notifications', notif.id);
+                await updateDoc(notifRef, { status: 'read' });
+            });
+    
             setUnreadCount(0);
         }
+
+        console.log("Current User UID:", currentUser?.uid);
     };
 
     return (
@@ -139,28 +163,32 @@ const NavBar = () => {
 
                             {/* Notifications Icon */}
                             <div className="relative" ref={notificationRef}>
-                                <button onClick={toggleNotification} className="relative">
-                                    <MdNotificationsActive className="w-8 h-8 text-white" />
-                                    {unreadCount > 0 && (
-                                        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                            {unreadCount}
-                                        </div>
-                                    )}
-                                </button>
+                                <MdNotificationsActive
+                                    onClick={toggleNotification}
+                                    className="w-7 h-7 cursor-pointer text-white"
+                                />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                                        {unreadCount}
+                                    </span>
+                                )}
                                 {notificationOpen && (
-                                    <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-80 max-h-96 overflow-y-auto">
-                                        <h3 className="p-4 border-b font-semibold">Notifications</h3>
-                                        <ul>
-                                            {notifications
-                                                .slice()
-                                                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                                                .map((notif) => (
-                                                    <li key={notif.id} className="p-4 hover:bg-gray-100 border-b">
-                                                        <span>Your "{notif.service}" order was accepted and has been assigned to rider: {notif.riderName}.</span>
+                                    <div className="absolute right-0 mt-2 w-72 bg-white text-black shadow-md rounded-md p-2 z-50">
+                                        <ul className="text-sm max-h-60 overflow-y-auto">
+                                            {notifications.length === 0 ? (
+                                                <li className="px-4 py-2 text-gray-500">No notifications</li>
+                                            ) : (
+                                                notifications.map((notif) => (
+                                                    <li
+                                                        key={notif.id}
+                                                        className={`px-4 py-2 border-b ${notif.status === 'unread' ? 'bg-gray-100 font-semibold' : 'bg-white'}`}
+                                                    >
+                                                        <div className="font-medium">{notif.message}</div>
+                                                        <div className="text-xs text-gray-500">
+                                                            {notif.timestamp ? dayjs(notif.timestamp).fromNow() : ''}
+                                                        </div>
                                                     </li>
-                                                ))}
-                                            {notifications.length === 0 && (
-                                                <li className="p-4 text-center text-gray-500">No new notifications</li>
+                                                ))
                                             )}
                                         </ul>
                                     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaBars, FaBell, FaUserCircle } from 'react-icons/fa';
 import { auth, db } from '../../../utils/firebase';
 import { signOut } from 'firebase/auth';
-import { collection, query, orderBy, limit, onSnapshot, addDoc, deleteDoc, updateDoc, doc, Timestamp } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -107,9 +107,6 @@ const TopNavbar = ({ toggleSidebar }) => {
                                         <div className="text-xs text-gray-500">
                                             {notif.timestamp ? dayjs(notif.timestamp.toDate()).fromNow() : ''}
                                         </div>
-                                        {/* <div className="text-xs text-gray-500">
-                                            {notif.timestamp?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </div> */}
                                     </li>
                                 ))
                             )}
