@@ -55,11 +55,11 @@ const Reports = () => {
     const date = new Date(order.createdAt.toDate ? order.createdAt.toDate() : order.createdAt);
     const month = date.toLocaleString("en-US", { month: "long" });
     const service = order.service;
-    
+
     if (!acc[month]) acc[month] = {};
     if (!acc[month][service]) acc[month][service] = 0;
     acc[month][service]++;
-    
+
     return acc;
   }, {});
 
@@ -72,7 +72,7 @@ const Reports = () => {
     const doc = new jsPDF();
     const tableColumn = ["Date", "Service", "Customer Name", "Phone Number", "Address", "Rider Name", "Delivery Fee"];
     const tableRows = filteredOrders.map((order) => [
-      formatDate(order.completedAt),
+      formatDate(order.updatedAt),
       order.service,
       order.customerFirstName + " " + order.customerLastName,
       order.phoneNumber,
