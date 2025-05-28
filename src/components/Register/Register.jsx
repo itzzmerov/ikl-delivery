@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Logo from '../../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth, db } from '../../utils/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db, storage } from '../../utils/firebase';
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Register = () => {
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [popupType, setPopupType] = useState('success');
+    const [idFile, setIdFile] = useState(null);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -28,61 +30,59 @@ const Register = () => {
         zip: '',
     });
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileChange = (e) => {
+        setIdFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        if (!idFile) {
+            setPopupMessage('Please upload a valid ID.');
+            setPopupType('error');
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000);
+            return;
+        }
+
         try {
             const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             const userId = response.user.uid;
 
+            // Upload ID to storage
+            const storageRef = ref(storage, `user_ids/${userId}/${idFile.name}`);
+            await uploadBytes(storageRef, idFile);
+            const idUrl = await getDownloadURL(storageRef);
+
+            // Save user info in Firestore
             await setDoc(doc(db, 'users', userId), {
-                firstName: formData.firstName,
-                middleName: formData.middleName,
-                lastName: formData.lastName,
-                username: formData.username,
-                email: formData.email,
-                phoneNumber: formData.phoneNumber,
-                userType: formData.userType,
-                house: formData.house,
-                street: formData.street,
-                barangay: formData.barangay,
-                city: formData.city,
-                region: formData.region,
-                zip: formData.zip,
+                ...formData,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
+                idUrl,
+                isApproved: false, // Default unapproved
             });
 
-            setPopupMessage('Created Account Successfully! Please login!');
+            setPopupMessage('Account created successfully! Pending approval.');
             setPopupType('success');
             setShowPopup(true);
 
             setTimeout(() => {
                 setShowPopup(false);
                 navigate('/login');
-            }, 2000);
+            }, 3000);
         } catch (error) {
-            console.error('Error during registration:', error.message);
-
-            if (error.code === 'auth/email-already-in-use') {
-                setPopupMessage('Email is already in use. Please use another one!');
-            } else {
-                setPopupMessage('An error occurred. Please try again.');
-            }
+            console.error('Registration error:', error.message);
+            setPopupMessage(error.code === 'auth/email-already-in-use'
+                ? 'Email already in use.'
+                : 'Registration failed.');
             setPopupType('error');
             setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-            }, 3000);
+            setTimeout(() => setShowPopup(false), 3000);
         }
     };
 
@@ -224,6 +224,10 @@ const Register = () => {
                         onChange={handleInputChange}
                         value={formData.password}
                     />
+
+                    {/* Upload ID */}
+                    <input type="file" accept="image/*,application/pdf" onChange={handleFileChange} required className="mb-4" />
+
 
                     <button
                         type="submit"

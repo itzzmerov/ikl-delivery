@@ -35,6 +35,12 @@ const Login = () => {
                 const userData = userDoc.data();
                 console.log('User data:', userData);
 
+                // Check approval status for customer
+                if (userData.userType === 'customer' && userData.isApproved === false) {
+                    alert('Your account is not yet approved by the admin. Please wait for approval.');
+                    return;
+                }
+
                 setWelcomeMessage(
                     `Welcome back, ${userData.firstName || 'User'}! You are logged in as ${userData.userType || 'a user'
                     }.`

@@ -17,6 +17,7 @@ import UpdateCustomer from './UpdateForms/UpdateCustomer/UpdateCustomer';
 import AddNewRider from './AddForms/AddNewRider/AddNewRider';
 import UpdateRider from './UpdateForms/UpdateRider/UpdateRider';
 import AddReview from './AddForms/AddReviews/AddReview';
+import AdminApproval from './AdminApproval/AdminApproval';
 
 // import PendingOrders from './OrderList/PendingOrders';
 import AcceptedOrders from './OrderList/AcceptedOrders';
@@ -28,6 +29,7 @@ import Reports from './Reports/Reports';
 import Admins from './AdminManagement/Admins';
 import UpdateAdmins from './UpdateForms/UpdateAdmins/UpdateAdmins';
 import AddNewAdmin from './AddForms/AddNewAdmin/AddNewAdmin';
+
 
 const AdminDashboard = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -54,6 +56,7 @@ const AdminDashboard = () => {
                         <Route path="riders-history" element={<RiderHistory />} />
                         <Route path="analytics" element={<Analytics />} />
                         <Route path="reports" element={<Reports />} />
+                        <Route path="admin-approval" element={<AdminApproval />} />
 
                         {/* Link for Orders */}
                         {/* <Route path="orders/pending-orders" element={<PendingOrders />} /> */}

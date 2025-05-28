@@ -20,3 +20,7 @@ html,
 body {
   scroll-behavior: smooth;
 }
+
+.input {
+  @apply border border-gray-400 p-2 mb-4 w-full rounded-xl;
+}

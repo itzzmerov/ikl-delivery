@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaHome, FaList, FaConciergeBell, FaStar, FaChartBar, FaUser } from 'react-icons/fa';
+import { FaHome, FaList, FaConciergeBell, FaStar, FaChartBar, FaUser, FaIdCard } from 'react-icons/fa';
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { HiDocumentReport } from "react-icons/hi";
 import { NavLink, useLocation } from 'react-router-dom';
@@ -136,6 +136,15 @@ const Sidebar = ({ isCollapsed }) => {
                 >
                     <FaStar size={23} className="text-lightWhite min-w-[23px]" />
                     {!isCollapsed && <span className="ml-3">Reviews</span>}
+                </NavLink>
+
+                <NavLink
+                    to="/admin/admin-approval"
+                    className={({ isActive }) => `flex items-center px-4 py-2 hover:bg-gray-700 
+                        ${isCollapsed ? 'justify-center' : ''}${isActive ? 'bg-gray-700' : ''}`}
+                >
+                    <FaIdCard size={23} className="text-lightWhite min-w-[23px]" />
+                    {!isCollapsed && <span className="ml-3">ID Approval</span>}
                 </NavLink>
 
                 <NavLink
