@@ -96,7 +96,7 @@ const Register = () => {
 
                 <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
                     <div className="w-full flex mb-2">
-                        <h3>Personal Information:</h3>
+                        <h3><strong>Personal Information:</strong></h3>
                     </div>
                     <input
                         type="text"
@@ -127,7 +127,7 @@ const Register = () => {
                     />
 
                     <div className="w-full flex mb-2">
-                        <h3>Address Information:</h3>
+                        <h3><strong>Address Information:</strong></h3>
                     </div>
                     <input
                         type="text"
@@ -185,7 +185,7 @@ const Register = () => {
                     />
 
                     <div className="w-full flex mb-2">
-                        <h3>Account Information:</h3>
+                        <h3><strong>Account Information:</strong></h3>
                     </div>
                     <input
                         type="text"
@@ -214,7 +214,6 @@ const Register = () => {
                         onChange={handleInputChange}
                         value={formData.email}
                     />
-
                     <input
                         type="password"
                         placeholder="Password"
@@ -225,9 +224,15 @@ const Register = () => {
                         value={formData.password}
                     />
 
-                    {/* Upload ID */}
-                    <input type="file" accept="image/*,application/pdf" onChange={handleFileChange} required className="mb-4" />
-
+                    <div className="w-full flex mb-2">
+                        <h3><strong>Upload Valid ID:</strong></h3>
+                    </div>
+                    <input type="file" 
+                        accept="image/*,application/pdf" 
+                        onChange={handleFileChange} 
+                        required 
+                        className="mb-4 w-full flex" 
+                    />
 
                     <button
                         type="submit"

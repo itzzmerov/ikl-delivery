@@ -33,9 +33,11 @@ const AdminApproval = () => {
             {users.length === 0 ? <p>No pending users.</p> : (
                 <ul>
                     {users.map(user => (
-                        <li key={user.id} className="mb-4 border p-4 rounded-md shadow">
-                            <p><strong>{user.firstName} {user.lastName}</strong> ({user.email})</p>
-                            <a href={user.idUrl} target="_blank" rel="noreferrer" className="text-blue-500">View Uploaded ID</a>
+                        <li key={user.id} className="mb-4 border p-4 rounded-md shadow bg-slate-50">
+                            <p className='mb-4'><strong>{user.firstName} {user.lastName}</strong> ({user.email})</p>
+                            <p className='mb-4'><strong>Address:</strong> <i>{user.house}, {user.street}, {user.barangay}, {user.city} {user.zip}, {user.region}</i></p>
+
+                            <a href={user.idUrl} target="_blank" rel="noreferrer" className="bg-blue-500 text-white px-4 py-2 rounded">View Uploaded ID</a>
                             <button onClick={() => approveUser(user.id)} className="ml-4 bg-green-600 text-white px-4 py-2 rounded">Approve</button>
                         </li>
                     ))}
