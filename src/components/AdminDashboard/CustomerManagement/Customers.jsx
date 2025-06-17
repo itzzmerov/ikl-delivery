@@ -14,7 +14,7 @@ const Customers = () => {
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
     const fetchCustomers = async () => {
-        const customersQuery = query(collection(db, "users"), where("userType", "==", "customer"));
+        const customersQuery = query(collection(db, "users"), where("userType", "==", "customer"), where("isApproved", "==", true));
         const response = await getDocs(customersQuery);
         const customersList = response.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setCustomers(customersList);
