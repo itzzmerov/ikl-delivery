@@ -36,9 +36,16 @@ const Login = () => {
                 console.log('User data:', userData);
 
                 // Check approval status for customer
-                if (userData.userType === 'customer' && userData.isApproved === false) {
-                    alert('Your account is not yet approved by the admin. Please wait for approval.');
-                    return;
+                if (userData.userType === 'customer') {
+                    if (userData.rejected === true) {
+                        alert(`Your registration of account is rejected by the admin. This is a note by the admin: ${userData.rejectionMessage || 'No reason provided.'}`);
+                        return;
+                    }
+
+                    if (userData.isApproved === false) {
+                        alert('Your account is not yet approved by the admin. Please wait for approval.');
+                        return;
+                    }
                 }
 
                 setWelcomeMessage(
